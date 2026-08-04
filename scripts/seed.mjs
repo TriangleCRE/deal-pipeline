@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { validateProperty } from "../schema/property-schema.mjs";
-import { upsertProperty, getPool } from "../lib/db.mjs";
+import { upsertProperty } from "../lib/db.mjs";
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const seedDir = path.join(ROOT, "data", "seed");
@@ -27,5 +27,3 @@ for (const file of files) {
   await upsertProperty(check.data.id, check.data);
   console.log(`seeded ${check.data.id} (${file})`);
 }
-
-await getPool().end();

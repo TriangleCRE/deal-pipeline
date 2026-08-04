@@ -3,12 +3,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getPool } from "../lib/db.mjs";
+import { runSql } from "../lib/db.mjs";
 
 const ROOT = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const sql = fs.readFileSync(path.join(ROOT, "db", "schema.sql"), "utf8");
 
-const pool = getPool();
-await pool.query(sql);
+await runSql(sql);
 console.log("properties table ready.");
-await pool.end();
