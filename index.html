@@ -1170,78 +1170,46 @@ const PF_SKELETON=`<div class="hero">
 
 const ADD_SKELETON=`<div class="crumbs"><a href="#/">Portfolio</a> › Add a property</div>
     <div class="phead"><div><h1>Add a Property</h1>
-      <div class="addr">Three steps: gather what you have on the deal, hand it to your own Claude with our prompt, then paste the JSON it gives back here.</div></div></div>
+      <div class="addr">Two steps — no manual form-filling.</div></div></div>
 
     <div class="player" style="grid-template-columns:1fr">
       <div class="pmain">
-        <div class="extra" style="border-left-color:var(--brand);background:var(--brand-wash)">
-          <div class="lab">Where things actually go</div>
-          <div class="txt">Your deal materials (PDFs, the model, photos, emails…) go into <b>your own Claude conversation</b> in step 2 — never into this dashboard. The <b>only</b> thing you paste or upload here, in step 3, is the small JSON text Claude gives back. Nothing is uploaded to this site except that JSON.</div>
-        </div>
-
         <section class="card block">
-          <h2><span class="block-icon">1</span>Gather what you have</h2>
-          <div class="hint">Grab whatever exists for this deal — partial is fine. Anything you don't have just renders as "Needs input" on the card and can be added later. More below is better, but don't let a missing item hold you up.</div>
-          <div class="duo">
-            <div>
-              <div class="section-title" style="margin:6px 0 8px">Deal basics</div>
-              <ul class="checklist-plain">
-                <li>Offering memorandum / broker packet</li>
-                <li>Address, parcel ID(s) / tax map number</li>
-                <li>Asking price, terms, ownership info</li>
-                <li>Listing broker contact info</li>
-              </ul>
-              <div class="section-title" style="margin:14px 0 8px">Property &amp; site</div>
-              <ul class="checklist-plain">
-                <li>Physical / boundary survey</li>
-                <li>GIS property card(s) from the county</li>
-                <li>Site plan or concept site plan (image/PDF)</li>
-                <li>Photos of the property</li>
-                <li>Zoning letters, rezoning correspondence</li>
-                <li>Utility availability letters</li>
-              </ul>
-              <div class="section-title" style="margin:14px 0 8px">Market</div>
-              <ul class="checklist-plain">
-                <li>Demographic / market study</li>
-                <li>Traffic count data (AADT, VDOT/DOT reports)</li>
-                <li>Comp set / nearby anchors &amp; competitors</li>
-              </ul>
-            </div>
-            <div>
-              <div class="section-title" style="margin:6px 0 8px">Deal economics</div>
-              <ul class="checklist-plain">
-                <li>Underwriting / financial model (Excel)</li>
-                <li>Rent roll, pro forma, sensitivity analysis</li>
-              </ul>
-              <div class="section-title" style="margin:14px 0 8px">Tenants &amp; leasing</div>
-              <ul class="checklist-plain">
-                <li>LOIs or lease drafts</li>
-                <li>Tenant correspondence</li>
-                <li>Broker call notes</li>
-              </ul>
-              <div class="section-title" style="margin:14px 0 8px">History &amp; diligence</div>
-              <ul class="checklist-plain">
-                <li>Emails/notes on seller motivation or deal history</li>
-                <li>Environmental reports (Phase I/II ESA)</li>
-                <li>Title report, prior appraisals</li>
-              </ul>
-              <div class="wnote" style="margin-top:14px">Want working file links on the card (so teammates can click through to the actual survey/model)? Put those files somewhere with a shareable link — your team's Drive, Dropbox, SharePoint, wherever you already keep them — <i>before</i> step 2, and give Claude those links too. This dashboard doesn't host files, so a real link is the only way they show up as clickable.</div>
-            </div>
-          </div>
-        </section>
-
-        <section class="card block">
-          <h2><span class="block-icon">2</span>Copy the prompt, run it in your own Claude</h2>
-          <div class="hint">Click "Copy data-entry prompt" below, open your own Claude (claude.ai or the app), and paste the prompt into a new conversation. Then attach or paste in everything you gathered in step 1 — files, links, notes, whatever you have — in that same conversation. Claude reads it all and replies with one JSON document: it fills in what the materials support, tags every fact with where it came from, and leaves anything it can't confirm as "Needs input" instead of guessing.</div>
+          <h2><span class="block-icon">1</span>Copy the prompt, paste it into your Claude</h2>
+          <div class="hint">Click "Copy data-entry prompt" below. Open your own Claude, paste the prompt in, then upload or attach everything you have on this property — GIS records, survey, financial model, photos, notes, whatever exists — and hit Enter. Partial is fine; anything missing just renders as "Needs input" and can be added later. Claude reads it all and writes back one JSON document for this deal.</div>
           <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
             <button class="btn btn-primary" id="copyPromptBtn" type="button">Copy data-entry prompt</button>
             <a class="btn btn-sm" href="/prompt/data-entry-prompt.md" target="_blank" rel="noopener">Open prompt in a new tab</a>
           </div>
+          <details style="margin-top:14px">
+            <summary class="wnote" style="cursor:pointer;font-weight:700">Not sure what to gather? See examples</summary>
+            <div class="duo" style="margin-top:12px">
+              <div>
+                <div class="section-title" style="margin:6px 0 8px">Deal basics &amp; site</div>
+                <ul class="checklist-plain">
+                  <li>Offering memorandum / broker packet</li>
+                  <li>Address, parcel ID(s), asking price, ownership info</li>
+                  <li>Physical survey &amp; GIS property card(s)</li>
+                  <li>Site plan / photos / zoning correspondence</li>
+                </ul>
+              </div>
+              <div>
+                <div class="section-title" style="margin:6px 0 8px">Economics &amp; leasing</div>
+                <ul class="checklist-plain">
+                  <li>Underwriting / financial model, rent roll</li>
+                  <li>LOIs, lease drafts, tenant correspondence</li>
+                  <li>Market/demographic study, traffic counts</li>
+                  <li>Emails or notes on seller motivation, history</li>
+                </ul>
+              </div>
+            </div>
+            <div class="wnote" style="margin-top:10px">Want working file links on the card? Put those files somewhere with a shareable link (Drive, Dropbox, SharePoint) before this step and give Claude the links too — this dashboard doesn't host files itself.</div>
+          </details>
         </section>
 
         <section class="card block">
-          <h2><span class="block-icon">3</span>Paste Claude's JSON here and save</h2>
-          <div class="hint">Claude's reply to that conversation will be nothing but a JSON document (starting with <code>{</code> and ending with <code>}</code>) — copy that whole reply and paste it below, or save it as a .json file and upload it. We check it against our schema and show you a preview before anything is saved. Uploading a JSON with the same <code>id</code> as an existing card updates that card instead of creating a duplicate.</div>
+          <h2><span class="block-icon">2</span>Paste the JSON back here</h2>
+          <div class="hint">Copy Claude's reply — it will be nothing but the JSON, starting with <code>{</code> and ending with <code>}</code> — and paste it below, or save it as a .json file and upload it. We check it against our schema and show a preview. Then press <b>Save property</b> to add it to the deal pipeline. Uploading a JSON with the same <code>id</code> as an existing card updates that card instead of creating a duplicate.</div>
           <div class="fld">
             <label>Paste JSON</label>
             <textarea id="jsonInput" class="edit-input" style="min-height:220px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px" placeholder="{ &quot;id&quot;: &quot;...&quot;, &quot;name&quot;: &quot;...&quot;, ... }"></textarea>
