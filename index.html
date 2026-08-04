@@ -1303,7 +1303,73 @@ async function initProperty(){
     </div>`;
 
     const legend = `<div class="card" style="padding:11px 16px;margin:6px 0 14px" id="legendbar"><div class="prov-legend"><span class="wnote" style="font-weight:700">Source markers:</span>${T.provLegend()}</div></div>`;
-    app.innerHTML = `<div class="screen-only">${header}${toc}${legend}<div class="player">${mainCol}${rail}</div></div>`;
+
+    /* ---------- print tearsheet (the "Save as PDF (1-pager)" button) ----------
+       The .tearsheet CSS above has always existed, but nothing ever built
+       the markup for it — .screen-only (everything above) gets hidden by
+       the @media print rule and .tearsheet{display:block} had nothing to
+       show, so printing produced a blank page. This builds it from the
+       same score/fin/P data the full card already computed above. */
+    const tsBadge = score ? `<span class="badge ${score.cls}">${score.status}</span>` : `<span class="badge badge-neutral">Unscored</span>`;
+    const tsScorebar = score ? `<div class="ts-scorebar">
+        <div class="ts-bar"><div class="ts-mark" style="left:${score.weighted}%"></div></div>
+        <div class="ts-scale"><span>Pass</span><span>Keep Warm</span><span>Advance</span></div>
+      </div>` : "";
+    const tsFintiles = fin ? `<div class="ts-fintiles">
+        <div class="ts-tile"><div class="l">${T.esc(fin.isDevelopment ? "Land basis" : "Purchase price")}</div><div class="v">${T.fmtUSD(fin.purchasePrice)}</div></div>
+        <div class="ts-tile"><div class="l">Total cost</div><div class="v">${T.fmtUSDk(fin.totalCost)}</div></div>
+        <div class="ts-tile"><div class="l">Yield on cost</div><div class="v">${T.fmtPct(fin.yieldOnCost)}</div></div>
+        <div class="ts-tile"><div class="l">Exit value</div><div class="v">${T.fmtUSDk(fin.exitValue)}</div></div>
+        <div class="ts-tile"><div class="l">Levered IRR</div><div class="v">${fin.leveredIRR != null ? T.fmtPct(fin.leveredIRR) : "TBD"}</div></div>
+      </div>` : "";
+    const tsKeyFacts = [].concat(P.propertyInfo || [], P.market || [], P.zoning || []).slice(0, 6);
+    const tsEconRows = fin ? `
+        <div class="tsr"><span class="tsk">Loan / Equity</span><span class="tsv">${T.fmtUSD(fin.loan)} / ${T.fmtUSD(fin.equity)}</span></div>
+        <div class="tsr"><span class="tsk">Interest · amort · hold</span><span class="tsv">${T.fmtPct(fin.interestRate, 2)} · ${(P.financing && P.financing.amortYears) || "—"}yr · ${(P.financing && P.financing.holdYears) || "—"}yr</span></div>
+        <div class="tsr"><span class="tsk">Exit cap · cost of sale</span><span class="tsv">${T.fmtPct(fin.exitCap, 2)} · ${T.fmtPct(fin.costOfSale, 1)}</span></div>
+        <div class="tsr"><span class="tsk">Stabilized NOI</span><span class="tsv">${T.fmtUSD(fin.noi)}</span></div>`
+      : `<div class="tsr"><span class="tsk">Not yet modeled</span><span class="tsv">—</span></div>`;
+    const tsFlags = (P.flags && P.flags.length) ? `<div class="ts-flags">
+        <div class="ts-h">Flags</div>
+        <div class="tsflags-grid">${P.flags.slice(0, 6).map(f => `<div class="tsflag ${f.type || "watch"}"><span>${f.type === "opp" ? "▲" : f.type === "risk" ? "■" : "◆"}</span><span>${T.esc(f.text)}</span></div>`).join("")}</div>
+      </div>` : "";
+    const tearsheet = `<div class="tearsheet">
+      <div class="ts-head">
+        <div class="ts-logo" style="background:var(--brand-ink);color:#fff;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:800;font-size:15px">TIG</div>
+        <div class="ts-title">
+          <div class="ts-kicker">Triangle Investment Group · Deal Summary</div>
+          <h1>${T.esc(P.name)}</h1>
+          <div class="ts-addr">${T.esc(P.address || "")}${P.county ? " · " + T.esc(P.county) : ""}</div>
+        </div>
+        <div class="ts-meta">
+          ${tsBadge}
+          <div class="ts-mrow"><b>Deal type</b><span>${T.esc(dealType)}</span></div>
+          <div class="ts-mrow"><b>Stage</b><span>${T.esc(P.status || "—")}</span></div>
+          <div class="ts-mrow"><b>Parcels</b><span>${T.esc(P.parcels || "—")}</span></div>
+          <div class="ts-mrow"><b>Updated</b><span>${T.esc(P.updated || "—")}</span></div>
+        </div>
+      </div>
+      ${tsScorebar}
+      ${tsFintiles}
+      ${P.thesis && P.thesis.v ? `<div class="ts-thesis">${T.esc(P.thesis.v)}</div>` : ""}
+      <div class="ts-cols">
+        <div>
+          <div class="ts-h">Key Facts</div>
+          ${tsKeyFacts.length ? tsKeyFacts.map(r => `<div class="tsr"><span class="tsk">${T.esc(r.k)}</span><span class="tsv">${T.esc(r.d && r.d.v)}</span></div>`).join("") : `<div class="tsr"><span class="tsk">No details captured yet</span><span class="tsv">—</span></div>`}
+        </div>
+        <div>
+          <div class="ts-h">Deal Economics</div>
+          ${tsEconRows}
+        </div>
+      </div>
+      ${tsFlags}
+      <div class="ts-foot">
+        <div class="prov-legend">${T.provLegend()}</div>
+        <div class="ts-disc">Triangle Investment Group — internal &amp; confidential. Figures are estimates based on current assumptions; not a substitute for the underlying model, survey, or counsel.</div>
+      </div>
+    </div>`;
+
+    app.innerHTML = `<div class="screen-only">${header}${toc}${legend}<div class="player">${mainCol}${rail}</div></div>${tearsheet}`;
     document.body.classList.toggle("editing", EDIT);
     wire();
   }
