@@ -73,6 +73,62 @@ const source = z.object({
   url: z.string().optional(),
 }).passthrough();
 
+// ---------------------------------------------------------------------------
+// Scoring + checklist reference data — mirrors index.html's TRI engine
+// (SCORE_CRITERIA_BY_TYPE / CHECKLIST_TEMPLATE_BY_TYPE) exactly. Duplicated
+// here (rather than imported) because index.html is a single inline script,
+// not an importable module. If you change the scorecard or checklist in
+// index.html, change it here too — scripts/generate-prompt.mjs uses these
+// to tell Claude the real score factors and checklist items per dealType,
+// instead of just pointing at "the app's templates" and hoping for the best.
+// ---------------------------------------------------------------------------
+export const SCORE_CRITERIA_BY_TYPE = {
+  "Property-Driven": [
+    { id: "location", label: "Location Quality", weight: 2.0, hint: "5 = dominant corridor / hard corner · 3 = workable · 1 = weak" },
+    { id: "traffic", label: "Traffic", weight: 1.5, hint: "5 = very high AADT / visibility · 1 = low counts" },
+    { id: "demographics", label: "Demographics", weight: 1.25, hint: "5 = strong income + growth + density · 1 = weak" },
+    { id: "zoning", label: "Zoning Risk", weight: 1.5, hint: "5 = by-right / very low risk · 3 = moderate approval risk · 1 = rezoning / political risk" },
+    { id: "siteLayout", label: "Site Layout Efficiency", weight: 1.25, hint: "5 = highly efficient fit · 1 = constrained / poor yield" },
+    { id: "tenantDemand", label: "Tenant Demand", weight: 2.0, hint: "5 = deep demand / signed interest · 1 = limited demand" },
+    { id: "rentPotential", label: "Rent Potential", weight: 2.0, hint: "5 = materially above target · 3 = at target · 1 = below" },
+    { id: "devCost", label: "Development Cost Risk", weight: 1.5, hint: "5 = low / predictable cost · 1 = high / uncertain cost" },
+    { id: "exitLiquidity", label: "Exit Liquidity", weight: 1.5, hint: "5 = broad buyer pool / easy exit · 1 = thin buyer pool" },
+  ],
+  "Tenant-Driven": [
+    { id: "tenantFit", label: "Tenant Requirement Fit", weight: 2.0, hint: "5 = site matches all tenant criteria · 3 = workable with tradeoffs · 1 = major gaps" },
+    { id: "tradeArea", label: "Trade Area Strength", weight: 1.5, hint: "5 = dominant corridor, thin competition · 1 = weak / saturated" },
+    { id: "siteAvailability", label: "Site Availability", weight: 1.25, hint: "5 = multiple viable sites identified · 1 = few or no options" },
+    { id: "siteFeasibility", label: "Site-Level Feasibility", weight: 1.5, hint: "5 = clean access/utilities/zoning · 1 = major constraints" },
+    { id: "tenantCommitment", label: "Tenant Commitment", weight: 2.0, hint: "5 = LOI signed, economics aligned · 1 = exploratory only" },
+    { id: "dealEconomics", label: "Deal Economics", weight: 2.0, hint: "5 = yield on cost well above target · 3 = at target · 1 = below" },
+    { id: "entitlementRisk", label: "Entitlement & Timeline Risk", weight: 1.5, hint: "5 = by-right, fast timeline · 1 = rezoning/SUP required, slow" },
+    { id: "executionReadiness", label: "Execution Readiness", weight: 1.25, hint: "5 = site control secured, budget final · 1 = early stage" },
+  ],
+};
+
+export const CHECKLIST_TEMPLATE_BY_TYPE = {
+  "Property-Driven": [
+    { id: "A", title: "Property Information", items: ["Address, parcel ID", "Acreage", "Ownership structure", "Asking price / basis", "Current zoning", "Existing improvements", "Utilities status"] },
+    { id: "B", title: "Market & Location Analysis", items: ["Traffic counts", "Visibility", "Retail corridor strength", "Nearby anchors", "Competition mapping", "Demographics", "Growth trends", "Daytime population"] },
+    { id: "C", title: "Highest & Best Use", items: ["Single-tenant net lease", "Multi-tenant strip center", "Mixed-use potential", "Pad development strategy", "Phasing potential"] },
+    { id: "D", title: "Site Planning Test Fit", items: ["Building footprints", "Parking layout", "Drive-thru feasibility", "Truck access", "Stormwater requirements"] },
+    { id: "E", title: "Entitlement & Risk", items: ["Zoning compliance", "Rezoning required", "Political risk", "Planning timeline", "Municipal constraints"] },
+    { id: "F", title: "Deal Economics", items: ["Land basis", "Development cost", "Rent assumptions", "Stabilized NOI", "Exit value", "Yield on cost", "Sensitivity analysis"] },
+    { id: "G", title: "Tenant Targeting", items: ["Identify tenant categories", "Build tenant list", "Match tenants to layout"] },
+    { id: "H", title: "Tenant Outreach", items: ["Create site package", "Broker outreach", "Direct outreach", "Track feedback", "Iterate site plan", "Secure LOIs"] },
+    { id: "I", title: "Deal Execution", items: ["Pre-lease thresholds", "Finalize site plan", "Secure financing", "Execute leases", "Begin construction"] },
+  ],
+  "Tenant-Driven": [
+    { id: "A", title: "Tenant Requirement Definition", items: ["Confirm tenant type (Ground lease / BTS / inline)", "Required building size (SF range)", "Site size requirement (acres)", "Parking requirements", "Drive-thru requirements", "Visibility requirements", "Traffic count thresholds", "Demographic requirements", "Co-tenancy preferences", "Prohibited adjacencies", "Market priority ranking", "Timeline", "Prototype / site plan requirements"] },
+    { id: "B", title: "Market Mapping & Trade Area Identification", items: ["Define target trade areas", "Map competitor locations", "Identify gaps / white space", "Identify dominant retail corridors", "Rank corridors", "Confirm traffic counts", "Identify anchor centers"] },
+    { id: "C", title: "Site Identification", items: ["Vacant land parcels", "Redevelopment opportunities", "Outparcels", "Assemblage opportunities", "Broker outreach", "Off-market outreach", "Public land opportunities", "Ground lease opportunities"] },
+    { id: "D", title: "Site-Level Feasibility", items: ["Parcel size & dimensions", "Topography", "Access / ingress-egress", "Visibility", "Utilities availability", "Environmental concerns", "Floodplain / wetlands", "Zoning compliance", "Drive-thru allowance", "Parking compliance", "Setbacks / height", "Signage limitations", "Rezoning or SUP required"] },
+    { id: "E", title: "Deal Economics", items: ["Land cost", "Construction cost", "Soft costs", "Tenant rent", "Yield on cost", "Exit cap rate", "Developer fee", "Available incentives"] },
+    { id: "F", title: "Tenant Engagement", items: ["Present site options", "Gather feedback", "Secure LOI", "Confirm lease economics", "Align on site plan"] },
+    { id: "G", title: "Site Control & Execution", items: ["Secure PSA / ground lease", "Negotiate contingencies", "Begin entitlements", "Execute lease", "Finalize budget", "Move to financing and construction"] },
+  ],
+};
+
 export const PropertySchema = z.object({
   schemaVersion: z.number().int().optional(),
 
@@ -198,16 +254,15 @@ export const FIELD_GUIDE = [
   ]},
   { section: "Weighted score (1-5 each factor, app computes the total)", fields: [
     "scoreProvenance — provenance for the score set as a whole",
-    "scores — Property-Driven keys: location, traffic, demographics, zoning, siteLayout, tenantDemand, rentPotential, devCost, exitLiquidity",
-    "scores — Tenant-Driven keys: tenantFit, tradeArea, siteAvailability, siteFeasibility, tenantCommitment, dealEconomics, entitlementRisk, executionReadiness",
-    "scoreNotes — { <same key>: \"one-line rationale\" }",
+    "scores — use the id from the score-factor table for this deal's dealType (below) as the key, 1-5 as the value. Never send a computed/weighted total — the app computes it from these raw inputs.",
+    "scoreNotes — { <same key>: \"one-line rationale\" } — a short justification per factor, the same way the example does",
   ]},
   { section: "Financing model inputs (app computes NOI/IRR/etc.)", fields: [
-    "financing — plain numbers pulled straight from the model, e.g. landPrice, retailSF, retailRentPSF, retailCostPSF, storageSF, storageCostPSF, storageRentPSF, softCosts, totalProjectCost, loanLTC, loan, equity, interestRate, amortYears, holdYears, exitCap, costOfSale, retailNOI, storageNOI, stabilizedNOI, yieldOnCost, devSpread, exitValue, netSaleValue, devProfit, profitMarginOnCost, leveredIRR, equityMultiple, cashOnCash, dscr, annualDebtService, loanBalanceExit, storageSensitivity: [{rent,yoc,spread}, ...]",
+    "financing — a free-form bag of plain numbers pulled straight from the deal's model — there is no fixed set of keys. The example below (landPrice, retailSF, retailRentPSF, storageSF, storageCostPSF, storageRentPSF, softCosts, totalProjectCost, loanLTC, loan, equity, interestRate, amortYears, holdYears, exitCap, costOfSale, stabilizedNOI, yieldOnCost, exitValue, leveredIRR, equityMultiple, cashOnCash, dscr, storageSensitivity: [{rent,yoc,spread}, ...]) is from a retail + self-storage deal — reuse whatever of those genuinely apply, but for a different asset class use whatever key names actually describe THAT model's line items (e.g. unitCount/avgUnitRentPSF for multifamily, warehouseSF/officeSF/clearHeightFt for industrial, lotCount/lotPricePerAcre for land, baseRentPSF/percentageRent for a ground lease). Match the model in front of you, don't force it into someone else's shape.",
     "financingNote: { pencil: {v,s}, listAsk: {v,s} } — call out if the deal does or doesn't pencil, and any price-to-reconcile note",
   ]},
   { section: "Property Information / GIS / Market / Zoning / Highest & Best Use", fields: [
-    "propertyInfo, gis, market, zoning, hbu — each an array of { k: \"label\", d: { v: \"value\", s, n: \"optional note\" } }",
+    "propertyInfo, gis, market, zoning, hbu — each an array of { k: \"label\", d: { v: \"value\", s, n: \"optional note\" } }. The labels are free-form too — use whatever's relevant to this property's actual type. A retail corner cares about traffic counts and visibility; a warehouse cares about clear height and dock doors; an apartment deal cares about unit mix and comps; raw land cares about entitlement status and utility availability. Pull labels from the materials in front of you rather than copying the retail-flavored example verbatim.",
   ]},
   { section: "History & Surroundings", fields: [
     "history: { s, bullets: [{ t: \"short title\", d: \"detail\", s }] }",
@@ -219,7 +274,7 @@ export const FIELD_GUIDE = [
   ]},
   { section: "Development checklist", fields: [
     "checklist: { A: [{ item, status: \"done\"|\"prog\"|\"none\"|\"flag\", response, note, s }], B: [...], ... }",
-    "Use the section letters/items for the deal's dealType (see the app's checklist templates) — leave status \"none\" and s \"need\" for anything not yet worked.",
+    "Use the exact section letters and item text from the checklist template for this deal's dealType (below) — don't invent your own section titles or items. For each item: status \"done\" if the materials fully answer it, \"prog\" if partially, \"flag\" if it surfaces a problem worth calling out, \"none\"/s:\"need\" if you have nothing on it yet.",
   ]},
   { section: "Materials & Sources", fields: [
     "materials: { financingModel: [{ name, file, meta, s }], gis: [...], siteMap: [...], survey: [...], scoring: [...], other: [...] } — file is a link or filename to where the material already lives, NEVER embedded base64",
