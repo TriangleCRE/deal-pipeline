@@ -215,13 +215,37 @@ export const PropertySchema = z.object({
   }).passthrough().optional(),
 }).passthrough(); // unknown top-level keys are kept, not rejected
 
+// The data-entry prompt (see prompt/data-entry-prompt.md, rule 8) tells
+// Claude a field it has nothing for can be either omitted or set to `null`
+// — both are meant to mean "no data." Most fields above are plain
+// `z.string().optional()` etc., which accepts a missing key but NOT an
+// explicit `null` (only a few, like `logo`, are `.nullable()` too). That
+// mismatch is exactly what broke meta.dealId being sent as `null`. Rather
+// than chase down and `.nullable()` every field a future prompt tweak might
+// null out, treat null as "not provided" everywhere, once, here — so the
+// validator actually honors the contract the prompt promises.
+function stripNulls(value) {
+  if (Array.isArray(value)) {
+    return value.filter((v) => v !== null).map(stripNulls);
+  }
+  if (value && typeof value === "object") {
+    const out = {};
+    for (const [k, v] of Object.entries(value)) {
+      if (v === null) continue; // drop it — same as the key never being sent
+      out[k] = stripNulls(v);
+    }
+    return out;
+  }
+  return value;
+}
+
 /**
  * Validate a candidate property document.
  * Returns { ok: true, data } or { ok: false, errors: [{ path, message }] }.
  * Never throws.
  */
 export function validateProperty(candidate) {
-  const result = PropertySchema.safeParse(candidate);
+  const result = PropertySchema.safeParse(stripNulls(candidate));
   if (result.success) return { ok: true, data: result.data };
   return {
     ok: false,
