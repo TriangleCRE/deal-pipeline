@@ -39,8 +39,15 @@ const EXAMPLE_PROPERTY_DRIVEN = {
   scoreProvenance: "ai",
   scores: { location: 4, traffic: 4, demographics: 3, zoning: 2, siteLayout: 4, tenantDemand: 3, rentPotential: 3, devCost: 3, exitLiquidity: 3 },
   scoreNotes: { location: "Hard corner on a major arterial.", zoning: "Rezoning required, not guaranteed." },
-  financing: { landPrice: 1000000, retailSF: 6000, retailRentPSF: 26, totalProjectCost: 5000000, loanLTC: 0.7, exitCap: 0.075 },
-  financingNote: { pencil: { v: "Pencils at current assumptions.", s: "ai" } },
+  financing: {
+    purchasePrice: 1000000, totalProjectCost: 5000000, softCosts: 480000, loanLTC: 0.7, loan: 3500000, equity: 1500000,
+    interestRate: 0.0725, amortYears: 30, holdYears: 5, exitCap: 0.075, costOfSale: 0.02,
+    primaryUseLabel: "Retail", primaryUseSF: 6000, primaryUseRentPSF: 26,
+    secondaryUses: [{ label: "Self-storage", sf: 65000, rentPSF: 14, rentBasis: "/SF net rentable", costPSF: 92 }],
+    stabilizedNOI: 425000, yieldOnCost: 0.085, exitValue: 5666667, leveredIRR: 0.14, equityMultiple: 1.4, cashOnCash: 0.06, dscr: 1.3,
+    developmentSpread: 0.01, netDevelopmentProfit: 553333,
+  },
+  financingNote: { pencil: { ok: true, v: "Pencils at current assumptions — 8.5% yield on cost against a 7.5% exit cap is a positive ~1.0% spread, with the anchor tenant's interest and hard-corner location supporting the rent basis.", s: "ai" } },
   propertyInfo: [
     { k: "Address", d: { v: "1200 Example Pkwy", s: "source" } },
     { k: "Current zoning", d: { v: "R-1 — requires rezoning to commercial", s: "source" } },
@@ -60,32 +67,42 @@ const EXAMPLE_PROPERTY_DRIVEN = {
   images: { sitePlan: "uploads/1200-example-pkwy/site-plan.svg" },
 };
 
-// Example 2: Tenant-Driven, industrial build-to-suit — deliberately a
-// different asset class and a different dealType, to make it unmistakable
-// that field names/scores/checklist all adapt to the actual deal, not just
-// to the first example's retail+storage shape.
+// Example 2: Tenant-Driven, existing-building industrial ACQUISITION —
+// deliberately a different asset class, a different dealType, AND not a
+// development (no dev metrics, purchasePrice is an acquisition price, not
+// a land basis) — so the model has a correct pattern for both an
+// acquisition and a ground-up deal, not just the first example's
+// retail+storage development shape.
 const EXAMPLE_TENANT_DRIVEN = {
   schemaVersion: SCHEMA_VERSION,
   id: "4400-commerce-blvd",
-  name: "4400 Commerce Blvd (BTS)",
+  name: "4400 Commerce Blvd (Acquisition)",
   address: "4400 Commerce Blvd, Example City, VA 24000",
   county: "Example County, VA",
-  status: "LOI / Negotiation",
+  status: "Under Contract",
   dealType: "Tenant-Driven",
-  tags: ["Build-to-suit", "Industrial", "I-81 corridor"],
+  tags: ["Acquisition", "Industrial", "I-81 corridor"],
   updated: "2026-08-04",
   headlineTenant: { name: "Example Logistics Co.", logo: null },
-  thesis: { v: "A regional 3PL needs a 120K SF distribution building on I-81; this site fits their footprint and timeline.", s: "ai" },
+  thesis: { v: "A regional 3PL needs 120K SF of distribution space now; an existing building on I-81 already meets their spec, so we're underwriting it as an acquisition + direct lease instead of a build-to-suit.", s: "ai" },
   scoreProvenance: "ai",
   scores: { tenantFit: 4, tradeArea: 3, siteAvailability: 3, siteFeasibility: 4, tenantCommitment: 3, dealEconomics: 4, entitlementRisk: 4, executionReadiness: 3 },
-  scoreNotes: { tenantFit: "Site depth and clear-height requirement both check out.", tenantCommitment: "LOI signed, lease terms still being negotiated." },
-  financing: { landPrice: 2200000, warehouseSF: 120000, clearHeightFt: 32, dockDoors: 24, baseRentPSF: 6.25, escalationPct: 0.03, totalProjectCost: 14500000, loanLTC: 0.65 },
+  scoreNotes: { tenantFit: "Existing clear height and dock count both meet the tenant's spec as-is.", tenantCommitment: "LOI signed, lease terms still being negotiated." },
+  financing: {
+    purchasePrice: 8200000, totalProjectCost: 8350000, loanLTC: 0.65, loan: 5330000, equity: 2870000,
+    interestRate: 0.061, amortYears: 30, holdYears: 7, exitCap: 0.065, costOfSale: 0.02,
+    primaryUseLabel: "Warehouse", primaryUseSF: 120000, primaryUseRentPSF: 6.25,
+    stabilizedNOI: 615000, yieldOnCost: 0.075, exitValue: 9461538, leveredIRR: 0.143, equityMultiple: 1.65, cashOnCash: 0.052, dscr: 1.35,
+    // no developmentSpread / netDevelopmentProfit — this is an acquisition, not a development
+    clearHeightFt: 32, dockDoors: 24, escalationPct: 0.03,
+  },
+  financingNote: { pencil: { ok: true, v: "Pencils — in-place NOI supports a 7.5% going-in yield against a 6.5% stabilized industrial exit cap, and levered IRR of 14.3% clears our target.", s: "ai" } },
   propertyInfo: [
     { k: "Parcel size", d: { v: "±22 acres", s: "source" } },
     { k: "Zoning", d: { v: "M-1 (Light Industrial) — by right", s: "source" } },
   ],
   market: [{ k: "Highway access", d: { v: "Direct frontage on I-81 Exit 12", s: "source" } }],
-  checklist: { A: [{ item: "Confirm tenant type (Ground lease / BTS / inline)", status: "done", response: "Build-to-suit, 120K SF", s: "source" }] },
+  checklist: { A: [{ item: "Confirm tenant type (Ground lease / BTS / inline)", status: "done", response: "Direct lease into an existing building (acquisition, not build-to-suit), 120K SF", s: "source" }] },
   materials: { survey: [{ name: "ALTA Survey", file: "uploads/4400-commerce-blvd/alta-survey.pdf", s: "source" }] },
   sources: [{ label: "County zoning ordinance — M-1 district", url: "https://example-county.gov/zoning/m1" }],
 };
@@ -134,12 +151,16 @@ it's an example.
 
 Rules:
 1. This deal could be any property type. The two example documents below
-   show two different shapes (a retail+storage site, an industrial
-   build-to-suit) on purpose — they illustrate the STRUCTURE, not a fixed
-   vocabulary. Field names inside \`financing\`, and labels inside
-   \`propertyInfo\`/\`gis\`/\`market\`/\`zoning\`/\`hbu\`, are free-form — use
-   whatever actually describes this deal's model and materials. The
-   \`scores\` keys and \`checklist\` sections/items, however, are NOT
+   show two different shapes on purpose — a retail + self-storage GROUND-UP
+   DEVELOPMENT (Example 1) and an industrial ACQUISITION (Example 2) — they
+   illustrate the STRUCTURE and how it adapts, not a fixed vocabulary.
+   \`financing\` is a bag of numbers, BUT it has a known set of canonical keys
+   the card actually renders (see the Financing section of the schema below)
+   — always populate those when the deal's model supports them, mapped from
+   whatever the model calls them, and add anything else as extra keys.
+   Labels inside \`propertyInfo\`/\`gis\`/\`market\`/\`zoning\`/\`hbu\` stay
+   fully free-form — use whatever actually describes this deal's materials.
+   The \`scores\` keys and \`checklist\` sections/items, however, are NOT
    free-form — use exactly the ones listed for this deal's \`dealType\` in
    the reference tables below.
 2. Don't just transcribe the materials — actively fill out the card:
@@ -215,18 +236,29 @@ ${guideText}
 
 ## Examples (trimmed — show the shape and how it adapts, not real data)
 
-### Example 1 — Property-Driven, retail + self-storage
+### Example 1 — Property-Driven, retail + self-storage GROUND-UP DEVELOPMENT
+
+Notice \`financing\` sets \`developmentSpread\`/\`netDevelopmentProfit\`
+(dev-only — this is a ground-up build) and \`secondaryUses\` for the
+self-storage component alongside the primary retail use, and
+\`financingNote.pencil.ok\` is the explicit true/false signal the card's
+header reads.
 
 \`\`\`json
 ${JSON.stringify(EXAMPLE_PROPERTY_DRIVEN, null, 2)}
 \`\`\`
 
-### Example 2 — Tenant-Driven, industrial build-to-suit
+### Example 2 — Tenant-Driven, industrial ACQUISITION (not a development)
 
 Notice \`scores\`/\`checklist\` use the Tenant-Driven tables above, and
 \`financing\`/\`propertyInfo\`/\`market\` use industrial-specific field
 names and labels instead of the retail example's — that's the adaptation
-rule 1 is asking for.
+rule 1 is asking for. Also notice this example OMITS
+\`developmentSpread\`/\`netDevelopmentProfit\` entirely (it's an
+acquisition, not a development) while still setting \`purchasePrice\`,
+\`primaryUseLabel\`/\`primaryUseSF\`/\`primaryUseRentPSF\`, and
+\`financingNote.pencil.ok\` — the correct pattern for a non-development
+deal.
 
 \`\`\`json
 ${JSON.stringify(EXAMPLE_TENANT_DRIVEN, null, 2)}

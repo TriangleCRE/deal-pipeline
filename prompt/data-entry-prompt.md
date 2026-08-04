@@ -25,12 +25,16 @@ it's an example.
 
 Rules:
 1. This deal could be any property type. The two example documents below
-   show two different shapes (a retail+storage site, an industrial
-   build-to-suit) on purpose — they illustrate the STRUCTURE, not a fixed
-   vocabulary. Field names inside `financing`, and labels inside
-   `propertyInfo`/`gis`/`market`/`zoning`/`hbu`, are free-form — use
-   whatever actually describes this deal's model and materials. The
-   `scores` keys and `checklist` sections/items, however, are NOT
+   show two different shapes on purpose — a retail + self-storage GROUND-UP
+   DEVELOPMENT (Example 1) and an industrial ACQUISITION (Example 2) — they
+   illustrate the STRUCTURE and how it adapts, not a fixed vocabulary.
+   `financing` is a bag of numbers, BUT it has a known set of canonical keys
+   the card actually renders (see the Financing section of the schema below)
+   — always populate those when the deal's model supports them, mapped from
+   whatever the model calls them, and add anything else as extra keys.
+   Labels inside `propertyInfo`/`gis`/`market`/`zoning`/`hbu` stay
+   fully free-form — use whatever actually describes this deal's materials.
+   The `scores` keys and `checklist` sections/items, however, are NOT
    free-form — use exactly the ones listed for this deal's `dealType` in
    the reference tables below.
 2. Don't just transcribe the materials — actively fill out the card:
@@ -154,8 +158,18 @@ missing section just renders as "Needs input."
 - scoreNotes — { <same key>: "one-line rationale" } — a short justification per factor, the same way the example does
 
 ### Financing model inputs (app computes NOI/IRR/etc.)
-- financing — a free-form bag of plain numbers pulled straight from the deal's model — there is no fixed set of keys. The example below (landPrice, retailSF, retailRentPSF, storageSF, storageCostPSF, storageRentPSF, softCosts, totalProjectCost, loanLTC, loan, equity, interestRate, amortYears, holdYears, exitCap, costOfSale, stabilizedNOI, yieldOnCost, exitValue, leveredIRR, equityMultiple, cashOnCash, dscr, storageSensitivity: [{rent,yoc,spread}, ...]) is from a retail + self-storage deal — reuse whatever of those genuinely apply, but for a different asset class use whatever key names actually describe THAT model's line items (e.g. unitCount/avgUnitRentPSF for multifamily, warehouseSF/officeSF/clearHeightFt for industrial, lotCount/lotPricePerAcre for land, baseRentPSF/percentageRent for a ground lease). Match the model in front of you, don't force it into someone else's shape.
-- financingNote: { pencil: {v,s}, listAsk: {v,s} } — call out if the deal does or doesn't pencil, and any price-to-reconcile note
+- financing is a bag of numbers, BUT the card renders a known set of canonical keys — always populate these when the deal's model supports them, mapped from whatever the model calls them; add any extra line items as additional keys alongside them. The canonical keys:
+-   purchasePrice — acquisition price OR land basis for a development; always use this key (not a synonym) so the card's purchase-price tile reads correctly
+-   totalProjectCost, softCosts, loan, equity, loanLTC, interestRate, amortYears, holdYears, exitCap, costOfSale — the standard capital-stack + exit assumptions
+-   stabilizedNOI, yieldOnCost, exitValue, leveredIRR, equityMultiple, cashOnCash, dscr — the standard return metrics
+-   primaryUseLabel, primaryUseSF, primaryUseRentPSF — the deal's ONE dominant leasable use: primaryUseLabel is the asset-class name the card shows as the row label (e.g. "Retail", "Warehouse", "Units", "Land"), primaryUseSF is its area, primaryUseRentPSF its rent. Optionally set primaryUseAreaUnit (default "SF", e.g. "units", "acres") and primaryUseRentBasis (default "/SF NNN", e.g. "/unit/mo", "/acre") when the defaults don't fit.
+-   secondaryUses — OPTIONAL array of { label, sf, areaUnit, rentPSF, rentBasis, costPSF } for a genuine second use on the SAME deal (e.g. office SF inside an industrial building, self-storage bolted onto a retail pad). Omit entirely if there isn't one — don't add a secondary use just to fill the shape.
+-   developmentSpread, netDevelopmentProfit — DEV-ONLY: populate ONLY for ground-up / build-to-suit deals where the model actually computes a spread over cost and a profit. Omit both entirely for acquisitions — the card hides these rows when absent rather than showing a dash.
+-   Mapping guidance: acquisition purchase price → purchasePrice. The deal's primary leasable area + rent → primaryUseSF/primaryUseRentPSF with primaryUseLabel set to the asset class ("Retail", "Industrial", "Office"...). Multifamily → primaryUseLabel "Units", primaryUseSF = unit count, primaryUseAreaUnit "units", primaryUseRentPSF = average rent per unit, primaryUseRentBasis "/unit/mo". Land → primaryUseLabel "Land", primaryUseSF = acreage, primaryUseAreaUnit "acres". Whatever doesn't fit a canonical key (a ground lease's percentage rent, a storage-rent sensitivity table, a unique fee) is still fair game as an extra key — just don't rename a canonical key to something else.
+
+### Financing note — pencil signal
+- financingNote.pencil: { ok: true|false, v: "1-3 sentence explanation", s: provenance } — `ok` is what the card's header actually reads (green "Pencils" when true, red "Does not currently pencil" when false); set it from your own read of whether the deal's return metrics clear the bar (yield on cost vs. exit cap, IRR vs. target, spread sign, etc.), and explain the call in `v`. Never leave `ok` unset if you have enough to judge the deal either way — an unset `ok` renders as a neutral "Pencil status not set", not a negative.
+- financingNote.listAsk: { v, s } — optional note when there's a price to reconcile (e.g. broker ask vs. the model's working basis)
 
 ### Property Information / GIS / Market / Zoning / Highest & Best Use
 - propertyInfo, gis, market, zoning, hbu — each an array of { k: "label", d: { v: "value", s, n: "optional note" } }. The labels are free-form too — use whatever's relevant to this property's actual type. A retail corner cares about traffic counts and visibility; a warehouse cares about clear height and dock doors; an apartment deal cares about unit mix and comps; raw land cares about entitlement status and utility availability. Pull labels from the materials in front of you rather than copying the retail-flavored example verbatim.
@@ -180,7 +194,13 @@ missing section just renders as "Needs input."
 
 ## Examples (trimmed — show the shape and how it adapts, not real data)
 
-### Example 1 — Property-Driven, retail + self-storage
+### Example 1 — Property-Driven, retail + self-storage GROUND-UP DEVELOPMENT
+
+Notice `financing` sets `developmentSpread`/`netDevelopmentProfit`
+(dev-only — this is a ground-up build) and `secondaryUses` for the
+self-storage component alongside the primary retail use, and
+`financingNote.pencil.ok` is the explicit true/false signal the card's
+header reads.
 
 ```json
 {
@@ -240,16 +260,43 @@ missing section just renders as "Needs input."
     "zoning": "Rezoning required, not guaranteed."
   },
   "financing": {
-    "landPrice": 1000000,
-    "retailSF": 6000,
-    "retailRentPSF": 26,
+    "purchasePrice": 1000000,
     "totalProjectCost": 5000000,
+    "softCosts": 480000,
     "loanLTC": 0.7,
-    "exitCap": 0.075
+    "loan": 3500000,
+    "equity": 1500000,
+    "interestRate": 0.0725,
+    "amortYears": 30,
+    "holdYears": 5,
+    "exitCap": 0.075,
+    "costOfSale": 0.02,
+    "primaryUseLabel": "Retail",
+    "primaryUseSF": 6000,
+    "primaryUseRentPSF": 26,
+    "secondaryUses": [
+      {
+        "label": "Self-storage",
+        "sf": 65000,
+        "rentPSF": 14,
+        "rentBasis": "/SF net rentable",
+        "costPSF": 92
+      }
+    ],
+    "stabilizedNOI": 425000,
+    "yieldOnCost": 0.085,
+    "exitValue": 5666667,
+    "leveredIRR": 0.14,
+    "equityMultiple": 1.4,
+    "cashOnCash": 0.06,
+    "dscr": 1.3,
+    "developmentSpread": 0.01,
+    "netDevelopmentProfit": 553333
   },
   "financingNote": {
     "pencil": {
-      "v": "Pencils at current assumptions.",
+      "ok": true,
+      "v": "Pencils at current assumptions — 8.5% yield on cost against a 7.5% exit cap is a positive ~1.0% spread, with the anchor tenant's interest and hard-corner location supporting the rent basis.",
       "s": "ai"
     }
   },
@@ -385,24 +432,29 @@ missing section just renders as "Needs input."
 }
 ```
 
-### Example 2 — Tenant-Driven, industrial build-to-suit
+### Example 2 — Tenant-Driven, industrial ACQUISITION (not a development)
 
 Notice `scores`/`checklist` use the Tenant-Driven tables above, and
 `financing`/`propertyInfo`/`market` use industrial-specific field
 names and labels instead of the retail example's — that's the adaptation
-rule 1 is asking for.
+rule 1 is asking for. Also notice this example OMITS
+`developmentSpread`/`netDevelopmentProfit` entirely (it's an
+acquisition, not a development) while still setting `purchasePrice`,
+`primaryUseLabel`/`primaryUseSF`/`primaryUseRentPSF`, and
+`financingNote.pencil.ok` — the correct pattern for a non-development
+deal.
 
 ```json
 {
   "schemaVersion": 1,
   "id": "4400-commerce-blvd",
-  "name": "4400 Commerce Blvd (BTS)",
+  "name": "4400 Commerce Blvd (Acquisition)",
   "address": "4400 Commerce Blvd, Example City, VA 24000",
   "county": "Example County, VA",
-  "status": "LOI / Negotiation",
+  "status": "Under Contract",
   "dealType": "Tenant-Driven",
   "tags": [
-    "Build-to-suit",
+    "Acquisition",
     "Industrial",
     "I-81 corridor"
   ],
@@ -412,7 +464,7 @@ rule 1 is asking for.
     "logo": null
   },
   "thesis": {
-    "v": "A regional 3PL needs a 120K SF distribution building on I-81; this site fits their footprint and timeline.",
+    "v": "A regional 3PL needs 120K SF of distribution space now; an existing building on I-81 already meets their spec, so we're underwriting it as an acquisition + direct lease instead of a build-to-suit.",
     "s": "ai"
   },
   "scoreProvenance": "ai",
@@ -427,18 +479,40 @@ rule 1 is asking for.
     "executionReadiness": 3
   },
   "scoreNotes": {
-    "tenantFit": "Site depth and clear-height requirement both check out.",
+    "tenantFit": "Existing clear height and dock count both meet the tenant's spec as-is.",
     "tenantCommitment": "LOI signed, lease terms still being negotiated."
   },
   "financing": {
-    "landPrice": 2200000,
-    "warehouseSF": 120000,
+    "purchasePrice": 8200000,
+    "totalProjectCost": 8350000,
+    "loanLTC": 0.65,
+    "loan": 5330000,
+    "equity": 2870000,
+    "interestRate": 0.061,
+    "amortYears": 30,
+    "holdYears": 7,
+    "exitCap": 0.065,
+    "costOfSale": 0.02,
+    "primaryUseLabel": "Warehouse",
+    "primaryUseSF": 120000,
+    "primaryUseRentPSF": 6.25,
+    "stabilizedNOI": 615000,
+    "yieldOnCost": 0.075,
+    "exitValue": 9461538,
+    "leveredIRR": 0.143,
+    "equityMultiple": 1.65,
+    "cashOnCash": 0.052,
+    "dscr": 1.35,
     "clearHeightFt": 32,
     "dockDoors": 24,
-    "baseRentPSF": 6.25,
-    "escalationPct": 0.03,
-    "totalProjectCost": 14500000,
-    "loanLTC": 0.65
+    "escalationPct": 0.03
+  },
+  "financingNote": {
+    "pencil": {
+      "ok": true,
+      "v": "Pencils — in-place NOI supports a 7.5% going-in yield against a 6.5% stabilized industrial exit cap, and levered IRR of 14.3% clears our target.",
+      "s": "ai"
+    }
   },
   "propertyInfo": [
     {
@@ -470,7 +544,7 @@ rule 1 is asking for.
       {
         "item": "Confirm tenant type (Ground lease / BTS / inline)",
         "status": "done",
-        "response": "Build-to-suit, 120K SF",
+        "response": "Direct lease into an existing building (acquisition, not build-to-suit), 120K SF",
         "s": "source"
       }
     ]

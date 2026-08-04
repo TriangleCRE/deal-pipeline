@@ -65,7 +65,8 @@ function buildPreview(p) {
     dealType: p.dealType || null,
     status: p.status || null,
     scores: p.scores || null,
-    landPrice: fin.landPrice ?? null,
+    // canonical `purchasePrice`, falling back to the legacy `landPrice` key
+    purchasePrice: fin.purchasePrice ?? fin.landPrice ?? null,
     totalProjectCost: fin.totalProjectCost ?? null,
     yieldOnCost: fin.yieldOnCost ?? null,
     exitValue: fin.exitValue ?? null,
