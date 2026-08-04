@@ -52,9 +52,14 @@ per-field CRUD, no extra tables.
   already be somewhere with a shareable link (Drive, Dropbox, SharePoint,
   etc.) so Claude can include the link in the JSON — this app doesn't host
   files.
-- **Editing**: every card has a "View/edit JSON" button — raw JSON with
-  copy/download, or paste a corrected version back in to save. No per-field
-  edit forms.
+- **Editing**: every card has an "✎ Edit card" button for editing existing
+  text/values in place (name, thesis, scores, flags, tenants, contacts,
+  checklist responses, etc.) — Save writes the whole document back through
+  the same upsert endpoint, so it's visible to every Triangle employee, not
+  just the browser that made the edit. Adding or removing a row (a new
+  tenant, a new checklist item) is out of scope for inline editing — use
+  the "View/edit JSON" button for that: raw JSON with copy/download, or
+  paste a corrected version back in to save.
 
 ## Privacy — how it's kept off Google and every crawler
 

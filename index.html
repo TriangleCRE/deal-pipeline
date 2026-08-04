@@ -828,16 +828,35 @@ async function initProperty(){
 
   document.title = P.name + " — Triangle Deal Pipeline";
   const chip = k => T.provChip(k);
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const provOpts = (sel) => ["source", "web", "ai", "need"].map(k => `<option value="${k}" ${k === sel ? "selected" : ""}>${T.PROVENANCE[k].label}</option>`).join("");
+  function setPath(o, path, val) { const ks = path.split("."); const last = ks.pop(); let t = o; ks.forEach(k => { if (t[k] == null) t[k] = {}; t = t[k]; }); t[last] = val; }
+
+  /* ---------- edit-mode state ----------
+     Editing here covers existing text/values only — no adding or removing
+     rows (a new tenant, a new checklist item, etc.). That's what "View/edit
+     JSON" is for. Saving writes the whole document back to Postgres via
+     the same upsert endpoint Add Property and View/edit JSON use, so an
+     edit here is visible to every Triangle employee, not just this
+     browser. ------------------------------------------------------- */
+  let EDIT = false, dirty = false, saveMsg = null, baseSnapshot = clone(P);
+
+  /* editable value cell, shared by the flat field-blocks (propertyInfo/gis/market/zoning/hbu) */
+  function valCell(pathBase, d) {
+    d = d || {};
+    if (!EDIT) return `${T.esc(d.v)} ${chip(d.s)}${d.n ? `<span class="note">${T.esc(d.n)}</span>` : ""}`;
+    return `<textarea class="edit-input" data-path="${pathBase}.v" rows="2">${T.esc(d.v)}</textarea>
+      <input class="edit-note" data-path="${pathBase}.n" placeholder="note (optional)" value="${T.esc(d.n || "")}">
+      <select class="edit-prov" data-path="${pathBase}.s">${provOpts(d.s)}</select>`;
+  }
 
   function fieldBlock(id, title, icon, hint, arrKey) {
     const rows = P[arrKey]; if (!rows || !rows.length) return "";
     return `<section class="card block" id="${id}">
       <h2><span class="block-icon">${icon}</span>${T.esc(title)}</h2>
       ${hint ? `<div class="hint">${T.esc(hint)}</div>` : ""}
-      <div class="fields">${rows.map(r => {
-        const d = r.d || {};
-        return `<div class="f"><div class="k">${T.esc(r.k)}</div><div class="val">${T.esc(d.v)} ${chip(d.s)}${d.n ? `<span class="note">${T.esc(d.n)}</span>` : ""}</div></div>`;
-      }).join("")}</div>
+      <div class="fields">${rows.map((r, i) =>
+        `<div class="f ${EDIT ? "is-editing" : ""}"><div class="k">${T.esc(r.k)}</div><div class="val">${valCell(`${arrKey}.${i}.d`, r.d)}</div></div>`).join("")}</div>
     </section>`;
   }
 
@@ -854,24 +873,52 @@ async function initProperty(){
       <div class="crumbs" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
         <span><a href="#/">Portfolio</a> › ${T.esc(P.name)}</span>
         <span class="editbar noprint">
-          <button class="btn btn-sm" id="btnJson">{ } View/edit JSON</button>
-          <button class="btn btn-sm" onclick="window.print()" title="Choose “Save as PDF”">⬇ Save as PDF (1-pager)</button>
+          ${EDIT ? `<span class="edit-badge">Editing${dirty ? ' <span class="dirty-dot"></span>' : ""}</span>
+            <button class="btn btn-sm btn-primary" id="btnSave">Save</button>
+            <button class="btn btn-sm" id="btnCancel">Cancel</button>`
+          : `<button class="btn btn-sm" id="btnEdit">✎ Edit card</button>
+             <button class="btn btn-sm" id="btnJson">{ } View/edit JSON</button>
+             <button class="btn btn-sm" onclick="window.print()" title="Choose “Save as PDF”">⬇ Save as PDF (1-pager)</button>`}
         </span>
       </div>
+      ${saveMsg ? `<div class="wnote" style="margin:0 0 10px;font-weight:700;color:${saveMsg.ok ? "var(--ok-ink)" : "var(--bad-ink)"}">${saveMsg.text}</div>` : ""}
       <div class="phead">
-        <div>
+        ${EDIT ? `<div style="min-width:280px;flex:1">
+          <div class="fld"><label>Property name</label><input class="edit-input" data-path="name" value="${T.esc(P.name)}"></div>
+          <div class="fld"><label>Address</label><input class="edit-input" data-path="address" value="${T.esc(P.address || "")}"></div>
+          <div class="duo">
+            <div class="fld"><label>County / market</label><input class="edit-input" data-path="county" value="${T.esc(P.county || "")}"></div>
+            <div class="fld"><label>Parcels</label><input class="edit-input" data-path="parcels" value="${T.esc(P.parcels || "")}"></div>
+          </div>
+          <div class="fld"><label>Tags (comma-separated)</label><input class="edit-input" data-path="tags" data-type="tags" value="${T.esc((P.tags || []).join(", "))}"></div>
+          <div class="fld"><label>Deal type</label><select class="edit-input" data-path="dealType">${T.DEAL_TYPES.map(dt => `<option value="${T.esc(dt)}" ${dt === dealType ? "selected" : ""}>${T.esc(dt)}</option>`).join("")}</select></div>
+        </div>` : `<div>
           <h1>${T.esc(P.name)}</h1>
           <div class="addr">${T.esc(P.address || "")}</div>
           <div class="wnote" style="margin-top:2px">${T.esc(P.county || "")}${P.parcels ? " · " + T.esc(P.parcels) : ""}</div>
           <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><span class="type-chip">${T.esc(dealType)}</span>${(P.tags || []).map(t => `<span class="tag">${T.esc(t)}</span>`).join("")}</div>
-        </div>
+        </div>`}
         <div class="right">
           ${score ? `<div style="text-align:right"><div style="font-size:34px;font-weight:800;line-height:1">${score.weighted}<span style="font-size:15px;color:var(--muted)">/100</span></div><span class="badge ${score.cls}">${score.status}</span></div>` : ""}
-          <div style="text-align:right"><div class="wnote">Stage</div><div style="font-weight:750">${T.esc(P.status || "—")}</div><div class="wnote" style="margin-top:6px">Updated ${T.esc(P.updated || "")}</div></div>
+          ${EDIT ? `<div style="text-align:right;min-width:170px">
+            <div class="fld"><label>Stage</label><input class="edit-input" data-path="status" value="${T.esc(P.status || "")}"></div>
+            <div class="fld"><label>Updated</label><input class="edit-input" data-path="updated" value="${T.esc(P.updated || "")}"></div>
+          </div>` : `<div style="text-align:right"><div class="wnote">Stage</div><div style="font-weight:750">${T.esc(P.status || "—")}</div><div class="wnote" style="margin-top:6px">Updated ${T.esc(P.updated || "")}</div></div>`}
         </div>
       </div>
-      ${metaRows.length ? `<div class="card" style="padding:10px 16px;margin:0 0 14px;display:flex;flex-wrap:wrap;gap:22px">
-        ${metaRows.map(r => `<div><span class="wnote" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em">${T.esc(r[0])}</span><div style="font-weight:700;font-size:13.5px">${T.esc(r[1])}</div></div>`).join("")}</div>` : ""}`;
+      ${EDIT ? `<div class="card" style="padding:14px 16px;margin:0 0 14px">
+        <div class="section-title" style="margin-bottom:8px">Deal meta</div>
+        <div class="duo">
+          <div class="fld"><label>Deal ID</label><input class="edit-input" data-path="meta.dealId" value="${T.esc(m.dealId || "")}"></div>
+          <div class="fld"><label>Entity</label><input class="edit-input" data-path="meta.entity" value="${T.esc(m.entity || "")}"></div>
+        </div>
+        <div class="duo">
+          <div class="fld"><label>Prepared</label><input class="edit-input" data-path="meta.prepared" value="${T.esc(m.prepared || "")}"></div>
+          <div class="fld"><label>Source model</label><input class="edit-input" data-path="meta.sourceModel" value="${T.esc(m.sourceModel || "")}"></div>
+        </div>
+      </div>` : (metaRows.length ? `<div class="card" style="padding:10px 16px;margin:0 0 14px;display:flex;flex-wrap:wrap;gap:22px">
+        ${metaRows.map(r => `<div><span class="wnote" style="font-weight:700;text-transform:uppercase;letter-spacing:.05em">${T.esc(r[0])}</span><div style="font-weight:700;font-size:13.5px">${T.esc(r[1])}</div></div>`).join("")}</div>` : "")}
+      ${EDIT ? `<div class="wnote" style="margin:0 0 14px">Editing existing text and values, saved for everyone on Save. To add or remove a row (a new tenant, contact, checklist item, etc.) use <a href="#" id="btnJsonFromEdit">View/edit JSON</a> instead.</div>` : ""}`;
 
     /* ---------- table of contents ---------- */
     const tocItems = [
@@ -882,11 +929,12 @@ async function initProperty(){
     ];
     const toc = `<nav class="toc noprint"><span class="lbl">Jump to</span>${tocItems.map(t => `<a href="#${t[0]}">${t[1]}</a>`).join("")}</nav>`;
 
-    /* ---------- rail: score + meters ---------- */
+    /* ---------- rail: score + meters (editable) ---------- */
     const gc = score ? (score.weighted >= 80 ? "var(--ok)" : score.weighted >= 65 ? "var(--warn)" : "var(--bad)") : "var(--muted)";
     const meters = T.scoreCriteriaFor(dealType).map(c => {
       const v = Number(P.scores && P.scores[c.id]) || 0;
-      return `<div class="meter-row" title="${T.esc(c.hint)}\n${T.esc((P.scoreNotes && P.scoreNotes[c.id]) || "")}"><span class="name">${T.esc(c.label)}</span><span class="meter"><i style="width:${v / 5 * 100}%"></i></span><span class="sc">${v || "–"}</span></div>`;
+      const right = EDIT ? `<input class="editscore" data-path="scores.${c.id}" value="${v}" inputmode="numeric">` : `<span class="sc">${v || "–"}</span>`;
+      return `<div class="meter-row" title="${T.esc(c.hint)}\n${T.esc((P.scoreNotes && P.scoreNotes[c.id]) || "")}"><span class="name">${T.esc(c.label)}</span><span class="meter"><i style="width:${v / 5 * 100}%"></i></span>${right}</div>`;
     }).join("");
     const railScore = `<section class="card scoresum" id="scoring">
       <div class="section-title" style="margin-bottom:8px">Development Score</div>
@@ -894,7 +942,7 @@ async function initProperty(){
         <span class="badge ${score.cls}" style="font-size:13px">${score.status}</span>
         <div class="wnote" style="margin-top:6px">${T.esc(score.meaning)} · raw ${score.raw}/${score.rawMax} · ${chip(P.scoreProvenance)}</div>` : `<p class="wnote">Not yet scored.</p>`}
       <div style="margin-top:16px;text-align:left">${meters}</div>
-      <div class="wnote" style="margin-top:10px;text-align:left">Weighted per the ${T.esc(dealType)} scorecard. Hover a row for its rationale.</div>
+      <div class="wnote" style="margin-top:10px;text-align:left">${EDIT ? "Type 1–5 to re-score; the gauge updates on blur." : `Weighted per the ${T.esc(dealType)} scorecard. Hover a row for its rationale.`}</div>
     </section>`;
 
     const railFin = fin ? `<section class="card block">
@@ -912,12 +960,21 @@ async function initProperty(){
     const rail = `<aside class="prail">${railScore}${railFin}</aside>`;
 
     /* ---------- main sections ---------- */
-    const flagLine = f => `<li class="${f.type || "watch"}"><span class="mk">${f.type === "opp" ? "▲" : f.type === "risk" ? "■" : "◆"}</span><span>${T.esc(f.text)} ${chip(f.s)}</span></li>`;
+    const flagTypeOpts = t => ["opp", "risk", "watch"].map(k =>
+      `<option value="${k}" ${k === t ? "selected" : ""}>${k === "opp" ? "Opportunity" : k === "risk" ? "Risk" : "Watch"}</option>`).join("");
+    const flagLine = (f, i) => EDIT ? `<li class="${f.type || "watch"}"><span class="mk">${f.type === "opp" ? "▲" : f.type === "risk" ? "■" : "◆"}</span>
+        <span style="flex:1;display:flex;flex-direction:column;gap:5px">
+          <select class="edit-prov" data-path="flags.${i}.type" style="width:130px">${flagTypeOpts(f.type)}</select>
+          <input class="edit-input" data-path="flags.${i}.text" value="${T.esc(f.text)}">
+          <select class="edit-prov" data-path="flags.${i}.s">${provOpts(f.s)}</select>
+        </span></li>`
+      : `<li class="${f.type || "watch"}"><span class="mk">${f.type === "opp" ? "▲" : f.type === "risk" ? "■" : "◆"}</span><span>${T.esc(f.text)} ${chip(f.s)}</span></li>`;
     const snapshot = `<section class="card block" id="snapshot">
       <h2><span class="block-icon">◱</span>Investment Snapshot</h2>
-      ${P.thesis ? `<p style="font-size:15px;margin:6px 0 16px">${T.esc(P.thesis.v)} ${chip(P.thesis.s)}</p>` : `<p class="wnote">Needs input.</p>`}
+      ${EDIT ? `<textarea class="edit-input" data-path="thesis.v" rows="4">${T.esc(P.thesis && P.thesis.v)}</textarea><select class="edit-prov" data-path="thesis.s" style="margin-bottom:12px">${provOpts(P.thesis && P.thesis.s)}</select>`
+        : (P.thesis ? `<p style="font-size:15px;margin:6px 0 16px">${T.esc(P.thesis.v)} ${chip(P.thesis.s)}</p>` : `<p class="wnote">Needs input.</p>`)}
       <div class="section-title" style="margin-bottom:8px">Opportunities · Risks · Watch items</div>
-      <ul class="flags">${(P.flags || []).map(flagLine).join("")}</ul>
+      <ul class="flags">${(P.flags || []).map((f, i) => flagLine(f, i)).join("")}</ul>
     </section>`;
 
     const sitePlan = P.images && P.images.sitePlan ? `<section class="card block" id="siteplan">
@@ -929,31 +986,55 @@ async function initProperty(){
     const tenants = (P.tenants && P.tenants.length) ? `<section class="card block" id="tenants">
       <h2><span class="block-icon">☰</span>Potential Tenants</h2>
       <div class="hint">Who fills the buildings — and how solid they are.</div>
-      ${P.tenants.map(t => { const logo = t.logo ? `<img src="${T.esc(t.logo)}" alt="${T.esc(t.name)}">` : `<div class="ic" style="width:30px;height:30px;border-radius:7px;background:var(--brand-wash);color:var(--brand-dark);display:grid;place-items:center;font-weight:800">☰</div>`;
-        return `<div class="tenant">${logo}<div class="grow"><div class="tn">${T.esc(t.name)} <span class="badge ${t.cls || "badge-neutral"}" style="font-size:11px">${T.esc(t.status || "")}</span></div><div class="td">${T.esc(t.note)} ${chip(t.s)}</div></div></div>`;
+      ${P.tenants.map((t, i) => { const logo = t.logo ? `<img src="${T.esc(t.logo)}" alt="${T.esc(t.name)}">` : `<div class="ic" style="width:30px;height:30px;border-radius:7px;background:var(--brand-wash);color:var(--brand-dark);display:grid;place-items:center;font-weight:800">☰</div>`;
+        return EDIT ? `<div class="tenant" style="align-items:flex-start">${logo}
+          <div class="grow" style="display:flex;flex-direction:column;gap:5px">
+            <input class="edit-input" data-path="tenants.${i}.name" value="${T.esc(t.name)}" placeholder="Tenant name">
+            <input class="edit-input" data-path="tenants.${i}.status" value="${T.esc(t.status || "")}" placeholder="Status label (e.g. Interested — anchor)">
+            <textarea class="edit-input" rows="2" data-path="tenants.${i}.note">${T.esc(t.note)}</textarea>
+            <select class="edit-prov" data-path="tenants.${i}.s">${provOpts(t.s)}</select>
+          </div></div>`
+          : `<div class="tenant">${logo}<div class="grow"><div class="tn">${T.esc(t.name)} <span class="badge ${t.cls || "badge-neutral"}" style="font-size:11px">${T.esc(t.status || "")}</span></div><div class="td">${T.esc(t.note)} ${chip(t.s)}</div></div></div>`;
       }).join("")}
     </section>` : "";
 
     const surr = (P.surroundings && P.surroundings.items && P.surroundings.items.length) ? `<section class="card block" id="surroundings">
       <h2><span class="block-icon">◎</span>Surroundings & Adjacencies</h2>
-      <div class="hint">Neighboring uses and what they mean for this deal. ${chip(P.surroundings.s)}</div>
-      <ul class="flags">${P.surroundings.items.map(s => `<li class="${s.type || "watch"}"><span class="mk">${s.type === "opp" ? "▲" : "◆"}</span><span><b>${T.esc(s.name)}</b>${s.rel ? " — " + T.esc(s.rel) : ""}<br><span class="wnote">${T.esc(s.note)}</span></span></li>`).join("")}</ul>
+      <div class="hint">Neighboring uses and what they mean for this deal. ${EDIT ? `<select class="edit-prov" data-path="surroundings.s">${provOpts(P.surroundings.s)}</select>` : chip(P.surroundings.s)}</div>
+      <ul class="flags">${P.surroundings.items.map((s, i) => EDIT ? `<li class="${s.type || "watch"}"><span class="mk">${s.type === "opp" ? "▲" : "◆"}</span>
+          <span style="flex:1;display:flex;flex-direction:column;gap:5px">
+            <span style="display:flex;gap:8px">
+              <select class="edit-prov" data-path="surroundings.items.${i}.type" style="width:120px"><option value="opp" ${s.type === "opp" ? "selected" : ""}>Opportunity</option><option value="watch" ${s.type === "watch" ? "selected" : ""}>Watch</option></select>
+              <input class="edit-input" data-path="surroundings.items.${i}.name" value="${T.esc(s.name)}" placeholder="Name">
+            </span>
+            <input class="edit-input" data-path="surroundings.items.${i}.rel" value="${T.esc(s.rel || "")}" placeholder="Relationship">
+            <textarea class="edit-input" rows="2" data-path="surroundings.items.${i}.note">${T.esc(s.note)}</textarea>
+          </span></li>`
+        : `<li class="${s.type || "watch"}"><span class="mk">${s.type === "opp" ? "▲" : "◆"}</span><span><b>${T.esc(s.name)}</b>${s.rel ? " — " + T.esc(s.rel) : ""}<br><span class="wnote">${T.esc(s.note)}</span></span></li>`).join("")}</ul>
     </section>` : "";
 
     const history = (P.history && P.history.bullets && P.history.bullets.length) ? `<section class="card block" id="history">
       <h2><span class="block-icon">◷</span>Property History & Notable Findings</h2>
-      <div class="fields">${P.history.bullets.map(b => `<div class="f"><div class="k">${T.esc(b.t)}</div><div class="val">${T.esc(b.d)} ${chip(b.s)}</div></div>`).join("")}</div>
+      <div class="fields">${P.history.bullets.map((b, i) => EDIT
+        ? `<div class="f is-editing"><div class="k">${T.esc(b.t)}</div><div class="val"><textarea class="edit-input" rows="2" data-path="history.bullets.${i}.d">${T.esc(b.d)}</textarea><select class="edit-prov" data-path="history.bullets.${i}.s">${provOpts(b.s)}</select></div></div>`
+        : `<div class="f"><div class="k">${T.esc(b.t)}</div><div class="val">${T.esc(b.d)} ${chip(b.s)}</div></div>`).join("")}</div>
     </section>` : "";
 
     const contacts = (P.contacts && P.contacts.length) ? `<section class="card block" id="contacts">
       <h2><span class="block-icon">✉</span>Brokers, Owners & Contacts</h2>
-      <div class="duo">${P.contacts.map(c => `<div style="border:1px solid var(--line);border-radius:11px;padding:13px 15px">
+      <div class="duo">${P.contacts.map((c, i) => EDIT ? `<div style="border:1px solid var(--brand);border-radius:11px;padding:13px 15px">
+          <div style="display:flex;gap:8px;margin-bottom:6px"><input class="edit-input" data-path="contacts.${i}.role" value="${T.esc(c.role || "")}" placeholder="Role"><select class="edit-prov" data-path="contacts.${i}.s">${provOpts(c.s)}</select></div>
+          <input class="edit-input" style="margin-bottom:6px" data-path="contacts.${i}.name" value="${T.esc(c.name || "")}" placeholder="Name">
+          <input class="edit-input" style="margin-bottom:6px" data-path="contacts.${i}.org" value="${T.esc(c.org || "")}" placeholder="Organization">
+          <input class="edit-input" style="margin-bottom:6px" data-path="contacts.${i}.detail" value="${T.esc(c.detail || "")}" placeholder="Detail (phone / email)">
+          <textarea class="edit-input" rows="2" data-path="contacts.${i}.bg">${T.esc(c.bg)}</textarea>
+        </div>` : `<div style="border:1px solid var(--line);border-radius:11px;padding:13px 15px">
         <div class="section-title">${T.esc(c.role || "")} ${chip(c.s)}</div>
         <div style="font-weight:750;margin-top:4px">${T.esc(c.name)}</div><div class="wnote" style="color:var(--ink-2)">${T.esc(c.org)}</div>
         <div class="wnote" style="margin-top:6px">${T.esc(c.detail)}</div><div class="wnote" style="margin-top:6px;color:var(--ink-2)">${T.esc(c.bg)}</div></div>`).join("")}</div>
     </section>` : "";
 
-    /* ---------- financing detail (model outputs) ---------- */
+    /* ---------- financing detail (model outputs — figures only, edit via View/edit JSON) ---------- */
     const sens = fin && fin.storageSensitivity ? `<div style="margin-top:14px">
       <div class="section-title" style="margin-bottom:6px">Storage-rent sensitivity ${chip("source")}</div>
       <table class="fintable"><tr><td>Storage rent ($/SF)</td>${fin.storageSensitivity.map(r => `<td>$${r.rent}</td>`).join("")}</tr>
@@ -1007,14 +1088,28 @@ async function initProperty(){
         <span class="badge badge-ok" style="font-size:11px">✓ done</span> <span class="badge badge-warn" style="font-size:11px">◐ in progress</span>
         <span class="badge badge-bad" style="font-size:11px">! flag</span> <span class="badge badge-neutral" style="font-size:11px">· not started</span></div>
       <div class="check">${checklistSections.map(sec => `<div class="chk-cat">${sec.id}. ${T.esc(sec.title)}</div>` +
-        (P.checklist[sec.id] || []).map(r => { const st = stMap[r.status] || stMap.none;
-          return `<div class="ci"><span class="st ${st[0]}">${st[1]}</span><span class="lab">${T.esc(r.item)}<span class="rsp">${T.esc(r.response || "")}${r.note ? " · " + T.esc(r.note) : ""}</span></span><span>${chip(r.s)}</span></div>`;
-        }).join("")).join("")}</div>
+        (P.checklist[sec.id] || []).map((r, idx) => { const st = stMap[r.status] || stMap.none;
+          if (!EDIT) return `<div class="ci"><span class="st ${st[0]}">${st[1]}</span><span class="lab">${T.esc(r.item)}<span class="rsp">${T.esc(r.response || "")}${r.note ? " · " + T.esc(r.note) : ""}</span></span><span>${chip(r.s)}</span></div>`;
+          const path = `checklist.${sec.id}.${idx}`;
+          return `<div class="ci" style="grid-template-columns:56px 1fr 100px;align-items:start">
+            <select class="edit-prov" data-path="${path}.status" style="width:56px;padding:2px">
+              <option value="done" ${r.status === "done" ? "selected" : ""}>✓</option>
+              <option value="prog" ${r.status === "prog" ? "selected" : ""}>◐</option>
+              <option value="none" ${r.status === "none" ? "selected" : ""}>·</option>
+              <option value="flag" ${r.status === "flag" ? "selected" : ""}>!</option>
+            </select>
+            <span style="display:flex;flex-direction:column;gap:4px">
+              <b style="font-size:13.5px">${T.esc(r.item)}</b>
+              <input class="edit-input" data-path="${path}.response" value="${T.esc(r.response || "")}" placeholder="Response">
+              <input class="edit-note" data-path="${path}.note" value="${T.esc(r.note || "")}" placeholder="Note (optional)">
+            </span>
+            <select class="edit-prov" data-path="${path}.s">${provOpts(r.s)}</select>
+          </div>`; }).join("")).join("")}</div>
     </section>` : "";
 
     const materials = P.materials ? `<section class="card block" id="materials">
       <h2><span class="block-icon">📎</span>Deal Materials</h2>
-      <div class="hint">Every uploaded file, grouped by type — multiple files per category are supported.</div>
+      <div class="hint">Every uploaded file, grouped by type — multiple files per category are supported. Add/remove files via View/edit JSON.</div>
       ${T.MATERIAL_CATEGORIES.map(cat => { const files = (P.materials[cat.id] || []);
         return `<div class="matcat"><h4><span class="block-icon" style="width:22px;height:22px;font-size:12px">${cat.icon}</span>${T.esc(cat.label)} <span class="wnote">(${files.length})</span></h4>
           <div class="filelist">${files.length ? files.map(f => `<a class="fileitem" href="${T.esc(f.file || "#")}" target="_blank" rel="noopener"><span class="ic">${((f.name || "?").split(".").pop() || "?").slice(0, 4).toUpperCase()}</span><span class="grow"><b>${T.esc(f.name)}</b><br><span class="meta">${T.esc(f.meta || "")}</span></span>${chip(f.s)}</a>`).join("") : `<div class="dropzone">No files yet — add ${T.esc(cat.label)} here</div>`}</div></div>`; }).join("")}
@@ -1023,11 +1118,16 @@ async function initProperty(){
     const extras = (P.extras && P.extras.length) ? `<section class="card block" id="extras">
       <h2><span class="block-icon">＋</span>Additional Captured Information</h2>
       <div class="hint">Details that arrived outside the standard template — kept here so nothing gets lost.</div>
-      ${P.extras.map(e => `<div class="extra"><div class="lab">${T.esc(e.label)} ${chip(e.s)}</div><div class="txt">${T.esc(e.text)}</div></div>`).join("")}
+      ${P.extras.map((e, i) => EDIT ? `<div class="extra">
+          <div style="display:flex;gap:8px;margin-bottom:6px"><input class="edit-input" data-path="extras.${i}.label" value="${T.esc(e.label || "")}" placeholder="Label" style="font-weight:750"><select class="edit-prov" data-path="extras.${i}.s">${provOpts(e.s)}</select></div>
+          <textarea class="edit-input" rows="2" data-path="extras.${i}.text">${T.esc(e.text)}</textarea>
+        </div>` : `<div class="extra"><div class="lab">${T.esc(e.label)} ${chip(e.s)}</div><div class="txt">${T.esc(e.text)}</div></div>`).join("")}
     </section>` : "";
 
     const sources = (P.sources && P.sources.length) ? `<section class="card block" id="sources">
-      <h2><span class="block-icon">§</span>Sources</h2><ol class="srclist">${P.sources.map(s => `<li><a href="${T.esc(s.url || "#")}" target="_blank" rel="noopener">${T.esc(s.label || s.url)}</a></li>`).join("")}</ol>
+      <h2><span class="block-icon">§</span>Sources</h2><ol class="srclist">${P.sources.map((s, i) => EDIT
+        ? `<li style="margin-bottom:6px"><input class="edit-input" data-path="sources.${i}.label" value="${T.esc(s.label || "")}"></li>`
+        : `<li><a href="${T.esc(s.url || "#")}" target="_blank" rel="noopener">${T.esc(s.label || s.url)}</a></li>`).join("")}</ol>
     </section>` : "";
 
     const mainCol = `<div class="pmain">
@@ -1043,14 +1143,60 @@ async function initProperty(){
 
     const legend = `<div class="card" style="padding:11px 16px;margin:6px 0 14px" id="legendbar"><div class="prov-legend"><span class="wnote" style="font-weight:700">Source markers:</span>${T.provLegend()}</div></div>`;
     app.innerHTML = `<div class="screen-only">${header}${toc}${legend}<div class="player">${mainCol}${rail}</div></div>`;
+    document.body.classList.toggle("editing", EDIT);
     wire();
+  }
+
+  /* ---------- events ---------- */
+  function markDirty() { dirty = true; const b = document.querySelector(".edit-badge"); if (b && !b.querySelector(".dirty-dot")) b.innerHTML = 'Editing <span class="dirty-dot"></span>'; }
+
+  async function doSave() {
+    const btn = document.getElementById("btnSave");
+    if (btn) { btn.disabled = true; btn.textContent = "Saving…"; }
+    const result = await apiSaveProperty(P).catch(err => ({ ok: false, error: err.message }));
+    if (result.ok) {
+      baseSnapshot = clone(P);
+      dirty = false; EDIT = false;
+      saveMsg = { ok: true, text: "Saved ✓ — visible to everyone now." };
+      render();
+      setTimeout(() => { saveMsg = null; render(); }, 4000);
+    } else {
+      if (btn) { btn.disabled = false; btn.textContent = "Save"; }
+      saveMsg = result.errors
+        ? { ok: false, text: "Doesn't match the schema: " + result.errors.map(e => e.path + ": " + e.message).join("; ") }
+        : { ok: false, text: result.error || "Save failed — try again." };
+      render();
+    }
   }
 
   function wire() {
     const g = id => document.getElementById(id);
     if (g("btnJson")) g("btnJson").onclick = () => openJsonModal(T, P, {
       title: P.name + " — raw JSON",
-      onSaved: updated => { P = updated; render(); }
+      onSaved: updated => { P = updated; baseSnapshot = clone(P); EDIT = false; dirty = false; render(); }
+    });
+    if (g("btnJsonFromEdit")) g("btnJsonFromEdit").onclick = (e) => { e.preventDefault(); openJsonModal(T, P, {
+      title: P.name + " — raw JSON",
+      onSaved: updated => { P = updated; baseSnapshot = clone(P); EDIT = false; dirty = false; render(); }
+    }); };
+    if (g("btnEdit")) g("btnEdit").onclick = () => { baseSnapshot = clone(P); EDIT = true; dirty = false; saveMsg = null; render(); };
+    if (g("btnCancel")) g("btnCancel").onclick = () => {
+      if (dirty && !confirm("Discard your unsaved changes?")) return;
+      P = clone(baseSnapshot); EDIT = false; dirty = false; saveMsg = null; render();
+    };
+    if (g("btnSave")) g("btnSave").onclick = doSave;
+    // bind editable inputs
+    document.querySelectorAll("[data-path]").forEach(el => {
+      const isScore = el.classList.contains("editscore");
+      const isDealType = el.dataset.path === "dealType";
+      el.addEventListener(isScore || isDealType ? "change" : "input", () => {
+        let v = el.value;
+        if (isScore) { v = Math.max(0, Math.min(5, parseInt(v, 10) || 0)); }
+        else if (el.dataset.type === "tags") { v = v.split(",").map(s => s.trim()).filter(Boolean); }
+        setPath(P, el.dataset.path, v);
+        markDirty();
+        if (isScore || isDealType) render(); // refresh gauge + meter (and checklist/scorecard on type switch)
+      });
     });
   }
 
