@@ -142,6 +142,12 @@ export const PropertySchema = z.object({
   dealType: z.enum(["Property-Driven", "Tenant-Driven"]).optional(),
   tags: z.array(z.string()).optional(),
   updated: z.string().optional(),
+  // App-managed, not part of the data-entry prompt — set via the "Archive" /
+  // "Restore" buttons on the property page, not by hand. An archived
+  // property is kept (fully intact, still deletable/restorable) but drops
+  // out of the default portfolio view and its KPIs.
+  archived: z.boolean().optional(),
+  archivedAt: z.string().nullable().optional(),
   headlineTenant: z.object({
     name: z.string().optional(),
     logo: z.string().nullable().optional(),
