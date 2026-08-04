@@ -166,7 +166,10 @@ export const PropertySchema = z.object({
   /* ---- financing model inputs (the app derives NOI/IRR/etc. from these) ---- */
   financing: z.record(z.string(), z.any()).nullable().optional(),
   financingNote: z.object({
-    pencil: fact(z.string()).optional(),
+    // `ok` is the explicit pencil signal the card's header reads — true/false,
+    // not "presence of this object" (see FIELD_GUIDE below). `v`/`s` behave
+    // like any other fact() — the note text + provenance badge.
+    pencil: z.object({ ok: z.boolean().optional(), v: z.string().optional(), s: prov(), n: z.string().optional() }).passthrough().optional(),
     listAsk: fact(z.string()).optional(),
   }).passthrough().optional(),
 
@@ -282,8 +285,18 @@ export const FIELD_GUIDE = [
     "scoreNotes — { <same key>: \"one-line rationale\" } — a short justification per factor, the same way the example does",
   ]},
   { section: "Financing model inputs (app computes NOI/IRR/etc.)", fields: [
-    "financing — a free-form bag of plain numbers pulled straight from the deal's model — there is no fixed set of keys. The example below (landPrice, retailSF, retailRentPSF, storageSF, storageCostPSF, storageRentPSF, softCosts, totalProjectCost, loanLTC, loan, equity, interestRate, amortYears, holdYears, exitCap, costOfSale, stabilizedNOI, yieldOnCost, exitValue, leveredIRR, equityMultiple, cashOnCash, dscr, storageSensitivity: [{rent,yoc,spread}, ...]) is from a retail + self-storage deal — reuse whatever of those genuinely apply, but for a different asset class use whatever key names actually describe THAT model's line items (e.g. unitCount/avgUnitRentPSF for multifamily, warehouseSF/officeSF/clearHeightFt for industrial, lotCount/lotPricePerAcre for land, baseRentPSF/percentageRent for a ground lease). Match the model in front of you, don't force it into someone else's shape.",
-    "financingNote: { pencil: {v,s}, listAsk: {v,s} } — call out if the deal does or doesn't pencil, and any price-to-reconcile note",
+    "financing is a bag of numbers, BUT the card renders a known set of canonical keys — always populate these when the deal's model supports them, mapped from whatever the model calls them; add any extra line items as additional keys alongside them. The canonical keys:",
+    "  purchasePrice — acquisition price OR land basis for a development; always use this key (not a synonym) so the card's purchase-price tile reads correctly",
+    "  totalProjectCost, softCosts, loan, equity, loanLTC, interestRate, amortYears, holdYears, exitCap, costOfSale — the standard capital-stack + exit assumptions",
+    "  stabilizedNOI, yieldOnCost, exitValue, leveredIRR, equityMultiple, cashOnCash, dscr — the standard return metrics",
+    "  primaryUseLabel, primaryUseSF, primaryUseRentPSF — the deal's ONE dominant leasable use: primaryUseLabel is the asset-class name the card shows as the row label (e.g. \"Retail\", \"Warehouse\", \"Units\", \"Land\"), primaryUseSF is its area, primaryUseRentPSF its rent. Optionally set primaryUseAreaUnit (default \"SF\", e.g. \"units\", \"acres\") and primaryUseRentBasis (default \"/SF NNN\", e.g. \"/unit/mo\", \"/acre\") when the defaults don't fit.",
+    "  secondaryUses — OPTIONAL array of { label, sf, areaUnit, rentPSF, rentBasis, costPSF } for a genuine second use on the SAME deal (e.g. office SF inside an industrial building, self-storage bolted onto a retail pad). Omit entirely if there isn't one — don't add a secondary use just to fill the shape.",
+    "  developmentSpread, netDevelopmentProfit — DEV-ONLY: populate ONLY for ground-up / build-to-suit deals where the model actually computes a spread over cost and a profit. Omit both entirely for acquisitions — the card hides these rows when absent rather than showing a dash.",
+    "  Mapping guidance: acquisition purchase price → purchasePrice. The deal's primary leasable area + rent → primaryUseSF/primaryUseRentPSF with primaryUseLabel set to the asset class (\"Retail\", \"Industrial\", \"Office\"...). Multifamily → primaryUseLabel \"Units\", primaryUseSF = unit count, primaryUseAreaUnit \"units\", primaryUseRentPSF = average rent per unit, primaryUseRentBasis \"/unit/mo\". Land → primaryUseLabel \"Land\", primaryUseSF = acreage, primaryUseAreaUnit \"acres\". Whatever doesn't fit a canonical key (a ground lease's percentage rent, a storage-rent sensitivity table, a unique fee) is still fair game as an extra key — just don't rename a canonical key to something else.",
+  ]},
+  { section: "Financing note — pencil signal", fields: [
+    "financingNote.pencil: { ok: true|false, v: \"1-3 sentence explanation\", s: provenance } — `ok` is what the card's header actually reads (green \"Pencils\" when true, red \"Does not currently pencil\" when false); set it from your own read of whether the deal's return metrics clear the bar (yield on cost vs. exit cap, IRR vs. target, spread sign, etc.), and explain the call in `v`. Never leave `ok` unset if you have enough to judge the deal either way — an unset `ok` renders as a neutral \"Pencil status not set\", not a negative.",
+    "financingNote.listAsk: { v, s } — optional note when there's a price to reconcile (e.g. broker ask vs. the model's working basis)",
   ]},
   { section: "Property Information / GIS / Market / Zoning / Highest & Best Use", fields: [
     "propertyInfo, gis, market, zoning, hbu — each an array of { k: \"label\", d: { v: \"value\", s, n: \"optional note\" } }. The labels are free-form too — use whatever's relevant to this property's actual type. A retail corner cares about traffic counts and visibility; a warehouse cares about clear height and dock doors; an apartment deal cares about unit mix and comps; raw land cares about entitlement status and utility availability. Pull labels from the materials in front of you rather than copying the retail-flavored example verbatim.",

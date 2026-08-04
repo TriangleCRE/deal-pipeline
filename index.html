@@ -466,11 +466,44 @@ textarea.edit-input{min-height:52px;resize:vertical;line-height:1.4}
     if (!f) return null;
     const g = k => Number(f[k]) || 0;
     const num = k => (f[k] != null ? Number(f[k]) : null);
-    const retailRent = g("retailSF") * g("retailRentPSF");
-    const retailCost = g("retailSF") * g("retailCostPSF");
-    const storageCost = g("storageSF") * g("storageCostPSF");
+
+    /* ---- purchase price: canonical `purchasePrice`, legacy `landPrice` ---- */
+    const purchasePrice = f.purchasePrice != null ? g("purchasePrice") : g("landPrice");
+
+    /* ---- primary use row: canonical primaryUse*, legacy retail* ----
+       Every deal has ONE dominant leasable use, whatever this asset class
+       calls it (Retail, Warehouse, Units, Land, ...) — legacy retailSF /
+       retailRentPSF docs still map straight onto it. */
+    const primaryUseLabel = f.primaryUseLabel || (f.retailSF != null || f.retailRentPSF != null ? "Retail" : null);
+    const primaryUseSF = f.primaryUseSF != null ? num("primaryUseSF") : num("retailSF");
+    const primaryUseRentPSF = f.primaryUseRentPSF != null ? num("primaryUseRentPSF") : num("retailRentPSF");
+    const primaryUseAreaUnit = f.primaryUseAreaUnit || "SF";
+    const primaryUseRentBasis = f.primaryUseRentBasis || "/SF NNN";
+    const primaryUseCostPSF = f.primaryUseCostPSF != null ? num("primaryUseCostPSF") : num("retailCostPSF");
+
+    /* ---- secondary use(s): canonical `secondaryUses` array, legacy storage* ----
+       Only present on deals that genuinely have a second use (self-storage
+       bolted onto a retail pad, office SF inside an industrial building) —
+       absent everywhere else, so no leftover "0 SF @ $0/SF" rows. */
+    let secondaryUses = Array.isArray(f.secondaryUses) ? f.secondaryUses : [];
+    if (!secondaryUses.length && (f.storageSF != null || f.storageRentPSF != null || f.storageCostPSF != null)) {
+      secondaryUses = [{ label: "Self-storage", sf: f.storageSF, rentPSF: f.storageRentPSF, rentBasis: "/SF net rentable", costPSF: f.storageCostPSF }];
+    }
+    const secondaryUseRows = secondaryUses
+      .map(u => ({
+        label: (u && u.label) || null,
+        sf: u && u.sf != null ? Number(u.sf) : null,
+        areaUnit: (u && u.areaUnit) || "SF",
+        rentPSF: u && u.rentPSF != null ? Number(u.rentPSF) : null,
+        rentBasis: (u && u.rentBasis) || "/SF",
+        costPSF: u && u.costPSF != null ? Number(u.costPSF) : null,
+      }))
+      .filter(u => u.label && (u.sf || u.rentPSF || u.costPSF));
+
+    const primaryUseCost = primaryUseSF && primaryUseCostPSF ? primaryUseSF * primaryUseCostPSF : 0;
+    const secondaryUseCost = secondaryUseRows.reduce((sum, u) => sum + (u.sf && u.costPSF ? u.sf * u.costPSF : 0), 0);
     const totalCost = f.totalProjectCost != null ? g("totalProjectCost")
-      : (g("landPrice") + retailCost + storageCost + g("softCosts"));
+      : (purchasePrice + primaryUseCost + secondaryUseCost + g("softCosts"));
     const loan = f.loan != null ? g("loan") : (f.loanLTC != null ? Math.round(totalCost * g("loanLTC")) : null);
     const equity = f.equity != null ? g("equity") : (loan != null ? totalCost - loan : null);
     const modelSourced = f.stabilizedNOI != null; // true when real model outputs are present
@@ -481,27 +514,50 @@ textarea.edit-input{min-height:52px;resize:vertical;line-height:1.4}
       exitValue = f.exitValue != null ? g("exitValue") : (g("exitCap") > 0 ? Math.round(noi / g("exitCap")) : null);
       yieldOnCost = f.yieldOnCost != null ? num("yieldOnCost") : (totalCost > 0 ? noi / totalCost : null);
     } else {
-      // AI estimate fallback for properties without finalized model outputs
-      const storageNOIest = Math.round(g("storageSF") * 0.72 * (f.storageRentPSF || f.storageRentPSFest || 13) * 0.62);
-      noi = retailRent + g("groundLeaseAnnual") + storageNOIest;
-      exitValue = g("exitCap") > 0 ? Math.round(noi / g("exitCap")) : null;
-      yieldOnCost = totalCost > 0 ? noi / totalCost : null;
+      // AI estimate fallback for properties without finalized model outputs —
+      // a rough rent-roll NOI from the primary use plus any secondary use(s).
+      const primaryRent = primaryUseSF && primaryUseRentPSF ? primaryUseSF * primaryUseRentPSF : 0;
+      const secondaryRentEst = secondaryUseRows.reduce((sum, u) => {
+        if (!u.sf || !u.rentPSF) return sum;
+        // self-storage carries a heavier vacancy/expense load than a straight NNN rent roll
+        const factor = /storage/i.test(u.label || "") ? 0.72 * 0.62 : 0.9;
+        return sum + u.sf * u.rentPSF * factor;
+      }, 0);
+      const noiEst = primaryRent + g("groundLeaseAnnual") + secondaryRentEst;
+      // no rent data at all (e.g. a land deal with no primary/secondary rent
+      // set yet) — leave these null rather than a misleading "$0"/"0.0%"
+      if (noiEst === 0) { noi = null; exitValue = null; yieldOnCost = null; }
+      else {
+        noi = noiEst;
+        exitValue = g("exitCap") > 0 ? Math.round(noi / g("exitCap")) : null;
+        yieldOnCost = totalCost > 0 ? noi / totalCost : null;
+      }
     }
+
+    /* ---- development-only metrics: canonical, legacy fallback ----
+       Present only for ground-up / build-to-suit deals; absent on
+       acquisitions, so the card hides these rows entirely instead of
+       showing "—" for a metric that doesn't apply to this deal. */
+    const developmentSpread = f.developmentSpread != null ? num("developmentSpread") : num("devSpread");
+    const netDevelopmentProfit = f.netDevelopmentProfit != null ? num("netDevelopmentProfit") : num("devProfit");
+    const isDevelopment = developmentSpread != null || netDevelopmentProfit != null;
+
     return {
-      modelSourced, modelVersion: f.modelVersion || null,
-      landPrice: g("landPrice"), totalCost, loan, equity,
+      modelSourced, modelVersion: f.modelVersion || null, isDevelopment,
+      purchasePrice, totalCost, loan, equity,
       loanLTC: num("loanLTC"), interestRate: num("interestRate"), exitCap: num("exitCap"), costOfSale: num("costOfSale"),
-      retailSF: g("retailSF"), retailRentPSF: g("retailRentPSF"), retailRent, retailCost, retailNOI: num("retailNOI"),
-      storageSF: g("storageSF"), storageCostPSF: g("storageCostPSF"), storageCost,
-      storageRentPSF: num("storageRentPSF"), storageNOI: num("storageNOI"),
+      primaryUseLabel, primaryUseSF, primaryUseRentPSF, primaryUseAreaUnit, primaryUseRentBasis,
+      secondaryUseRows,
       softCosts: g("softCosts"),
       noi, exitValue, yieldOnCost,
-      netSaleValue: num("netSaleValue"), devSpread: num("devSpread"), devProfit: num("devProfit"),
+      netSaleValue: num("netSaleValue"), developmentSpread, netDevelopmentProfit,
       profitMarginOnCost: num("profitMarginOnCost"),
       leveredIRR: num("leveredIRR"), equityMultiple: num("equityMultiple"), cashOnCash: num("cashOnCash"),
       dscr: num("dscr"), annualDebtService: num("annualDebtService"), loanBalanceExit: num("loanBalanceExit"),
       storageSensitivity: f.storageSensitivity || null,
-      // legacy aliases
+      // legacy aliases — kept so anything still reading the old shape doesn't break
+      landPrice: purchasePrice, retailSF: primaryUseSF, retailRentPSF: primaryUseRentPSF,
+      devSpread: developmentSpread, devProfit: netDevelopmentProfit,
       noiEst: noi, exitValueEst: exitValue, yieldOnCostEst: yieldOnCost
     };
   }
@@ -789,9 +845,9 @@ async function initPortfolio(){
       ? `<div class="scorebig"><div class="n">${sc.weighted}</div><div class="m">/100 · ${T.provChip(p.scoreProvenance, true)}</div></div>`
       : `<div class="scorebig"><div class="n" style="color:var(--muted)">—</div><div class="m">not scored</div></div>`;
     const tags = (p.tags || []).slice(0, 3).map(t => `<span class="tag">${T.esc(t)}</span>`).join("");
-    const purchase = fin ? T.fmtUSDk(fin.landPrice) : "—";
+    const purchase = fin ? T.fmtUSDk(fin.purchasePrice) : "—";
     const cost = fin ? T.fmtUSDk(fin.totalCost) : "—";
-    const rent = fin && fin.retailRentPSF ? "$" + fin.retailRentPSF + "/SF" : "—";
+    const rent = fin && fin.primaryUseRentPSF ? "$" + fin.primaryUseRentPSF + "/SF" : "—";
     return `<a class="card pcard" href="#/p/${encodeURIComponent(p.id)}">
       <div class="top">
         <div class="row">
@@ -805,7 +861,7 @@ async function initPortfolio(){
       </div>
       <div class="foot">
         <div class="mini">
-          <span class="b">Land<b class="money">${purchase}</b></span>
+          <span class="b">Price<b class="money">${purchase}</b></span>
           <span class="b">Project<b class="money">${cost}</b></span>
           <span class="b">Rent<b class="money">${rent}</b></span>
         </div>
@@ -964,9 +1020,9 @@ async function initProperty(){
     const railFin = fin ? `<section class="card block">
       <div class="section-title" style="margin-bottom:10px">Deal Economics ${chip(finProv)}</div>
       <div class="fin-hi">
-        <div class="t big"><div class="l">Purchase / land basis</div><div class="v">${T.fmtUSD(fin.landPrice)}</div></div>
+        <div class="t big"><div class="l">${fin.isDevelopment ? "Land basis" : "Purchase price / basis"}</div><div class="v">${T.fmtUSD(fin.purchasePrice)}</div></div>
         <div class="t"><div class="l">Total project</div><div class="v">${T.fmtUSDk(fin.totalCost)}</div></div>
-        <div class="t"><div class="l">Target retail rent</div><div class="v">$${fin.retailRentPSF}<small>/SF NNN</small></div></div>
+        ${fin.primaryUseRentPSF ? `<div class="t"><div class="l">${T.esc(fin.primaryUseLabel || "Primary use")} rent</div><div class="v">$${fin.primaryUseRentPSF}<small>${T.esc(fin.primaryUseRentBasis)}</small></div></div>` : ""}
         <div class="t"><div class="l">Est. sale · Yr5</div><div class="v">${T.fmtUSDk(fin.exitValue)}</div></div>
         <div class="t"><div class="l">Levered IRR</div><div class="v">${fin.leveredIRR != null ? T.fmtPct(fin.leveredIRR) : "TBD"}</div></div>
         <div class="t"><div class="l">Yield on cost</div><div class="v">${T.fmtPct(fin.yieldOnCost)}</div></div>
@@ -1057,23 +1113,47 @@ async function initProperty(){
         <tr><td>Yield on cost</td>${fin.storageSensitivity.map(r => `<td>${T.fmtPct(r.yoc)}</td>`).join("")}</tr>
         <tr><td>Dev. spread</td>${fin.storageSensitivity.map(r => `<td style="color:${r.spread < 0 ? "var(--bad-ink)" : "var(--ok-ink)"}">${(r.spread * 100).toFixed(1)}%</td>`).join("")}</tr></table>
       </div>` : "";
-    const pencil = P.financingNote && P.financingNote.pencil ? `<div class="extra" style="border-left-color:var(--bad);background:var(--bad-bg);margin:0 0 14px"><div class="lab">⚑ Does not currently pencil</div><div class="txt">${T.esc(P.financingNote.pencil.v)} ${chip(P.financingNote.pencil.s)}</div></div>` : "";
-    const listask = P.financingNote && P.financingNote.listAsk ? `<div class="extra" style="border-left-color:var(--p-need);background:var(--p-need-bg);margin-top:14px"><div class="lab">⚑ Land price to reconcile</div><div class="txt">${T.esc(P.financingNote.listAsk.v)} ${chip(P.financingNote.listAsk.s)}</div></div>` : "";
+    const pencilFact = P.financingNote && P.financingNote.pencil;
+    const pencil = pencilFact ? (() => {
+      const ok = pencilFact.ok;
+      const border = ok === true ? "var(--ok)" : ok === false ? "var(--bad)" : "var(--muted)";
+      const bg = ok === true ? "var(--ok-bg)" : ok === false ? "var(--bad-bg)" : "var(--line-2)";
+      const heading = ok === true ? "✓ Pencils" : ok === false ? "⚑ Does not currently pencil" : "◐ Pencil status not set";
+      return `<div class="extra" style="border-left-color:${border};background:${bg};margin:0 0 14px"><div class="lab">${heading}</div><div class="txt">${T.esc(pencilFact.v)} ${chip(pencilFact.s)}</div></div>`;
+    })() : "";
+    const listask = P.financingNote && P.financingNote.listAsk ? `<div class="extra" style="border-left-color:var(--p-need);background:var(--p-need-bg);margin-top:14px"><div class="lab">⚑ Price to reconcile</div><div class="txt">${T.esc(P.financingNote.listAsk.v)} ${chip(P.financingNote.listAsk.s)}</div></div>` : "";
+
+    /* data-driven use rows — a use only renders when it actually has an area or a rent, never "0 SF @ $0/SF" */
+    const useRow = (label, sf, areaUnit, rentPSF, rentBasis, costPSF) => {
+      if (!label || (!sf && !rentPSF && !costPSF)) return "";
+      const parts = [];
+      if (sf) parts.push(`${sf.toLocaleString()} ${areaUnit || "SF"}`);
+      if (rentPSF) parts.push(`$${rentPSF}${rentBasis || "/SF"}`);
+      if (costPSF) parts.push(`$${costPSF}/SF cost`);
+      return `<tr><td>${T.esc(label)}</td><td>${parts.join(" · ")}</td></tr>`;
+    };
+    const useRows = fin ? useRow(fin.primaryUseLabel, fin.primaryUseSF, fin.primaryUseAreaUnit, fin.primaryUseRentPSF, fin.primaryUseRentBasis) +
+      (fin.secondaryUseRows || []).map(u => useRow(u.label, u.sf, u.areaUnit, u.rentPSF, u.rentBasis, u.costPSF)).join("") : "";
+
+    /* development-only rows — only when the underlying keys are actually present */
+    const devSpreadRow = fin && fin.developmentSpread != null
+      ? `<tr><td>Development spread</td><td style="color:${fin.developmentSpread < 0 ? "var(--bad-ink)" : "var(--ok-ink)"}">${(fin.developmentSpread * 100).toFixed(1)}%</td></tr>` : "";
+    const devProfitRow = fin && fin.netDevelopmentProfit != null
+      ? `<tr><td>Net development profit</td><td style="color:${fin.netDevelopmentProfit < 0 ? "var(--bad-ink)" : "var(--ok-ink)"}">${T.fmtUSD(fin.netDevelopmentProfit)}</td></tr>` : "";
+
     const finDetail = fin ? `<section class="card block" id="financing">
       <h2><span class="block-icon">$</span>F · Deal Economics & Financing</h2>
       <div class="hint">${fin.modelVersion ? T.esc(fin.modelVersion) + " — figures below are from the model." : "From the financing model."}</div>
       ${pencil}
       <div class="fin-hi">
-        <div class="t big"><div class="l">Purchase price (land basis)</div><div class="v">${T.fmtUSD(fin.landPrice)} ${chip("source")}</div></div>
+        <div class="t big"><div class="l">${fin.isDevelopment ? "Land basis" : "Purchase price / basis"}</div><div class="v">${T.fmtUSD(fin.purchasePrice)} ${chip("source")}</div></div>
         <div class="t"><div class="l">Total project cost</div><div class="v">${T.fmtUSD(fin.totalCost)}</div></div>
         <div class="t"><div class="l">Est. sale price · Yr5</div><div class="v">${T.fmtUSDk(fin.exitValue)} ${chip(finProv)}</div></div>
       </div>
       <div class="duo">
         <div><div class="section-title" style="margin:4px 0 8px">Model inputs ${chip("source")}</div>
           <table class="fintable">
-            <tr><td>Retail</td><td>${fin.retailSF.toLocaleString()} SF · $${fin.retailRentPSF}/SF NNN</td></tr>
-            <tr><td>Self-storage</td><td>${fin.storageSF.toLocaleString()} SF @ $${fin.storageCostPSF}/SF</td></tr>
-            <tr><td>Storage rent</td><td>$${fin.storageRentPSF}/SF net rentable</td></tr>
+            ${useRows}
             <tr><td>Soft costs</td><td>${T.fmtUSD(fin.softCosts)}</td></tr>
             <tr><td>Loan / equity (${T.fmtPct(fin.loanLTC, 0)} LTC)</td><td>${T.fmtUSD(fin.loan)} / ${T.fmtUSD(fin.equity)}</td></tr>
             <tr><td>Interest · amort · hold</td><td>${T.fmtPct(fin.interestRate, 2)} · ${P.financing.amortYears || "—"}yr · ${P.financing.holdYears || "—"}yr</td></tr>
@@ -1084,10 +1164,10 @@ async function initProperty(){
             <tr><td>Stabilized NOI</td><td>${T.fmtUSD(fin.noi)}</td></tr>
             <tr><td>Exit value @ ${T.fmtPct(fin.exitCap, 1)}</td><td>${T.fmtUSD(fin.exitValue)}</td></tr>
             <tr><td>Yield on cost</td><td>${T.fmtPct(fin.yieldOnCost)}</td></tr>
-            <tr><td>Development spread</td><td style="color:${fin.devSpread < 0 ? "var(--bad-ink)" : "var(--ok-ink)"}">${fin.devSpread != null ? (fin.devSpread * 100).toFixed(1) + "%" : "—"}</td></tr>
+            ${devSpreadRow}
             <tr><td>Levered IRR · equity multiple</td><td style="color:${fin.leveredIRR < 0 ? "var(--bad-ink)" : "var(--ink)"}">${fin.leveredIRR != null ? T.fmtPct(fin.leveredIRR) : "—"} · ${fin.equityMultiple != null ? fin.equityMultiple.toFixed(2) + "×" : "—"}</td></tr>
             <tr><td>Cash-on-cash · DSCR</td><td>${fin.cashOnCash != null ? T.fmtPct(fin.cashOnCash) : "—"} · ${fin.dscr != null ? fin.dscr.toFixed(2) : "—"}</td></tr>
-            <tr><td>Net development profit</td><td style="color:${fin.devProfit < 0 ? "var(--bad-ink)" : "var(--ok-ink)"}">${fin.devProfit != null ? T.fmtUSD(fin.devProfit) : "—"}</td></tr>
+            ${devProfitRow}
           </table></div>
       </div>
       ${sens}
@@ -1256,7 +1336,7 @@ function initAdd(){
       <div style="display:flex;flex-wrap:wrap;gap:22px;align-items:baseline">
         <div><div class="wnote">Name</div><div style="font-weight:750;font-size:15px">${T.esc(preview.name)}</div></div>
         <div><div class="wnote">Score</div><div style="font-weight:750">${sc ? sc.weighted + "/100 · " + sc.status : "Not scored"}</div></div>
-        <div><div class="wnote">Land price</div><div style="font-weight:750">${T.fmtUSD(preview.landPrice)}</div></div>
+        <div><div class="wnote">Purchase price / basis</div><div style="font-weight:750">${T.fmtUSD(preview.purchasePrice)}</div></div>
         <div><div class="wnote">Total project cost</div><div style="font-weight:750">${T.fmtUSDk(preview.totalProjectCost)}</div></div>
         <div><div class="wnote">Yield on cost</div><div style="font-weight:750">${preview.yieldOnCost != null ? T.fmtPct(preview.yieldOnCost) : "—"}</div></div>
       </div>
