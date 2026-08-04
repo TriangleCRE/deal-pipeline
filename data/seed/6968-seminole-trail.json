@@ -1,0 +1,1100 @@
+{
+  "schemaVersion": 1,
+  "id": "6968-seminole-trail",
+  "name": "6968 Seminole Trail",
+  "address": "6968 Seminole Trail & 54 Preddy Creek Rd, Ruckersville, VA 22968",
+  "county": "Greene County, VA",
+  "parcels": "TMP 66-A-46 & 66-A-45",
+  "status": "Under Review",
+  "dealType": "Property-Driven",
+  "tags": [
+    "Goodwill anchor",
+    "Retail + Self-Storage",
+    "Rezoning R-1→B-3",
+    "US-29 hard corner"
+  ],
+  "updated": "2026-07-31",
+  "headlineTenant": {
+    "name": "Goodwill",
+    "logo": "/uploads/6968-seminole-trail/goodwill.png"
+  },
+  "meta": {
+    "dealId": "TRI-2026-001",
+    "entity": "Triangle Investment Group",
+    "prepared": "S. Dahl · Jul 2026",
+    "sourceModel": "Financing Model v7 (corrected) + Roudabush survey"
+  },
+  "thesis": {
+    "v": "±5.04-acre signalized hard corner on US Route 29 in Ruckersville — Greene County's dominant retail node — with Goodwill as an interested anchor and self-storage behind it. The location, traffic, and tenant interest are all strong; the deal hinges on rezoning the R-1/R-2 land to commercial (B-3), which the County supports in principle but has not guaranteed. Purchase is structured subject to rezoning, which caps downside.",
+    "s": "ai"
+  },
+  "flags": [
+    {
+      "type": "opp",
+      "text": "Goodwill is an interested anchor tenant, and the County (Jim Frydl, Stephanie Golon) is receptive to commercial rezoning on this frontage.",
+      "s": "source"
+    },
+    {
+      "type": "opp",
+      "text": "Adjacent 'Villages at Terrace Greene' brings 282 new townhomes next door — new rooftops and demand tailwind for both retail and storage.",
+      "s": "web"
+    },
+    {
+      "type": "risk",
+      "text": "Deal does NOT pencil at placeholder assumptions (v7 model): 6.6% yield-on-cost is below the 7.5% exit cap (−0.9% spread), levered IRR −3.8%, 0.83× equity multiple. Needs ~$16–18/SF storage rent and/or a lower land basis to work.",
+      "s": "source"
+    },
+    {
+      "type": "risk",
+      "text": "Currently zoned R-1/R-2. Entire deal depends on a discretionary rezoning to B-3; not guaranteed and likely to carry proffers.",
+      "s": "source"
+    },
+    {
+      "type": "risk",
+      "text": "Rapidan Service Authority has publicly flagged a water-supply constraint (White Run Reservoir underway). Confirm near-term water/sewer availability and tap fees for this parcel.",
+      "s": "web"
+    },
+    {
+      "type": "watch",
+      "text": "VDOT is studying alternative intersection designs on US-29 between Rt 33 and Rt 607 (this corner) — future access/median/turn-lane changes possible.",
+      "s": "web"
+    },
+    {
+      "type": "watch",
+      "text": "Villages at Terrace Greene proffered ~$700K toward a Rt 29 → Preddy Creek Rd connector — verify alignment vs. this site's Preddy Creek frontage.",
+      "s": "web"
+    },
+    {
+      "type": "watch",
+      "text": "Land-price gap: broker ask ($1.475M/ac) vs. model basis ($1.25M whole-site). A prior deal reportedly fell apart over the seller's attorney — expect friction.",
+      "s": "source"
+    }
+  ],
+  "scoreProvenance": "ai",
+  "scores": {
+    "location": 5,
+    "traffic": 5,
+    "demographics": 4,
+    "zoning": 3,
+    "siteLayout": 4,
+    "tenantDemand": 4,
+    "rentPotential": 3,
+    "devCost": 3,
+    "exitLiquidity": 3
+  },
+  "scoreNotes": {
+    "location": "Signalized hard corner on US-29 at Rt 607, next to Sheetz; dominant Ruckersville retail node.",
+    "traffic": "≈28,000 AADT on US-29 (broker); VDOT projects this corridor at/over capacity — very high exposure.",
+    "demographics": "Greene County growing +6.9% since 2020; county MHI ≈$89.8K (higher than broker's cited $73.8K). Tertiary market, not dense.",
+    "zoning": "R-1/R-2 today; requires rezoning to B-3. County supportive in principle (Mixed-Use Village Center) but approval not guaranteed and likely proffered.",
+    "siteLayout": "±5.04 ac supports a retail pad in front + storage in rear; storm-drain easement and 3 existing homes to raze are manageable constraints.",
+    "tenantDemand": "Goodwill actively interested as anchor; storage demand supported by county growth and thin local supply.",
+    "rentPotential": "Lowered to 3: corrected v7 model shows a negative development spread (6.6% YoC vs 7.5% cap) at the placeholder $14/SF storage rent. Clears target only if storage rent reaches ~$16–18/SF — the key swing factor.",
+    "devCost": "Elevated — rezoning cost/time, demo of 3 dwellings, RSA water/sewer capacity + tap fees, possible Preddy Creek connector-road impact.",
+    "exitLiquidity": "Net-lease + storage are financeable and saleable, but Ruckersville is a tertiary market with a shallower buyer pool."
+  },
+  "financing": {
+    "modelVersion": "Financing Model v7 (Base, corrected) · Jul 2026",
+    "landPrice": 1250000,
+    "retailSF": 6000,
+    "retailRentPSF": 28,
+    "retailCostPSF": 120,
+    "storageSF": 65000,
+    "storageCostPSF": 92,
+    "storageRentPSF": 14,
+    "storageEfficiency": 0.8,
+    "storageOccupancy": 0.9,
+    "storageOpexPct": 0.35,
+    "softCosts": 1005000,
+    "totalProjectCost": 8955000,
+    "loanLTC": 0.7,
+    "loan": 6268500,
+    "equity": 2686500,
+    "interestRate": 0.0725,
+    "amortYears": 30,
+    "holdYears": 5,
+    "exitCap": 0.075,
+    "costOfSale": 0.02,
+    "retailNOI": 168000,
+    "storageNOI": 425880,
+    "stabilizedNOI": 593880,
+    "yieldOnCost": 0.0663,
+    "devSpread": -0.0087,
+    "exitValue": 7918400,
+    "netSaleValue": 7760032,
+    "devProfit": -1194968,
+    "profitMarginOnCost": -0.1334,
+    "leveredIRR": -0.0383,
+    "equityMultiple": 0.8331,
+    "cashOnCash": 0.0283,
+    "dscr": 1.1467,
+    "annualDebtService": 517901,
+    "loanBalanceExit": 5901879,
+    "storageSensitivity": [
+      {
+        "rent": 12,
+        "yoc": 0.0595,
+        "spread": -0.0155
+      },
+      {
+        "rent": 14,
+        "yoc": 0.0663,
+        "spread": -0.0087
+      },
+      {
+        "rent": 16,
+        "yoc": 0.0731,
+        "spread": -0.0019
+      },
+      {
+        "rent": 18,
+        "yoc": 0.0799,
+        "spread": 0.0049
+      },
+      {
+        "rent": 20,
+        "yoc": 0.0867,
+        "spread": 0.0117
+      },
+      {
+        "rent": 22,
+        "yoc": 0.0935,
+        "spread": 0.0185
+      }
+    ]
+  },
+  "financingNote": {
+    "pencil": {
+      "v": "At the current placeholder storage rent ($14/SF), the deal does NOT pencil: 6.6% yield-on-cost sits below the 7.5% exit cap (−0.9% spread), levered IRR −3.8%, 0.83× equity multiple, net development profit −$1.2M. Storage rent is the swing factor — it needs ≈$16–18/SF to clear a positive spread (see sensitivity). Land basis is the other swing factor. Figures pending Ben/Conor review.",
+      "s": "source"
+    },
+    "listAsk": {
+      "v": "Broker list ask is $1,475,000 per acre (packet) — for ±5.04 ac that implies ~$7.4M gross. The model's $1.25M land basis is Triangle's working whole-site take-down (≈$248K/ac; combined assessed ≈$1.33M). Pin down acreage acquired and negotiated price before hard money.",
+      "s": "source"
+    }
+  },
+  "propertyInfo": [
+    {
+      "k": "Address",
+      "d": {
+        "v": "6968 Seminole Trail & 54 Preddy Creek Rd, Ruckersville, VA 22968",
+        "s": "source"
+      }
+    },
+    {
+      "k": "Parcels (Tax Map)",
+      "d": {
+        "v": "66-A-46 (±4.057 ac) + 66-A-45 (±0.983 ac)",
+        "s": "source",
+        "n": "Per physical survey (Roudabush, Gale & Assoc., Apr 2023). Acct nos. 2774-1/2/3."
+      }
+    },
+    {
+      "k": "Total site area",
+      "d": {
+        "v": "±5.04 acres",
+        "s": "source",
+        "n": "Broker markets 2–5.04 ac; owner prefers to sell the whole assemblage."
+      }
+    },
+    {
+      "k": "Ownership",
+      "d": {
+        "v": "D & G Property LLC",
+        "s": "source",
+        "n": "9997 Ashley Manor Ct, Fairfax, VA 22032. Acquired 6/14/2021. Pull VA SCC record for members/registered agent."
+      }
+    },
+    {
+      "k": "Current zoning",
+      "d": {
+        "v": "R-1 (66-A-46) / R-2 (66-A-45) — residential",
+        "s": "source",
+        "n": "GIS cards list R-2; survey notes 66-A-46 = R1, 66-A-45 = R2. Sale expected subject to rezoning."
+      }
+    },
+    {
+      "k": "Asking price (list)",
+      "d": {
+        "v": "$1,475,000 / acre",
+        "s": "source",
+        "n": "R.L. Travers packet. See Deal Economics for negotiated basis."
+      }
+    },
+    {
+      "k": "Purchase basis (model)",
+      "d": {
+        "v": "$1,250,000 (whole site)",
+        "s": "source",
+        "n": "Negotiated take-down in the financing model; motivated seller."
+      }
+    },
+    {
+      "k": "Existing improvements",
+      "d": {
+        "v": "3 single-family dwellings (built 1938 / 1965 / 1984) + frame garage/sheds",
+        "s": "source",
+        "n": "To be razed. Combined assessed value ≈ $1.33M."
+      }
+    },
+    {
+      "k": "Utilities",
+      "d": {
+        "v": "Public water (Rapidan Service Authority), electric (Rappahannock Electric), CenturyLink; septic on existing homes",
+        "s": "source",
+        "n": "Confirm public sewer availability/capacity + tap fees with RSA."
+      }
+    },
+    {
+      "k": "Flood zone",
+      "d": {
+        "v": "Not in a Special Flood Hazard Area (Zone X)",
+        "s": "source",
+        "n": "FEMA/FIRM panel 51079C0200C, eff. 3/23/2021 (per survey). Verify panel image at msc.fema.gov."
+      }
+    }
+  ],
+  "gis": [
+    {
+      "k": "GIS acreage",
+      "d": {
+        "v": "66-A-46 = 4.057 ac · 66-A-45 = 0.983 ac (survey); GIS card lists 2.32 ac legal on 66-A-46",
+        "s": "source",
+        "n": "Survey acreage supersedes older card 'RT 29 2.32 AC' legal description."
+      }
+    },
+    {
+      "k": "Buildings on site",
+      "d": {
+        "v": "3 dwellings: 1,056 SF ranch (1938), 864 SF (1984), 1,733 SF brick (1965); + frame garage, shed, carport",
+        "s": "source"
+      }
+    },
+    {
+      "k": "Assessed value (2023)",
+      "d": {
+        "v": "≈ $1,331,000 combined ($796.5K + $148.7K + $386.8K)",
+        "s": "source",
+        "n": "Across accounts 2774-1/2/3. Land assessed with a 'Commercial' component at ~$240K/ac on the primary account."
+      }
+    },
+    {
+      "k": "Topography",
+      "d": {
+        "v": "Rolling; paved US-29 frontage; public water at frontage",
+        "s": "source"
+      }
+    },
+    {
+      "k": "Frontage",
+      "d": {
+        "v": "≈ 680 ft along US Route 29; corner returns on Rt 607 and Preddy Creek Rd (Rt 670)",
+        "s": "source",
+        "n": "Per survey line/curve tables."
+      }
+    },
+    {
+      "k": "Easements",
+      "d": {
+        "v": "Storm-drain easement; 30' overhead / 15' underground Rappahannock Electric; variable-width waterline to RSA; CenturyLink/VDOT utility",
+        "s": "source",
+        "n": "Several run through the interior — factor into the site plan / yield."
+      }
+    },
+    {
+      "k": "GIS parcel viewer",
+      "d": {
+        "v": "Greene County GIS (WebGIS) — search TMP 66-A-45 / 66-A-46",
+        "s": "web",
+        "n": "Pull current GIS card, dimensions, and adjoining owners at deal close."
+      }
+    }
+  ],
+  "market": [
+    {
+      "k": "Traffic (AADT)",
+      "d": {
+        "v": "≈ 28,000 vehicles/day on US-29",
+        "s": "source",
+        "n": "Broker packet. VDOT corridor study notes US-29 here approaching capacity by ~2035 — verify exact VDOT segment count."
+      }
+    },
+    {
+      "k": "Visibility / access",
+      "d": {
+        "v": "Excellent — signalized intersection, hard corner, ±680 ft of US-29 frontage",
+        "s": "source"
+      }
+    },
+    {
+      "k": "Retail corridor strength",
+      "d": {
+        "v": "Strong — Ruckersville is the dominant retail node on US-29 between Charlottesville and points north",
+        "s": "web"
+      }
+    },
+    {
+      "k": "Nearby anchors",
+      "d": {
+        "v": "Sheetz (adjacent, B-3), Walmart Supercenter, Lowe's, Food Lion, Tractor Supply; Wawa & Gateway Market Center in the pipeline",
+        "s": "web"
+      }
+    },
+    {
+      "k": "Competition (Goodwill/thrift)",
+      "d": {
+        "v": "Nearest Goodwill is ~15 mi south in Charlottesville — Ruckersville is white space for value/thrift retail",
+        "s": "web"
+      }
+    },
+    {
+      "k": "Self-storage supply",
+      "d": {
+        "v": "Thin locally — MyPlace and U-Stor-It, both on Rt 33 (Spotswood Trail), not on this US-29 frontage",
+        "s": "web",
+        "n": "Commission a radius supply/demand + rate study before sizing storage."
+      }
+    },
+    {
+      "k": "Population",
+      "d": {
+        "v": "Greene County ≈ 21,958 (2025 est.), +6.9% since 2020",
+        "s": "web",
+        "n": "Broker's '20,347' is the older county figure; Ruckersville CDP itself is only ~1,350."
+      }
+    },
+    {
+      "k": "Median household income",
+      "d": {
+        "v": "≈ $89,808 (county, 2020–24 ACS)",
+        "s": "web",
+        "n": "Higher than the broker's cited $73,844 (older ACS) — favorable revision."
+      }
+    },
+    {
+      "k": "Daytime population",
+      "d": {
+        "v": "Ruckersville draws beyond its residential base as the county's retail/employment center",
+        "s": "ai",
+        "n": "No separate daytime-population figure verified yet."
+      }
+    },
+    {
+      "k": "Growth trends",
+      "d": {
+        "v": "Steady; County steering growth into Ruckersville via the Comprehensive Plan & service districts; 282 townhomes adjacent",
+        "s": "web"
+      }
+    }
+  ],
+  "zoning": [
+    {
+      "k": "Current → target",
+      "d": {
+        "v": "R-1 / R-2 (residential) → B-3 (Business, Highway / High-Intensity)",
+        "s": "source"
+      }
+    },
+    {
+      "k": "Comp Plan / FLU",
+      "d": {
+        "v": "'Mixed-Use Village Center' (Ruckersville Area Plan) — supports commercial & business use",
+        "s": "source",
+        "n": "Also included in a Technology/Flex R&D FLU place-type amendment (broker packet)."
+      }
+    },
+    {
+      "k": "County posture",
+      "d": {
+        "v": "Receptive in principle: board 'would be open to rezoning to commercial'; prefers frontage properties as commercial",
+        "s": "source",
+        "n": "Jim Frydl, Greene County (email, Apr 2026)."
+      }
+    },
+    {
+      "k": "Approval risk",
+      "d": {
+        "v": "Moderate — 'commercial use supported in principle, but a B-3 rezoning depends on the specific proposal and alignment with mixed-use goals; approval not guaranteed'",
+        "s": "source",
+        "n": "Stephanie Golon, AICP, Deputy Planning/Zoning (email). B-3 has been approved elsewhere on Seminole Trail, case-specific with conditions."
+      }
+    },
+    {
+      "k": "B-3 use fit",
+      "d": {
+        "v": "B-3 (highest-intensity commercial) supports the Goodwill retail use; comparable Rt-29 sites carry B-3",
+        "s": "web"
+      }
+    },
+    {
+      "k": "Self-storage in B-3",
+      "d": {
+        "v": "Confirm mini-warehouse / self-storage treatment (by-right vs. special use) in the Greene ordinance",
+        "s": "need",
+        "n": "Not yet verified in Appendix C, Article 2."
+      }
+    },
+    {
+      "k": "Process / next step",
+      "d": {
+        "v": "Submit a conceptual plan for a pre-application review; County circulates to internal agencies for site-specific feedback before a formal rezoning",
+        "s": "source",
+        "n": "greenecountyva.gov/181/Applications. Budget several months; expect proffers (likely transportation)."
+      }
+    },
+    {
+      "k": "Political risk",
+      "d": {
+        "v": "Low–moderate; no development moratorium found. A prior developer group wanted a medical office but declined to rezone.",
+        "s": "source"
+      }
+    }
+  ],
+  "hbu": [
+    {
+      "k": "Primary use",
+      "d": {
+        "v": "Single-tenant net-lease retail anchor (Goodwill) on the frontage",
+        "s": "ai"
+      }
+    },
+    {
+      "k": "Secondary use",
+      "d": {
+        "v": "Self-storage (±65,000 SF) on the rear/back land",
+        "s": "source",
+        "n": "Sized in the financing model."
+      }
+    },
+    {
+      "k": "Pad strategy",
+      "d": {
+        "v": "Owner does NOT want to create/subdivide pad sites — plan a unified single-buyer development",
+        "s": "source",
+        "n": "From broker call notes. A prior 2.5-ac pad interest (Southlands / 7-Eleven / Royal Farms) went nowhere."
+      }
+    },
+    {
+      "k": "Phasing potential",
+      "d": {
+        "v": "Phase 1: Goodwill retail pad + parking at the corner. Phase 2: self-storage buildings in the rear.",
+        "s": "ai",
+        "n": "See concept site plan. Retail de-risks the corner; storage absorbs the deep land."
+      }
+    },
+    {
+      "k": "Mixed-use potential",
+      "d": {
+        "v": "Supported by FLU; townhomes adjacent create live-near-retail synergy",
+        "s": "web"
+      }
+    }
+  ],
+  "history": {
+    "s": "source",
+    "bullets": [
+      {
+        "t": "Owner motivated & moving fast",
+        "d": "Seller has had 'some movement on price,' is 'very interested in selling the whole thing,' and wants to move ASAP.",
+        "s": "source"
+      },
+      {
+        "t": "Prior deal reportedly fell through",
+        "d": "A previous developer was under contract close to purchase; a new/difficult seller's attorney 'likely ruined' that deal. Expect legal friction.",
+        "s": "source"
+      },
+      {
+        "t": "Competing interest",
+        "d": "Another developer is currently looking at it; a separate group explored a small medical office but did not want to rezone.",
+        "s": "source"
+      },
+      {
+        "t": "Fragmented take-down history",
+        "d": "Southlands / 7-Eleven / Royal Farms only wanted ~2.5 acres; owner prefers not to subdivide, favoring a whole-site sale.",
+        "s": "source"
+      },
+      {
+        "t": "Acquired 2021",
+        "d": "D&G Property LLC acquired the assemblage on 6/14/2021; homes date to 1938–1984.",
+        "s": "source"
+      }
+    ]
+  },
+  "surroundings": {
+    "s": "web",
+    "items": [
+      {
+        "name": "Sheetz (7020 Seminole Trail)",
+        "rel": "Adjacent, across Rt 607 · zoned B-3",
+        "type": "opp",
+        "note": "Established fuel/convenience anchor drives corner traffic and co-tenancy."
+      },
+      {
+        "name": "Villages at Terrace Greene",
+        "rel": "±65 ac just south · 282 townhomes + ~21 ac commercial (rezoned B-3→PUD 2021)",
+        "type": "opp",
+        "note": "New rooftops next door; but proffered Rt 29→Preddy Creek connector road may touch this parcel — verify."
+      },
+      {
+        "name": "Walmart Supercenter / Lowe's / Food Lion / Tractor Supply",
+        "rel": "Ruckersville US-29 corridor",
+        "type": "opp",
+        "note": "Regional draw supports value retail co-tenancy (Goodwill benefits from this traffic)."
+      },
+      {
+        "name": "Existing self-storage (MyPlace, U-Stor-It)",
+        "rel": "On Rt 33 (Spotswood Trail), off the US-29 frontage",
+        "type": "watch",
+        "note": "Some competing supply, but not on this corridor; validate with a storage study."
+      },
+      {
+        "name": "US-29 / Rt 607 intersection",
+        "rel": "Subject corner",
+        "type": "watch",
+        "note": "VDOT alternative-intersection study underway (Rt 33–Rt 607) could alter access."
+      }
+    ]
+  },
+  "tenants": [
+    {
+      "name": "Goodwill (Industries of the Valleys)",
+      "logo": "/uploads/6968-seminole-trail/goodwill-industries-of-the-valleys.png",
+      "status": "Interested — anchor",
+      "cls": "badge-ok",
+      "note": "Regional 501(c)(3); Greene/Charlottesville is in its service area. Uses large-format stores (~15–25K SF) with an attached donation drive-through; nearest store reused the former Gander Mountain big-box in Charlottesville. Stable, mission-driven, expanding (~100 new U.S. stores planned 2026). Request Form 990 for a formal credit review.",
+      "s": "web"
+    },
+    {
+      "name": "Self-storage operator",
+      "logo": null,
+      "status": "Target — rear land",
+      "cls": "badge-neutral",
+      "note": "±65,000 SF program on the back parcel. Candidates: regional/national operators (CubeSmart, Extra Space, Public Storage) or an owner-operated facility. Demand supported by county growth + thin local supply.",
+      "s": "ai"
+    },
+    {
+      "name": "Convenience / QSR pad (secondary)",
+      "logo": null,
+      "status": "Latent demand",
+      "cls": "badge-neutral",
+      "note": "Southlands / 7-Eleven / Royal Farms previously sought ~2.5 ac here. Owner's no-subdivision stance limits pad plays, but corridor demand exists.",
+      "s": "source"
+    }
+  ],
+  "contacts": [
+    {
+      "role": "Listing Broker",
+      "name": "Guy Travers — Principal Broker",
+      "org": "R. L. Travers & Associates, Inc.",
+      "detail": "P.O. Box 686, Springfield, VA 22150 · P: 703.339.0100 · gtravers@rltinc.net · rltinc.net",
+      "bg": "Northern Virginia commercial firm operating since 1970; leasing, sales, property management, land development. Track record with national tenants (Safeway, Shell, Exxon, GSA).",
+      "s": "source"
+    },
+    {
+      "role": "Owner",
+      "name": "D & G Property LLC",
+      "org": "Fairfax, VA",
+      "detail": "9997 Ashley Manor Ct, Fairfax, VA 22032-3632",
+      "bg": "Acquired the assemblage 6/14/2021. Motivated seller. Pull VA SCC entity record for members & registered agent before LOI.",
+      "s": "source"
+    },
+    {
+      "role": "County — Planning/Zoning",
+      "name": "Stephanie Golon, AICP, CZA · Jim Frydl",
+      "org": "Greene County, VA",
+      "detail": "40 Celt Road, Stanardsville, VA 22973 · 434.985.1462 · sgolon@gcva.us · jfrydl@gcva.us",
+      "bg": "Deputy Planning Director & Deputy Zoning Administrator (Golon). Both engaged on the preliminary rezoning inquiry; supportive of commercial use in principle.",
+      "s": "source"
+    },
+    {
+      "role": "Buyer contact",
+      "name": "Conor Bredder",
+      "org": "Triangle Investment Group",
+      "detail": "2903 N. Augusta St., Staunton, VA 24401 · (434) 806-1133 · conorbredder@triangleinvestmentsva.com",
+      "bg": "Leading the zoning inquiry and underwriting.",
+      "s": "source"
+    }
+  ],
+  "checklist": {
+    "A": [
+      {
+        "item": "Address, parcel ID",
+        "status": "done",
+        "response": "6968 Seminole Trl; TMP 66-A-45 & 66-A-46",
+        "s": "source"
+      },
+      {
+        "item": "Acreage",
+        "status": "done",
+        "response": "±5.04 ac (survey)",
+        "s": "source"
+      },
+      {
+        "item": "Ownership structure",
+        "status": "done",
+        "response": "D&G Property LLC",
+        "note": "Confirm members via SCC",
+        "s": "source"
+      },
+      {
+        "item": "Asking price / basis",
+        "status": "flag",
+        "response": "List $1.475M/ac vs. $1.25M model basis",
+        "note": "Reconcile",
+        "s": "source"
+      },
+      {
+        "item": "Current zoning",
+        "status": "done",
+        "response": "R-1 / R-2",
+        "s": "source"
+      },
+      {
+        "item": "Existing improvements",
+        "status": "done",
+        "response": "3 dwellings + outbuildings (raze)",
+        "s": "source"
+      },
+      {
+        "item": "Utilities status",
+        "status": "prog",
+        "response": "Public water/electric; confirm sewer + capacity",
+        "note": "RSA water constraint",
+        "s": "source"
+      }
+    ],
+    "B": [
+      {
+        "item": "Traffic counts",
+        "status": "done",
+        "response": "≈28,000 AADT (verify VDOT segment)",
+        "s": "source"
+      },
+      {
+        "item": "Visibility",
+        "status": "done",
+        "response": "Signalized hard corner, 680 ft frontage",
+        "s": "source"
+      },
+      {
+        "item": "Retail corridor strength",
+        "status": "done",
+        "response": "Dominant Ruckersville node",
+        "s": "web"
+      },
+      {
+        "item": "Nearby anchors",
+        "status": "done",
+        "response": "Sheetz, Walmart, Lowe's, Food Lion",
+        "s": "web"
+      },
+      {
+        "item": "Competition mapping",
+        "status": "prog",
+        "response": "Goodwill = white space; storage thin",
+        "note": "Formalize storage study",
+        "s": "web"
+      },
+      {
+        "item": "Demographics",
+        "status": "done",
+        "response": "County ~22K, MHI ~$89.8K",
+        "s": "web"
+      },
+      {
+        "item": "Growth trends",
+        "status": "done",
+        "response": "+6.9% since 2020; 282 townhomes adj.",
+        "s": "web"
+      },
+      {
+        "item": "Daytime population",
+        "status": "none",
+        "response": "Not yet quantified",
+        "s": "need"
+      }
+    ],
+    "C": [
+      {
+        "item": "Single-tenant net lease",
+        "status": "prog",
+        "response": "Goodwill anchor on frontage",
+        "s": "ai"
+      },
+      {
+        "item": "Multi-tenant strip center",
+        "status": "none",
+        "response": "Not primary plan",
+        "s": "ai"
+      },
+      {
+        "item": "Mixed-use potential",
+        "status": "prog",
+        "response": "Supported by FLU",
+        "s": "web"
+      },
+      {
+        "item": "Pad development strategy",
+        "status": "flag",
+        "response": "Owner opposes subdivision/pads",
+        "s": "source"
+      },
+      {
+        "item": "Phasing potential",
+        "status": "prog",
+        "response": "P1 retail corner, P2 storage rear",
+        "s": "ai"
+      }
+    ],
+    "D": [
+      {
+        "item": "Building footprints",
+        "status": "prog",
+        "response": "±6K SF retail + ±65K SF storage (concept)",
+        "s": "ai"
+      },
+      {
+        "item": "Parking layout",
+        "status": "prog",
+        "response": "Field between frontage & storage (concept)",
+        "s": "ai"
+      },
+      {
+        "item": "Drive-thru feasibility",
+        "status": "none",
+        "response": "Donation lane for Goodwill; TBD",
+        "s": "ai"
+      },
+      {
+        "item": "Truck access",
+        "status": "none",
+        "response": "Rear access off Preddy Creek — study",
+        "s": "ai"
+      },
+      {
+        "item": "Stormwater requirements",
+        "status": "prog",
+        "response": "Existing storm-drain easement; BMP in SW corner",
+        "s": "source"
+      }
+    ],
+    "E": [
+      {
+        "item": "Zoning compliance",
+        "status": "flag",
+        "response": "Residential today; needs B-3",
+        "s": "source"
+      },
+      {
+        "item": "Rezoning required",
+        "status": "flag",
+        "response": "Yes — R-1/R-2 → B-3",
+        "s": "source"
+      },
+      {
+        "item": "Political risk",
+        "status": "prog",
+        "response": "County receptive; not guaranteed",
+        "s": "source"
+      },
+      {
+        "item": "Planning timeline",
+        "status": "prog",
+        "response": "Pre-app → rezoning; several months",
+        "s": "source"
+      },
+      {
+        "item": "Municipal constraints",
+        "status": "prog",
+        "response": "Water/sewer capacity (RSA); VDOT access",
+        "s": "web"
+      }
+    ],
+    "F": [
+      {
+        "item": "Land basis",
+        "status": "done",
+        "response": "$1,250,000 (model)",
+        "s": "source"
+      },
+      {
+        "item": "Development cost",
+        "status": "done",
+        "response": "≈$9.14M total project",
+        "s": "source"
+      },
+      {
+        "item": "Rent assumptions",
+        "status": "done",
+        "response": "Retail $28/SF NNN; ground lease $110K",
+        "s": "source"
+      },
+      {
+        "item": "Stabilized NOI",
+        "status": "prog",
+        "response": "Est. ~$0.66M (AI) — finalize in model",
+        "s": "ai"
+      },
+      {
+        "item": "Exit value",
+        "status": "prog",
+        "response": "Est. ~$8.7M @ 7.5% cap (AI)",
+        "s": "ai"
+      },
+      {
+        "item": "Yield on cost",
+        "status": "prog",
+        "response": "Est. ~7.2% (AI)",
+        "s": "ai"
+      },
+      {
+        "item": "Sensitivity analysis",
+        "status": "none",
+        "response": "Run rent/cap/rezoning-timing sensitivities",
+        "s": "need"
+      }
+    ],
+    "G": [
+      {
+        "item": "Identify tenant categories",
+        "status": "done",
+        "response": "Value retail + self-storage",
+        "s": "ai"
+      },
+      {
+        "item": "Build tenant list",
+        "status": "prog",
+        "response": "Goodwill; storage operators",
+        "s": "web"
+      },
+      {
+        "item": "Match tenants to layout",
+        "status": "prog",
+        "response": "Retail front / storage rear",
+        "s": "ai"
+      }
+    ],
+    "H": [
+      {
+        "item": "Create site package",
+        "status": "prog",
+        "response": "Broker packet + this card + concept plan",
+        "s": "source"
+      },
+      {
+        "item": "Broker outreach",
+        "status": "done",
+        "response": "R.L. Travers engaged",
+        "s": "source"
+      },
+      {
+        "item": "Direct outreach",
+        "status": "prog",
+        "response": "Goodwill interested",
+        "s": "source"
+      },
+      {
+        "item": "Track feedback",
+        "status": "prog",
+        "response": "County pre-app feedback pending",
+        "s": "source"
+      },
+      {
+        "item": "Iterate site plan",
+        "status": "none",
+        "response": "After pre-app comments",
+        "s": "need"
+      },
+      {
+        "item": "Secure LOIs",
+        "status": "none",
+        "response": "Goodwill LOI target",
+        "s": "need"
+      }
+    ],
+    "I": [
+      {
+        "item": "Pre-lease thresholds",
+        "status": "none",
+        "response": "Define Goodwill pre-lease trigger",
+        "s": "need"
+      },
+      {
+        "item": "Finalize site plan",
+        "status": "none",
+        "response": "Post-rezoning",
+        "s": "need"
+      },
+      {
+        "item": "Secure financing",
+        "status": "none",
+        "response": "70% LTC assumed",
+        "s": "source"
+      },
+      {
+        "item": "Execute leases",
+        "status": "none",
+        "response": "—",
+        "s": "need"
+      },
+      {
+        "item": "Begin construction",
+        "status": "none",
+        "response": "—",
+        "s": "need"
+      }
+    ]
+  },
+  "materials": {
+    "financingModel": [
+      {
+        "name": "Financing Model v7 — Base (corrected)",
+        "file": "/uploads/6968-seminole-trail/financing-model-v7-base-corrected.xlsx",
+        "meta": "Current · Seminole Dev Inputs + Returns + corrections log",
+        "s": "source"
+      },
+      {
+        "name": "Ruckersville Financial Model (v1)",
+        "file": "/uploads/6968-seminole-trail/ruckersville-financial-model-v1.xlsx",
+        "meta": "Superseded — earlier assumptions",
+        "s": "source"
+      }
+    ],
+    "gis": [
+      {
+        "name": "GIS Property Card — 66-A-46 (acct 2774-1)",
+        "file": "/uploads/6968-seminole-trail/gis-property-card-66-a-46-acct-2774-1.pdf",
+        "meta": "1938 ranch · $796.5K assessed",
+        "s": "source"
+      },
+      {
+        "name": "GIS Property Card — 66-A-46 (acct 2774-2)",
+        "file": "/uploads/6968-seminole-trail/gis-property-card-66-a-46-acct-2774-2.pdf",
+        "meta": "1984 dwelling · $148.7K assessed",
+        "s": "source"
+      },
+      {
+        "name": "GIS Property Card — 66-A-46 (acct 2774-3)",
+        "file": "/uploads/6968-seminole-trail/gis-property-card-66-a-46-acct-2774-3.pdf",
+        "meta": "1965 brick · $386.8K assessed",
+        "s": "source"
+      }
+    ],
+    "siteMap": [
+      {
+        "name": "Concept Site Plan (dashboard)",
+        "file": "/uploads/6968-seminole-trail/concept-site-plan-dashboard.svg",
+        "meta": "Goodwill on corner / storage rear / donation canopy",
+        "s": "ai"
+      },
+      {
+        "name": "Goodwill Conceptual Test-Fit (reference)",
+        "file": "/uploads/6968-seminole-trail/goodwill-conceptual-test-fit-reference.pdf",
+        "meta": "±18K SF store, ±49 spaces, program table",
+        "s": "ai"
+      }
+    ],
+    "survey": [
+      {
+        "name": "Physical Survey — TMP 66-A-45 & 66-A-46",
+        "file": "/uploads/6968-seminole-trail/physical-survey-tmp-66-a-45-66-a-46.pdf",
+        "meta": "Roudabush Gale, Apr 2023",
+        "s": "source"
+      }
+    ],
+    "scoring": [],
+    "other": [
+      {
+        "name": "Broker Packet — R.L. Travers",
+        "file": "/uploads/6968-seminole-trail/broker-packet-r-l-travers.pdf",
+        "meta": "9-page offering",
+        "s": "source"
+      },
+      {
+        "name": "Preliminary Zoning Inquiry (email thread)",
+        "file": "/uploads/6968-seminole-trail/preliminary-zoning-inquiry-email-thread.pdf",
+        "meta": "County correspondence",
+        "s": "source"
+      },
+      {
+        "name": "Broker call notes",
+        "file": "/uploads/6968-seminole-trail/broker-call-notes.png",
+        "meta": "Seller motivation & history",
+        "s": "source"
+      }
+    ]
+  },
+  "extras": [
+    {
+      "label": "Deal structure (v7 model)",
+      "text": "Now modeled as a Goodwill build-to-suit: Triangle builds the ~$720K retail shell and leases at $28/SF NNN. The earlier $110K/yr ground-lease income was removed. Returns are stabilized (no construction-draw / lease-up timeline), so a full development cash flow would lower the IRR further.",
+      "s": "source"
+    },
+    {
+      "label": "Model corrections applied (v6→v7)",
+      "text": "The base template carried structural bugs, now fixed: loan-payoff sign error (ending balance now $0), a project-cost double-count (now ties to $5.33M base), and a broken GP reference. Exit broker commission is intentionally kept out of the project IRR (treated as separate take-home). Some items still pending Ben/Conor confirmation.",
+      "s": "source"
+    },
+    {
+      "label": "Airport proximity",
+      "text": "7.3 miles (≈13 min) from Charlottesville-Albemarle Airport (CHO).",
+      "s": "source"
+    },
+    {
+      "label": "FLU place-type amendment",
+      "text": "Broker notes a Future Land Use map amendment adding a Technology/Flex Research & Development place type (~550 additional acres) in the area.",
+      "s": "source"
+    },
+    {
+      "label": "Regional context",
+      "text": "Greene County is within the Charlottesville MSA; ~20 min N of downtown Charlottesville, ~100 mi SW of Washington, DC; a gateway to Shenandoah National Park.",
+      "s": "source"
+    },
+    {
+      "label": "Water infrastructure",
+      "text": "Greene County approved a reduced-scope White Run Reservoir (600 MG storage, 2 MGD treatment, ~$65.5M) on 6/24/2025 — long-term capacity is being built, but near-term availability must be confirmed with RSA.",
+      "s": "web"
+    }
+  ],
+  "sources": [
+    {
+      "label": "R.L. Travers offering packet (9 pp.)",
+      "url": "/uploads/6968-seminole-trail/r-l-travers-offering-packet-9-pp.pdf"
+    },
+    {
+      "label": "Physical survey — Roudabush, Gale & Associates (2023)",
+      "url": "/uploads/6968-seminole-trail/physical-survey-roudabush-gale-associates-2023.pdf"
+    },
+    {
+      "label": "Greene County GIS property cards (66-A-46)",
+      "url": "/uploads/6968-seminole-trail/greene-county-gis-property-cards-66-a-46.pdf"
+    },
+    {
+      "label": "Preliminary zoning inquiry — Greene County (email)",
+      "url": "/uploads/6968-seminole-trail/preliminary-zoning-inquiry-greene-county-email.pdf"
+    },
+    {
+      "label": "Greene County Comprehensive Plan / Ruckersville Area Plan",
+      "url": "https://tjpdc.org/ruckersville"
+    },
+    {
+      "label": "Villages at Terrace Greene (rezoning + connector road)",
+      "url": "https://freeenterpriseforum.wordpress.com/2021/08/13/villages-at-terrace-greene-approved/"
+    },
+    {
+      "label": "Greene County demographics — U.S. Census QuickFacts",
+      "url": "https://www.census.gov/quickfacts/fact/table/greenecountyvirginia/PST045224"
+    },
+    {
+      "label": "Goodwill Industries of the Valleys — service area",
+      "url": "https://www.goodwillvalleys.com/about-us/service-area/"
+    },
+    {
+      "label": "Rapidan Service Authority water supply / White Run Reservoir",
+      "url": "https://communityengagement.substack.com/p/july-1-2025-greene-county-supervisors"
+    }
+  ],
+  "images": {
+    "sitePlan": "/uploads/6968-seminole-trail/siteplan.svg"
+  }
+}

@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 720" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" role="img" aria-label="Concept site plan for 6968 Seminole Trail">
+  <defs>
+    <pattern id="asphalt" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="8" height="8" fill="#eceef0"/><line x1="0" y1="0" x2="0" y2="8" stroke="#e0e2e5" stroke-width="1"/>
+    </pattern>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#52514e"/></marker>
+  </defs>
+  <rect width="1040" height="720" fill="#f4f5f2"/>
+
+  <!-- ===== ROADS ===== -->
+  <!-- Matthew Mill Rd (SR-607) : TOP -->
+  <polygon points="0,60 1040,60 1040,112 0,120" fill="#cfd2d6"/>
+  <line x1="0" y1="88" x2="1040" y2="84" stroke="#fff" stroke-width="2.5" stroke-dasharray="18 14"/>
+  <text x="420" y="46" font-size="14" font-weight="700" fill="#3a3a38" letter-spacing="1">MATTHEW MILL RD · STATE ROUTE 607</text>
+  <!-- Seminole Trail (US-29) : LEFT -->
+  <polygon points="0,120 66,120 74,720 0,720" fill="#cfd2d6"/>
+  <line x1="34" y1="130" x2="40" y2="720" stroke="#fff" stroke-width="2.5" stroke-dasharray="18 14"/>
+  <text x="30" y="430" transform="rotate(-90 30 430)" font-size="13.5" font-weight="700" fill="#3a3a38" letter-spacing="1">US ROUTE 29 · SEMINOLE TRAIL — ≈28,000 AADT</text>
+  <!-- Preddy Creek Rd (Rt 670) : RIGHT -->
+  <polygon points="946,150 1000,140 1010,720 946,720" fill="#cfd2d6"/>
+  <text x="984" y="430" transform="rotate(90 984 430)" font-size="12.5" font-weight="700" fill="#3a3a38" letter-spacing="1">PREDDY CREEK RD · RT 670</text>
+
+  <!-- Signalized intersection (TOP-LEFT) -->
+  <circle cx="66" cy="96" r="12" fill="#fab219" stroke="#7a5a00" stroke-width="2"/><circle cx="66" cy="96" r="3.5" fill="#7a5a00"/>
+  <text x="84" y="140" font-size="10.5" font-weight="700" fill="#7a5a00">◆ SIGNALIZED CORNER</text>
+
+  <!-- Sheetz (across Matthew Mill, top) -->
+  <rect x="250" y="6" width="150" height="44" rx="6" fill="#e7f0e9" stroke="#9db8a4" stroke-width="1.5"/>
+  <text x="325" y="26" font-size="12" font-weight="700" fill="#3a3a38" text-anchor="middle">SHEETZ · 7020</text>
+  <text x="325" y="41" font-size="9.5" fill="#6f6e6a" text-anchor="middle">across SR-607 · zoned B-3</text>
+
+  <!-- ===== PARCEL BOUNDARY (~5.04 ac) ===== -->
+  <polygon points="86,126 300,120 620,128 850,150 890,440 700,606 360,612 86,470"
+           fill="#ffffff" stroke="#33a94d" stroke-width="3"/>
+  <text x="112" y="150" font-size="11.5" font-weight="700" fill="#2b6b39">SUBJECT SITE · ±5.04 AC · PARCELS 66-A-46 &amp; 66-A-45</text>
+
+  <!-- Monument sign at the corner -->
+  <rect x="92" y="158" width="24" height="15" rx="2" fill="#33a94d"/><text x="120" y="170" font-size="9" fill="#2b6b39">▲ monument sign (corner)</text>
+
+  <!-- ===== PHASE 1 : GOODWILL held to the top-left corner ===== -->
+  <text x="118" y="196" font-size="11" font-weight="700" fill="#0a5c30">PHASE 1 · GOODWILL — HELD TO CORNER</text>
+  <!-- building -->
+  <rect x="118" y="204" width="210" height="96" rx="3" fill="#0f7a3f" stroke="#0a5c30" stroke-width="2"/>
+  <text x="223" y="245" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">GOODWILL RETAIL</text>
+  <text x="223" y="265" font-size="11" fill="#d6f0df" text-anchor="middle">±18,000 SF (or ±6,000 SF BTS)</text>
+  <!-- storefront faces the lot (south) -->
+  <rect x="126" y="296" width="150" height="6" rx="3" fill="#57b0ff"/><text x="132" y="316" font-size="9" fill="#2b6b39">storefront ↓ faces lot</text>
+  <!-- loading / processing on east end -->
+  <rect x="330" y="204" width="60" height="58" rx="3" fill="#e7ece9" stroke="#9db8a4"/><text x="360" y="230" font-size="8.5" fill="#3a3a38" text-anchor="middle">loading /</text><text x="360" y="242" font-size="8.5" fill="#3a3a38" text-anchor="middle">processing</text>
+  <!-- attended donation canopy -->
+  <rect x="332" y="270" width="80" height="48" rx="4" fill="#f6d9b0" stroke="#c98a3a" stroke-width="2"/>
+  <text x="372" y="290" font-size="10" font-weight="800" fill="#8a5a17" text-anchor="middle">DONATION</text>
+  <text x="372" y="303" font-size="9" fill="#8a5a17" text-anchor="middle">CANOPY</text>
+  <text x="372" y="314" font-size="8" fill="#8a5a17" text-anchor="middle">(attended)</text>
+  <!-- one-way donor lane -->
+  <path d="M372,320 C372,360 320,372 240,372" fill="none" stroke="#f0b46a" stroke-width="9" stroke-linecap="round"/>
+  <text x="300" y="360" font-size="8.5" font-style="italic" fill="#a9741f">one-way donor lane ▸</text>
+
+  <!-- customer parking (front / south of store) -->
+  <rect x="118" y="330" width="300" height="150" rx="4" fill="url(#asphalt)" stroke="#c7c9cc"/>
+  <g stroke="#c2c4c7" stroke-width="1">
+    <line x1="138" y1="440" x2="138" y2="474"/><line x1="156" y1="440" x2="156" y2="474"/><line x1="174" y1="440" x2="174" y2="474"/>
+    <line x1="192" y1="440" x2="192" y2="474"/><line x1="210" y1="440" x2="210" y2="474"/><line x1="228" y1="440" x2="228" y2="474"/>
+    <line x1="246" y1="440" x2="246" y2="474"/><line x1="264" y1="440" x2="264" y2="474"/><line x1="282" y1="440" x2="282" y2="474"/>
+    <line x1="300" y1="440" x2="300" y2="474"/><line x1="318" y1="440" x2="318" y2="474"/><line x1="336" y1="440" x2="336" y2="474"/>
+    <line x1="354" y1="440" x2="354" y2="474"/><line x1="372" y1="440" x2="372" y2="474"/><line x1="390" y1="440" x2="390" y2="474"/>
+  </g>
+  <text x="128" y="498" font-size="10" font-weight="600" fill="#52514e">Customer parking · ±49 spaces (right-size to store)</text>
+
+  <!-- Entrance off SR-607 (top), spaced from signal -->
+  <path d="M470,120 L470,168" stroke="#52514e" stroke-width="3" marker-end="url(#arr)"/>
+  <text x="478" y="140" font-size="9" fill="#52514e">Entrance (SR-607) · spaced from signal</text>
+  <!-- Potential RIRO on Seminole (left, into parking) -->
+  <path d="M74,410 L112,410" stroke="#d03b3b" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+  <text x="80" y="402" font-size="8.5" fill="#b03636">potential RIRO — VDOT approval</text>
+
+  <!-- ===== PHASE 2 : SELF-STORAGE (rear / east) ===== -->
+  <text x="560" y="196" font-size="11" font-weight="700" fill="#1e293b">PHASE 2 · SELF-STORAGE (REAR)</text>
+  <rect x="560" y="204" width="300" height="250" rx="4" fill="#eef1f4" stroke="#c7c9cc"/>
+  <rect x="580" y="222" width="160" height="86" rx="3" fill="#334155" stroke="#1e293b" stroke-width="2"/>
+  <text x="660" y="258" font-size="12" font-weight="800" fill="#fff" text-anchor="middle">SELF-STORAGE</text>
+  <text x="660" y="275" font-size="10" fill="#cbd5e1" text-anchor="middle">±65,000 SF GSF</text>
+  <text x="660" y="289" font-size="9" fill="#cbd5e1" text-anchor="middle">multi-story climate</text>
+  <rect x="580" y="326" width="230" height="30" rx="2" fill="#475569" stroke="#1e293b" stroke-width="1.5"/><text x="695" y="346" font-size="9.5" fill="#e2e8f0" text-anchor="middle">drive-up units</text>
+  <rect x="580" y="364" width="230" height="30" rx="2" fill="#475569" stroke="#1e293b" stroke-width="1.5"/><text x="695" y="384" font-size="9.5" fill="#e2e8f0" text-anchor="middle">drive-up units</text>
+  <rect x="580" y="402" width="230" height="30" rx="2" fill="#475569" stroke="#1e293b" stroke-width="1.5"/><text x="695" y="422" font-size="9.5" fill="#e2e8f0" text-anchor="middle">drive-up units</text>
+  <text x="560" y="472" font-size="8.5" font-style="italic" fill="#64748b">Reserved land — build-to-suit rear; monetizes low-visibility depth</text>
+
+  <!-- Stormwater (bottom / low corner near storm-drain easement) -->
+  <ellipse cx="470" cy="560" rx="86" ry="42" fill="#dbeafe" stroke="#7fa8d9" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text x="470" y="558" font-size="10.5" font-weight="600" fill="#2b5f9e" text-anchor="middle">STORMWATER</text>
+  <text x="470" y="572" font-size="9.5" fill="#3a6ba5" text-anchor="middle">bioretention / BMP</text>
+
+  <!-- existing homes to raze -->
+  <text x="118" y="530" font-size="9" fill="#9a6a1a">◦ 3 existing dwellings to be razed</text>
+
+  <!-- North arrow (up) -->
+  <g transform="translate(986,60)"><path d="M0,-20 L7,10 L0,3 L-7,10 Z" fill="#3a3a38"/><text x="0" y="26" font-size="11" font-weight="700" fill="#3a3a38" text-anchor="middle">N</text></g>
+
+  <!-- Legend / disclaimer -->
+  <g transform="translate(24,676)">
+    <rect x="-8" y="-16" width="812" height="42" rx="6" fill="#fff" stroke="#e1e0d9"/>
+    <rect x="4" y="-6" width="14" height="14" rx="2" fill="#0f7a3f"/><text x="24" y="5" font-size="10.5" fill="#3a3a38">Phase 1 retail (Goodwill)</text>
+    <rect x="168" y="-6" width="14" height="14" rx="2" fill="#f6d9b0" stroke="#c98a3a"/><text x="188" y="5" font-size="10.5" fill="#3a3a38">Donation canopy</text>
+    <rect x="300" y="-6" width="14" height="14" rx="2" fill="#334155"/><text x="320" y="5" font-size="10.5" fill="#3a3a38">Phase 2 self-storage</text>
+    <rect x="452" y="-6" width="14" height="14" rx="2" fill="#dbeafe" stroke="#7fa8d9"/><text x="472" y="5" font-size="10.5" fill="#3a3a38">Stormwater</text>
+    <text x="580" y="5" font-size="9.5" font-style="italic" fill="#8a5a17">Conceptual test-fit — not for construction</text>
+  </g>
+</svg>
