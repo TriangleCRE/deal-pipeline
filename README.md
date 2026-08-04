@@ -40,10 +40,17 @@ per-field CRUD, no extra tables.
   from `/api/properties`. Weighted scores and financing metrics are
   computed client-side from the raw per-factor inputs in the JSON — the DB
   stores inputs, not derived totals.
-- **Adding a property**: Portfolio -> Add Property has two steps: (1) copy
-  the generated data-entry prompt and run it in your own Claude alongside
-  the deal materials, (2) paste or upload the resulting JSON — it's
-  validated against the schema, previewed, then saved (upsert by `id`).
+- **Adding a property**: Portfolio -> Add Property walks through three
+  steps: (1) gather whatever deal materials exist (the page lists examples —
+  OM, survey, GIS card, site plan, financial model, rent roll, etc. —
+  partial is fine), (2) copy the generated data-entry prompt into your own
+  Claude conversation and paste/attach everything from step 1 there, (3)
+  paste or upload the JSON Claude gives back — it's validated against the
+  schema, previewed, then saved (upsert by `id`). Materials themselves never
+  get uploaded to this app; only the resulting JSON does. If you want
+  working file links on a card, the source files need to already be
+  somewhere with a shareable link (Drive, Dropbox, SharePoint, etc.) so
+  Claude can include the link in the JSON — this app doesn't host files.
 - **Editing**: every card has a "View/edit JSON" button — raw JSON with
   copy/download, or paste a corrected version back in to save. No per-field
   edit forms.
