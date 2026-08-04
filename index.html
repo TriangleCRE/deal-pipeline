@@ -661,11 +661,13 @@ function openJsonModal(T, data, opts) {
       <h2 style="font-size:17px">${T.esc(readOnlyTitle)}</h2>
       <button class="btn btn-sm" id="jmClose" type="button">✕</button>
     </div>
-    <div class="wnote" style="margin-bottom:8px">Raw JSON for this property. Copy or download it, or paste a corrected version back in and save.</div>
+    <div class="wnote" style="margin-bottom:8px">Raw JSON for this property. Copy or download it, or paste/upload a corrected version and save.</div>
     <textarea id="jmText" class="edit-input" style="flex:1;min-height:320px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;white-space:pre">${T.esc(JSON.stringify(data, null, 2))}</textarea>
+    <input type="file" id="jmFile" accept=".json,application/json" style="display:none">
     <div id="jmMsg" style="margin-top:8px"></div>
     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center">
       <button class="btn" id="jmCopy" type="button">Copy</button>
+      <button class="btn" id="jmUpload" type="button">Upload .json</button>
       <button class="btn" id="jmDownload" type="button">Download .json</button>
       <span style="flex:1"></span>
       <button class="btn btn-primary" id="jmSave" type="button">Save</button>
@@ -681,6 +683,20 @@ function openJsonModal(T, data, opts) {
   document.getElementById("jmDownload").onclick = () => {
     const blob = new Blob([document.getElementById("jmText").value], { type: "application/json" });
     const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = (data.id || "property") + ".json"; a.click();
+  };
+  document.getElementById("jmUpload").onclick = () => document.getElementById("jmFile").click();
+  document.getElementById("jmFile").onchange = async (e) => {
+    const file = e.target.files && e.target.files[0];
+    e.target.value = ""; // allow picking the same file again later
+    if (!file) return;
+    const msg = document.getElementById("jmMsg");
+    let text;
+    try { text = await file.text(); }
+    catch (err) { msg.innerHTML = `<div class="wnote" style="color:var(--bad-ink)">Could not read file: ${T.esc(err.message)}</div>`; return; }
+    try { JSON.parse(text); }
+    catch (err) { msg.innerHTML = `<div class="wnote" style="color:var(--bad-ink)">"${T.esc(file.name)}" is not valid JSON: ${T.esc(err.message)}</div>`; return; }
+    document.getElementById("jmText").value = text;
+    msg.innerHTML = `<div class="wnote" style="color:var(--ok-ink)">Loaded "${T.esc(file.name)}" — review below, then Save.</div>`;
   };
   document.getElementById("jmSave").onclick = async () => {
     const msg = document.getElementById("jmMsg");
