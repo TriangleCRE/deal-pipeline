@@ -719,6 +719,28 @@ async function apiDeleteProperty(id) {
   const body = await res.json().catch(() => ({}));
   return { httpOk: res.ok, status: res.status, ...body };
 }
+const MAX_MATERIAL_FILE_BYTES = 3 * 1024 * 1024;
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result).split(",").pop()); // strip the "data:...;base64," prefix
+    reader.onerror = () => reject(reader.error || new Error("Could not read file"));
+    reader.readAsDataURL(file);
+  });
+}
+async function apiUploadMaterial(propertyId, category, file) {
+  if (file.size > MAX_MATERIAL_FILE_BYTES) {
+    return { ok: false, error: `"${file.name}" is ${(file.size / 1024 / 1024).toFixed(1)}MB — max 3MB. For a bigger file, paste a link to where it already lives (Google Drive, Dropbox, etc.) via View/edit JSON instead.` };
+  }
+  const dataBase64 = await fileToBase64(file);
+  const res = await fetch("/api/materials/" + encodeURIComponent(propertyId), {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ category, filename: file.name, contentType: file.type, dataBase64 })
+  });
+  if (res.status === 401) { redirectToLogin(); throw new Error("Session expired"); }
+  const body = await res.json().catch(() => ({}));
+  return { httpOk: res.ok, status: res.status, ...body };
+}
 
 /* ---------- shared: "View/edit JSON" modal (property page + preview) ---------- */
 function openJsonModal(T, data, opts) {
@@ -810,11 +832,10 @@ async function initPortfolio(){
   props.forEach(p => { p._score = T.computeScore(p.scores, p.dealType); p._fin = T.computeFinancing(p.financing); });
 
   // Archived properties are kept (fully intact, still openable/restorable/
-  // deletable) but drop out of the default pipeline view, its KPIs, and its
-  // status/type filter chips — same idea as an archived email thread.
+  // deletable) and stay right on the portfolio grid — just sorted to the
+  // bottom and shown a little grayed out — but they drop out of the KPIs
+  // and the status filter chips, since those describe the active pipeline.
   const activeProps = props.filter(p => !p.archived);
-  const archivedProps = props.filter(p => p.archived);
-  let showArchived = false;
 
   /* ----- KPIs (active properties only) ----- */
   const scored = activeProps.filter(p => p._score);
@@ -857,13 +878,6 @@ async function initPortfolio(){
 
   document.getElementById("q").addEventListener("input", e => { query = e.target.value.toLowerCase(); render(); });
 
-  /* ----- archived toggle ----- */
-  const archBtn = document.getElementById("archToggle");
-  if (archivedProps.length) {
-    archBtn.style.display = "";
-    archBtn.onclick = () => { showArchived = !showArchived; render(); };
-  }
-
   /* ----- card ----- */
   function card(p) {
     const sc = p._score, fin = p._fin;
@@ -877,7 +891,7 @@ async function initPortfolio(){
     const purchase = fin ? T.fmtUSDk(fin.purchasePrice) : "—";
     const cost = fin ? T.fmtUSDk(fin.totalCost) : "—";
     const rent = fin && fin.primaryUseRentPSF ? "$" + fin.primaryUseRentPSF + "/SF" : "—";
-    return `<a class="card pcard" href="#/p/${encodeURIComponent(p.id)}"${p.archived ? ' style="opacity:.68"' : ""}>
+    return `<a class="card pcard" href="#/p/${encodeURIComponent(p.id)}"${p.archived ? ' style="opacity:.7;filter:grayscale(.4)"' : ""}>
       <div class="top">
         <div class="row">
           <div><h3>${T.esc(p.name)}</h3><div class="addr">${T.esc(p.county)} · ${T.esc(p.parcels || "")}</div></div>
@@ -900,26 +914,23 @@ async function initPortfolio(){
   }
 
   function render() {
-    if (archBtn) archBtn.textContent = showArchived ? "← Back to active pipeline" : `🗄 Archived (${archivedProps.length})`;
-    document.getElementById("statusFilter").style.display = showArchived ? "none" : "";
-    document.getElementById("typeFilter").style.display = showArchived ? "none" : "";
-
-    const source = showArchived ? archivedProps : activeProps;
-    const list = source.filter(p => {
-      if (!showArchived) {
+    const list = props.filter(p => {
+      // status/type chips describe the active pipeline — an archived
+      // property still shows under "All" (search always finds it), just
+      // sorted to the bottom below, so it never vanishes entirely.
+      if (!p.archived) {
         if (activeStatus !== "All" && p.status !== activeStatus) return false;
         if (activeType !== "All" && (p.dealType || "Property-Driven") !== activeType) return false;
+      } else if (activeStatus !== "All" || activeType !== "All") {
+        return false;
       }
       if (!query) return true;
       const hay = [p.name, p.county, p.address, (p.tags || []).join(" "), p.headlineTenant && p.headlineTenant.name].join(" ").toLowerCase();
       return hay.includes(query);
-    });
-    const addTile = `<a class="addtile" href="#/add"><span class="plus">＋</span><b>Add a property</b>
+    }).sort((a, b) => (a.archived ? 1 : 0) - (b.archived ? 1 : 0));
+    gridEl.innerHTML = list.map(card).join("") +
+      `<a class="addtile" href="#/add"><span class="plus">＋</span><b>Add a property</b>
        <span class="wnote">Copy the data-entry prompt, or upload a JSON card</span></a>`;
-    const emptyArchived = `<p class="wnote">No archived properties.</p>`;
-    gridEl.innerHTML = showArchived
-      ? (list.length ? list.map(card).join("") : emptyArchived)
-      : list.map(card).join("") + addTile;
   }
   render();
 }
@@ -1059,6 +1070,15 @@ async function initProperty(){
       <div class="wnote" style="margin-top:10px;text-align:left">${EDIT ? "Type 1–5 to re-score; the gauge updates on blur." : `Weighted per the ${T.esc(dealType)} scorecard. Hover a row for its rationale.`}</div>
     </section>`;
 
+    // Real, openable link if a financing model has actually been uploaded
+    // (or a live external link was pasted in via View/edit JSON) — an
+    // inline upload control otherwise, instead of a button that quietly
+    // did nothing when there was no file behind it.
+    const finModelFile = P.materials && P.materials.financingModel && P.materials.financingModel[0];
+    const finModelLink = finModelFile && finModelFile.file
+      ? `<a class="btn btn-sm" href="${T.esc(finModelFile.file)}" target="_blank" rel="noopener">Open financing model ↗</a>`
+      : `<label class="btn btn-sm" style="cursor:pointer">＋ Upload financing model<input type="file" data-mat-cat="financingModel" style="display:none"></label>`;
+
     const railFin = fin ? `<section class="card block">
       <div class="section-title" style="margin-bottom:10px">Deal Economics ${chip(finProv)}</div>
       <div class="fin-hi">
@@ -1069,7 +1089,7 @@ async function initProperty(){
         <div class="t"><div class="l">Levered IRR</div><div class="v">${fin.leveredIRR != null ? T.fmtPct(fin.leveredIRR) : "TBD"}</div></div>
         <div class="t"><div class="l">Yield on cost</div><div class="v">${T.fmtPct(fin.yieldOnCost)}</div></div>
       </div>
-      ${P.materials && P.materials.financingModel && P.materials.financingModel[0] ? `<a class="btn btn-sm" href="${T.esc(P.materials.financingModel[0].file || "#")}" target="_blank" rel="noopener">Open financing model ↗</a>` : ""}
+      ${finModelLink}
     </section>` : "";
     const rail = `<aside class="prail">${railScore}${railFin}</aside>`;
 
@@ -1245,13 +1265,16 @@ async function initProperty(){
           </div>`; }).join("")).join("")}</div>
     </section>` : "";
 
-    const materials = P.materials ? `<section class="card block" id="materials">
+    const matData = P.materials || {};
+    const materials = `<section class="card block" id="materials">
       <h2><span class="block-icon">📎</span>Deal Materials</h2>
-      <div class="hint">Every uploaded file, grouped by type — multiple files per category are supported. Add/remove files via View/edit JSON.</div>
-      ${T.MATERIAL_CATEGORIES.map(cat => { const files = (P.materials[cat.id] || []);
+      <div class="hint">Every uploaded file, grouped by type — multiple files per category are supported. Upload directly below (max 3MB/file), or link to somewhere the file already lives (Google Drive, Dropbox, etc.) via View/edit JSON.</div>
+      ${T.MATERIAL_CATEGORIES.map(cat => { const files = (matData[cat.id] || []);
         return `<div class="matcat"><h4><span class="block-icon" style="width:22px;height:22px;font-size:12px">${cat.icon}</span>${T.esc(cat.label)} <span class="wnote">(${files.length})</span></h4>
-          <div class="filelist">${files.length ? files.map(f => `<a class="fileitem" href="${T.esc(f.file || "#")}" target="_blank" rel="noopener"><span class="ic">${((f.name || "?").split(".").pop() || "?").slice(0, 4).toUpperCase()}</span><span class="grow"><b>${T.esc(f.name)}</b><br><span class="meta">${T.esc(f.meta || "")}</span></span>${chip(f.s)}</a>`).join("") : `<div class="dropzone">No files yet — add ${T.esc(cat.label)} here</div>`}</div></div>`; }).join("")}
-    </section>` : "";
+          <div class="filelist">${files.length ? files.map(f => `<a class="fileitem" href="${T.esc(f.file || "#")}" target="_blank" rel="noopener"><span class="ic">${((f.name || "?").split(".").pop() || "?").slice(0, 4).toUpperCase()}</span><span class="grow"><b>${T.esc(f.name)}</b><br><span class="meta">${T.esc(f.meta || "")}</span></span>${chip(f.s)}</a>`).join("") : `<div class="dropzone">No files yet — upload one below</div>`}</div>
+          <label class="btn btn-sm" style="margin-top:8px;cursor:pointer">＋ Upload file<input type="file" data-mat-cat="${cat.id}" style="display:none"></label>
+        </div>`; }).join("")}
+    </section>`;
 
     const extras = (P.extras && P.extras.length) ? `<section class="card block" id="extras">
       <h2><span class="block-icon">＋</span>Additional Captured Information</h2>
@@ -1340,6 +1363,21 @@ async function initProperty(){
     }
   }
 
+  async function doUploadMaterial(category, file) {
+    saveMsg = { ok: true, text: `Uploading "${file.name}"…` };
+    render();
+    const result = await apiUploadMaterial(P.id, category, file).catch(err => ({ ok: false, error: err.message }));
+    if (result.ok) {
+      P = result.property; baseSnapshot = clone(P);
+      saveMsg = { ok: true, text: `Uploaded "${file.name}" ✓` };
+      render();
+      setTimeout(() => { saveMsg = null; render(); }, 4000);
+    } else {
+      saveMsg = { ok: false, text: result.error || `Couldn't upload "${file.name}" — try again.` };
+      render();
+    }
+  }
+
   function wire() {
     const g = id => document.getElementById(id);
     if (g("btnJson")) g("btnJson").onclick = () => openJsonModal(T, P, {
@@ -1358,6 +1396,13 @@ async function initProperty(){
     if (g("btnSave")) g("btnSave").onclick = doSave;
     if (g("btnArchive")) g("btnArchive").onclick = doArchiveToggle;
     if (g("btnDelete")) g("btnDelete").onclick = doDelete;
+    document.querySelectorAll("input[data-mat-cat]").forEach(input => {
+      input.onchange = () => {
+        const file = input.files && input.files[0];
+        input.value = "";
+        if (file) doUploadMaterial(input.dataset.matCat, file);
+      };
+    });
     // bind editable inputs
     document.querySelectorAll("[data-path]").forEach(el => {
       const isScore = el.classList.contains("editscore");
@@ -1479,8 +1524,6 @@ const PF_SKELETON=`<div class="hero">
       <input type="search" id="q" placeholder="Search properties, county, tenant…" aria-label="Search properties">
       <div class="chipfilter" id="statusFilter"></div>
       <div class="chipfilter" id="typeFilter"></div>
-      <span style="flex:1"></span>
-      <button class="btn btn-sm" id="archToggle" style="display:none"></button>
     </div>
 
     <div class="card" style="padding:12px 16px;margin-bottom:20px">

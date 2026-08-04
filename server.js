@@ -14,6 +14,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { authGate, checkPasscode, sessionCookieHeader, loginPage } from "./lib/auth.mjs";
 import propertiesRouter from "./routes/properties.js";
+import materialsRouter from "./routes/materials.js";
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
 
@@ -64,7 +65,11 @@ app.get("/robots.txt", (req, res) => {
 
 /* ---------- login / logout (public) ---------- */
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+// Raised from Express's 100kb default so a base64-encoded material-file
+// upload (see routes/materials.js) actually fits — bounded by
+// MAX_FILE_BYTES there, comfortably under this limit and under Vercel's
+// own ~4.5MB serverless request-body ceiling.
+app.use(express.json({ limit: "5mb" }));
 
 app.get("/login", (req, res) => {
   res.status(200).set("Content-Type", "text/html; charset=utf-8").send(loginPage({ error: false }));
@@ -89,6 +94,7 @@ app.all("/api/logout", (req, res) => {
 app.use(authGate);
 
 app.use("/api/properties", propertiesRouter);
+app.use("/api/materials", materialsRouter);
 app.use("/uploads", express.static(path.join(ROOT, "uploads")));
 app.use("/prompt", express.static(path.join(ROOT, "prompt")));
 
