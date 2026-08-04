@@ -9,11 +9,21 @@ per-field CRUD, no extra tables.
 
 ## Architecture
 
-- **Storage**: one table (`properties`), one `JSONB` column (`data`). See
-  `db/schema.sql`. Deal materials (PDFs, models, images) are **not** stored
-  in the JSON — they live as static files under `/uploads/<id>/...` and the
-  JSON references them by filename/link. A card is a few hundred KB of text
-  at most, nowhere near Postgres's ~255MB jsonb limit.
+- **Storage**: `properties` (`id`, one `JSONB` column `data`) and
+  `material_files` (`id`, `property_id`, `filename`, `content_type`, a
+  `bytea` `data`). See `db/schema.sql`. Deal materials (PDFs, models,
+  images) are **not** stored in the `properties` JSON — the JSON only ever
+  has a `file` URL, never embedded bytes. That URL points at one of two
+  places: a file uploaded through the "Deal Materials" section / the
+  financing-model button, served back from `material_files` via
+  `GET /api/materials/file/:id/:name` (routes/materials.js); or a small
+  set of seed files checked into git under `/uploads/<id>/...` (baked into
+  the Vercel deployment at build time — see `vercel.json`'s
+  `includeFiles`) for properties set up before in-app upload existed, or
+  anywhere else with a shareable link (Drive, Dropbox, SharePoint, etc.).
+  A card's `properties.data` is a few hundred KB of text at most, nowhere
+  near Postgres's ~255MB jsonb limit; uploaded files are capped at 3MB
+  each (`MAX_FILE_BYTES` in routes/materials.js).
 - **Schema**: `schema/property-schema.mjs` — a Zod schema with a
   `schemaVersion`. Only `id` and `name` are required; everything else is
   optional and renders as "Needs input" when missing. Unknown extra fields
@@ -31,8 +41,9 @@ per-field CRUD, no extra tables.
 - **Backend**: a single small Express app (`server.js`), deployed as one
   Vercel serverless function (`vercel.json` routes every path to it). It
   handles the login screen, the passcode gate, `/robots.txt`, the
-  `/api/properties` routes (`routes/properties.js`), and serving
-  `index.html` / `/uploads` / `/prompt`.
+  `/api/properties` routes (`routes/properties.js`), the
+  `/api/materials` upload/download routes (`routes/materials.js`), and
+  serving `index.html` / `/uploads` / `/prompt`.
 - **Privacy** (see below) — the whole site sits behind one shared passcode.
   There's no separate "write" passcode anymore: being logged in *is* the
   authorization to read or write.
@@ -47,11 +58,11 @@ per-field CRUD, no extra tables.
   page has a collapsed "see examples" list for anyone unsure what to
   gather), (2) paste or upload the JSON Claude gives back — it's validated
   against the schema, previewed, then saved (upsert by `id`). Materials
-  themselves never get uploaded to this app; only the resulting JSON does.
-  If you want working file links on a card, the source files need to
-  already be somewhere with a shareable link (Drive, Dropbox, SharePoint,
-  etc.) so Claude can include the link in the JSON — this app doesn't host
-  files.
+  themselves aren't part of that JSON upload — once the card exists, use
+  the "Deal Materials" section (or the financing-model button) to upload
+  the actual files (max 3MB each); for anything bigger, paste a link to
+  where it already lives (Drive, Dropbox, SharePoint, etc.) via View/edit
+  JSON instead.
 - **Editing**: every card has an "✎ Edit card" button for editing existing
   text/values in place (name, thesis, scores, flags, tenants, contacts,
   checklist responses, etc.) — Save writes the whole document back through
@@ -60,6 +71,13 @@ per-field CRUD, no extra tables.
   tenant, a new checklist item) is out of scope for inline editing — use
   the "View/edit JSON" button for that: raw JSON with copy/download, or
   paste a corrected version back in to save.
+- **Archiving vs. deleting**: "🗄 Archive" on a card sets `archived` in its
+  JSON (no separate page/table) — an archived property is kept intact and
+  stays on the portfolio grid, just sorted to the bottom and grayed out,
+  and drops out of the KPIs and status/type filters until "↩ Restore".
+  "🗑 Delete" is the only destructive action in the app — it permanently
+  removes the row (and its uploaded material files, via `on delete
+  cascade`) after a confirm dialog; there's no undo.
 
 ## Privacy — how it's kept off Google and every crawler
 
