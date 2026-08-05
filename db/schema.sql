@@ -6,8 +6,20 @@
 create table if not exists properties (
   id text primary key,
   data jsonb not null,
+  created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+-- created_at was added after properties already existed in some databases
+-- (including production) — `create table if not exists` above is a no-op
+-- there, so backfill it explicitly. Safe to re-run: a no-op once the column
+-- exists. Existing rows get created_at = their current updated_at (the best
+-- available approximation of when they were first added, since that's all
+-- the old schema tracked); new rows get the DEFAULT now() from here on.
+alter table properties add column if not exists created_at timestamptz;
+update properties set created_at = updated_at where created_at is null;
+alter table properties alter column created_at set default now();
+alter table properties alter column created_at set not null;
 
 -- Speeds up "list sorted by most recently updated" on the portfolio page.
 create index if not exists properties_updated_at_idx on properties (updated_at desc);
