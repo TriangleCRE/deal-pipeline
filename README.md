@@ -90,14 +90,11 @@ per-field CRUD, no extra tables.
   save bumps `updated_at`; `created_at` is set once, on the row's first
   insert, and never touched again. `lib/db.mjs` surfaces them to the
   frontend as plain `createdAt`/`updatedAt` fields on the property object
-  (same shape as `archivedAt`), which is what the portfolio grid's card
-  footer ("Updated Aug 5") and the property page's Deal meta block
-  ("Added" / "Last edited") both read from. Distinct from the older,
-  free-text `updated` field (a hand-typed "as of" note like "Q3 2026
-  broker call") — that one's still there, unchanged, and still editable.
-- **Portfolio card thumbnail**: a property with `images.sitePlan` set
-  shows it as a thumbnail at the top of its portfolio grid card — nothing
-  rendered (no placeholder/broken image) for a property without one.
+  (same shape as `archivedAt`), which is what the property page's Deal meta
+  block ("Added" / "Last edited") reads from — portfolio grid cards don't
+  show either date. Distinct from the older, free-text `updated` field (a
+  hand-typed "as of" note like "Q3 2026 broker call") — that one's still
+  there, unchanged, and still editable.
 - **Archiving vs. deleting**: "🗄 Archive" on a card sets `archived` in its
   JSON (no separate page/table) — an archived property is kept intact and
   stays on the portfolio grid, just sorted to the bottom and grayed out,
