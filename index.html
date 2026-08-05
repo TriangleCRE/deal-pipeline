@@ -574,6 +574,20 @@ textarea.edit-input{min-height:52px;resize:vertical;line-height:1.4}
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g,
     c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+  // A material/image `file` value is documented (schema/property-schema.mjs)
+  // as "link/filename only" — either a full URL a human/Claude pasted in
+  // (http(s)://..., or a root-relative /api/materials/... or /uploads/...
+  // path), or just a bare filename with the implication that it lives at
+  // /uploads/<propertyId>/<file> (the seed-file convention). Every place
+  // that turns a `file` string into an actual href/src should go through
+  // this, so a bare filename actually opens instead of 404ing against
+  // whatever path happens to be in the address bar.
+  function resolveFileUrl(propertyId, file) {
+    if (!file) return "";
+    if (/^(https?:|data:|\/)/i.test(file)) return file; // already absolute or root-relative
+    return `/uploads/${encodeURIComponent(propertyId)}/${file}`;
+  }
+
   /* ---------- checklist templates ----------
      Property-Driven: sections A–I (site-first — find a property, then figure out
      highest & best use and go find tenants).
@@ -655,7 +669,7 @@ textarea.edit-input{min-height:52px;resize:vertical;line-height:1.4}
     SCORE_CRITERIA_BY_TYPE, scoreCriteriaFor,
     computeFinancing, CHECKLIST_TEMPLATE, MATERIAL_CATEGORIES,
     CHECKLIST_TEMPLATE_BY_TYPE, checklistTemplateFor,
-    fmtUSD, fmtUSDk, fmtPct, esc,
+    fmtUSD, fmtUSDk, fmtPct, esc, resolveFileUrl,
     mountChrome
   };
 })(window);
@@ -736,6 +750,22 @@ async function apiUploadMaterial(propertyId, category, file) {
   const res = await fetch("/api/materials/" + encodeURIComponent(propertyId), {
     method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ category, filename: file.name, contentType: file.type, dataBase64 })
+  });
+  if (res.status === 401) { redirectToLogin(); throw new Error("Session expired"); }
+  const body = await res.json().catch(() => ({}));
+  return { httpOk: res.ok, status: res.status, ...body };
+}
+// Same upload plumbing as apiUploadMaterial, but for a single named "hero"
+// image (P.images.<imageKey>, e.g. "sitePlan") rather than an appended
+// materials[category] entry — see routes/materials.js's `imageKey` branch.
+async function apiUploadImage(propertyId, imageKey, file) {
+  if (file.size > MAX_MATERIAL_FILE_BYTES) {
+    return { ok: false, error: `"${file.name}" is ${(file.size / 1024 / 1024).toFixed(1)}MB — max 3MB. For a bigger file, paste a link to where it already lives (Google Drive, Dropbox, etc.) via View/edit JSON instead.` };
+  }
+  const dataBase64 = await fileToBase64(file);
+  const res = await fetch("/api/materials/" + encodeURIComponent(propertyId), {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ imageKey, filename: file.name, contentType: file.type, dataBase64 })
   });
   if (res.status === 401) { redirectToLogin(); throw new Error("Session expired"); }
   const body = await res.json().catch(() => ({}));
@@ -1076,7 +1106,7 @@ async function initProperty(){
     // did nothing when there was no file behind it.
     const finModelFile = P.materials && P.materials.financingModel && P.materials.financingModel[0];
     const finModelLink = finModelFile && finModelFile.file
-      ? `<a class="btn btn-sm" href="${T.esc(finModelFile.file)}" target="_blank" rel="noopener">Open financing model ↗</a>`
+      ? `<a class="btn btn-sm" href="${T.esc(T.resolveFileUrl(P.id, finModelFile.file))}" target="_blank" rel="noopener">Open financing model ↗</a>`
       : `<label class="btn btn-sm" style="cursor:pointer">＋ Upload financing model<input type="file" data-mat-cat="financingModel" style="display:none"></label>`;
 
     const railFin = fin ? `<section class="card block">
@@ -1111,10 +1141,17 @@ async function initProperty(){
       <ul class="flags">${(P.flags || []).map((f, i) => flagLine(f, i)).join("")}</ul>
     </section>`;
 
-    const sitePlan = P.images && P.images.sitePlan ? `<section class="card block" id="siteplan">
+    // Same "real control if there's something to open/replace, upload
+    // prompt otherwise" pattern as the financing model button above —
+    // works identically the first time a property gets a site plan (right
+    // after Add Property lands on this same card) and every time after.
+    const sitePlanUrl = P.images && P.images.sitePlan ? T.resolveFileUrl(P.id, P.images.sitePlan) : "";
+    const sitePlanUpload = `<label class="btn btn-sm" style="cursor:pointer">＋ ${sitePlanUrl ? "Replace" : "Upload"} site plan image<input type="file" accept="image/*,.svg" data-img-key="sitePlan" style="display:none"></label>`;
+    const sitePlan = (sitePlanUrl || EDIT) ? `<section class="card block" id="siteplan">
       <h2><span class="block-icon">▦</span>Concept Site Plan</h2>
       <div class="hint">Conceptual test-fit — not an engineered plan. ${chip("ai")}</div>
-      <div class="frame"><img src="${T.esc(P.images.sitePlan)}" alt="Concept site plan"></div>
+      ${sitePlanUrl ? `<div class="frame"><img src="${T.esc(sitePlanUrl)}" alt="Concept site plan"></div>` : `<div class="dropzone">No site plan image yet — upload one below</div>`}
+      ${EDIT ? `<div style="margin-top:10px">${sitePlanUpload}</div>` : ""}
     </section>` : "";
 
     const tenants = (P.tenants && P.tenants.length) ? `<section class="card block" id="tenants">
@@ -1271,7 +1308,7 @@ async function initProperty(){
       <div class="hint">Every uploaded file, grouped by type — multiple files per category are supported. Upload directly below (max 3MB/file), or link to somewhere the file already lives (Google Drive, Dropbox, etc.) via View/edit JSON.</div>
       ${T.MATERIAL_CATEGORIES.map(cat => { const files = (matData[cat.id] || []);
         return `<div class="matcat"><h4><span class="block-icon" style="width:22px;height:22px;font-size:12px">${cat.icon}</span>${T.esc(cat.label)} <span class="wnote">(${files.length})</span></h4>
-          <div class="filelist">${files.length ? files.map(f => `<a class="fileitem" href="${T.esc(f.file || "#")}" target="_blank" rel="noopener"><span class="ic">${((f.name || "?").split(".").pop() || "?").slice(0, 4).toUpperCase()}</span><span class="grow"><b>${T.esc(f.name)}</b><br><span class="meta">${T.esc(f.meta || "")}</span></span>${chip(f.s)}</a>`).join("") : `<div class="dropzone">No files yet — upload one below</div>`}</div>
+          <div class="filelist">${files.length ? files.map(f => `<a class="fileitem" href="${T.esc(T.resolveFileUrl(P.id, f.file) || "#")}" target="_blank" rel="noopener"><span class="ic">${((f.name || "?").split(".").pop() || "?").slice(0, 4).toUpperCase()}</span><span class="grow"><b>${T.esc(f.name)}</b><br><span class="meta">${T.esc(f.meta || "")}</span></span>${chip(f.s)}</a>`).join("") : `<div class="dropzone">No files yet — upload one below</div>`}</div>
           <label class="btn btn-sm" style="margin-top:8px;cursor:pointer">＋ Upload file<input type="file" data-mat-cat="${cat.id}" style="display:none"></label>
         </div>`; }).join("")}
     </section>`;
@@ -1444,6 +1481,21 @@ async function initProperty(){
     }
   }
 
+  async function doUploadImage(imageKey, file) {
+    saveMsg = { ok: true, text: `Uploading "${file.name}"…` };
+    render();
+    const result = await apiUploadImage(P.id, imageKey, file).catch(err => ({ ok: false, error: err.message }));
+    if (result.ok) {
+      P = result.property; baseSnapshot = clone(P);
+      saveMsg = { ok: true, text: `Uploaded "${file.name}" ✓` };
+      render();
+      setTimeout(() => { saveMsg = null; render(); }, 4000);
+    } else {
+      saveMsg = { ok: false, text: result.error || `Couldn't upload "${file.name}" — try again.` };
+      render();
+    }
+  }
+
   function wire() {
     const g = id => document.getElementById(id);
     if (g("btnJson")) g("btnJson").onclick = () => openJsonModal(T, P, {
@@ -1467,6 +1519,13 @@ async function initProperty(){
         const file = input.files && input.files[0];
         input.value = "";
         if (file) doUploadMaterial(input.dataset.matCat, file);
+      };
+    });
+    document.querySelectorAll("input[data-img-key]").forEach(input => {
+      input.onchange = () => {
+        const file = input.files && input.files[0];
+        input.value = "";
+        if (file) doUploadImage(input.dataset.imgKey, file);
       };
     });
     // bind editable inputs
