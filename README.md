@@ -85,6 +85,19 @@ per-field CRUD, no extra tables.
   tenant, a new checklist item) is out of scope for inline editing — use
   the "View/edit JSON" button for that: raw JSON with copy/download, or
   paste a corrected version back in to save.
+- **Created / last-edited dates**: tracked by the `properties` row itself
+  (`created_at`/`updated_at` in `db/schema.sql`), not hand-typed — every
+  save bumps `updated_at`; `created_at` is set once, on the row's first
+  insert, and never touched again. `lib/db.mjs` surfaces them to the
+  frontend as plain `createdAt`/`updatedAt` fields on the property object
+  (same shape as `archivedAt`), which is what the portfolio grid's card
+  footer ("Updated Aug 5") and the property page's Deal meta block
+  ("Added" / "Last edited") both read from. Distinct from the older,
+  free-text `updated` field (a hand-typed "as of" note like "Q3 2026
+  broker call") — that one's still there, unchanged, and still editable.
+- **Portfolio card thumbnail**: a property with `images.sitePlan` set
+  shows it as a thumbnail at the top of its portfolio grid card — nothing
+  rendered (no placeholder/broken image) for a property without one.
 - **Archiving vs. deleting**: "🗄 Archive" on a card sets `archived` in its
   JSON (no separate page/table) — an archived property is kept intact and
   stays on the portfolio grid, just sorted to the bottom and grayed out,
@@ -125,19 +138,12 @@ anywhere public.
 ## One-time setup (Neon)
 
 1. Create a Neon project/database, grab its connection string.
-2. Run the SQL in `db/schema.sql` (paste into the Neon SQL editor, or run
-   `npm run db:setup` locally with `DATABASE_URL` set):
-
-   ```sql
-   create table if not exists properties (
-     id text primary key,
-     data jsonb not null,
-     updated_at timestamptz not null default now()
-   );
-
-   create index if not exists properties_updated_at_idx on properties (updated_at desc);
-   ```
-
+2. Run the SQL in `db/schema.sql` in full (paste into the Neon SQL editor,
+   or run `npm run db:setup` locally with `DATABASE_URL` set) — it creates
+   `properties` and `material_files`. Safe to re-run any time the file
+   changes (every statement in it is a no-op against an already-current
+   database), which is also how an existing database picks up a schema
+   change like `created_at` — no separate migration step or tool.
 3. Seed the 6968 Seminole Trail card (extracted from the old index.html,
    already validated against the schema):
 

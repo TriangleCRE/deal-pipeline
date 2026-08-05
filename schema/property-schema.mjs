@@ -141,6 +141,8 @@ export const PropertySchema = z.object({
   status: z.string().optional(),
   dealType: z.enum(["Property-Driven", "Tenant-Driven"]).optional(),
   tags: z.array(z.string()).optional(),
+  // Free-text, hand-typed "as of" note (e.g. "Q3 2026 broker call") — not an
+  // actual timestamp. See createdAt/updatedAt below for the real one.
   updated: z.string().optional(),
   // App-managed, not part of the data-entry prompt — set via the "Archive" /
   // "Restore" buttons on the property page, not by hand. An archived
@@ -148,6 +150,12 @@ export const PropertySchema = z.object({
   // out of the default portfolio view and its KPIs.
   archived: z.boolean().optional(),
   archivedAt: z.string().nullable().optional(),
+  // App-managed, ISO timestamps tracked by the properties row itself (see
+  // lib/db.mjs's withTimestamps/upsertProperty) — never hand-edited, and
+  // stripped back out before the document is stored so these two fields
+  // never drift from the row's real created_at/updated_at columns.
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
   headlineTenant: z.object({
     name: z.string().optional(),
     logo: z.string().nullable().optional(),
