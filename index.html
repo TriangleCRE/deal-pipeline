@@ -114,7 +114,6 @@ img{max-width:100%}
 .pf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
 .pcard{display:flex;flex-direction:column;overflow:hidden;cursor:pointer;transition:.15s;text-decoration:none;color:inherit}
 .pcard:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(20,20,15,.12);border-color:#d6d5cd;text-decoration:none}
-.pcard .thumb{width:100%;height:120px;object-fit:cover;display:block;background:var(--surface-2);border-bottom:1px solid var(--line-2)}
 .pcard .top{padding:16px 18px 0}
 .pcard .mid{padding:12px 18px;flex:1}
 .pcard .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -934,12 +933,7 @@ async function initPortfolio(){
     const purchase = fin ? T.fmtUSDk(fin.purchasePrice) : "—";
     const cost = fin ? T.fmtUSDk(fin.totalCost) : "—";
     const rent = fin && fin.primaryUseRentPSF ? "$" + fin.primaryUseRentPSF + "/SF" : "—";
-    // Same resolveFileUrl a bare filename needs everywhere else — omitted
-    // entirely (no placeholder/broken image) when the property has none.
-    const thumbUrl = p.images && p.images.sitePlan ? T.resolveFileUrl(p.id, p.images.sitePlan) : "";
-    const updatedLabel = T.fmtDate(p.updatedAt);
     return `<a class="card pcard" href="#/p/${encodeURIComponent(p.id)}"${p.archived ? ' style="opacity:.7;filter:grayscale(.4)"' : ""}>
-      ${thumbUrl ? `<img class="thumb" src="${T.esc(thumbUrl)}" alt="">` : ""}
       <div class="top">
         <div class="row">
           <div><h3>${T.esc(p.name)}</h3><div class="addr">${T.esc(p.county)} · ${T.esc(p.parcels || "")}</div></div>
@@ -956,7 +950,7 @@ async function initPortfolio(){
           <span class="b">Project<b class="money">${cost}</b></span>
           <span class="b">Rent<b class="money">${rent}</b></span>
         </div>
-        <span class="wnote">${updatedLabel ? `Updated ${updatedLabel} · ` : ""}Open →</span>
+        <span class="wnote">Open →</span>
       </div>
     </a>`;
   }
