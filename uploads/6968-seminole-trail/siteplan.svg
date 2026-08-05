@@ -1,106 +1,133 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 720" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" role="img" aria-label="Concept site plan for 6968 Seminole Trail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1046" font-family="system-ui, -apple-system, 'Segoe UI', sans-serif" role="img" aria-label="Concept site plan for 6968 Seminole Trail — Goodwill build-to-suit">
   <defs>
     <pattern id="asphalt" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-      <rect width="8" height="8" fill="#eceef0"/><line x1="0" y1="0" x2="0" y2="8" stroke="#e0e2e5" stroke-width="1"/>
+      <rect width="8" height="8" fill="#e4e6e8"/><line x1="0" y1="0" x2="0" y2="8" stroke="#d5d8db" stroke-width="1"/>
     </pattern>
-    <pattern id="field" width="10" height="10" patternUnits="userSpaceOnUse">
-      <rect width="10" height="10" fill="#f4f6f1"/><path d="M0,10 L10,0" stroke="#dfe4d8" stroke-width="1"/>
-    </pattern>
-    <marker id="arr" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#52514e"/></marker>
+    <marker id="arr" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#3a3a38"/></marker>
+    <marker id="arrRed" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#c23b34"/></marker>
   </defs>
-  <rect width="1040" height="720" fill="#f4f5f2"/>
+
+  <!-- ===== HEADER — title and address stacked (not side-by-side, so a
+       long title never runs into the metadata text) ===== -->
+  <rect width="1400" height="150" fill="#0d4a2a"/>
+  <text x="28" y="54" font-size="26" font-weight="800" fill="#fff" letter-spacing="0.3">6968 SEMINOLE TRAIL — GOODWILL CONCEPT SITE PLAN</text>
+  <text x="28" y="90" font-size="15" fill="#cfe8d8">Ruckersville (Greene County), VA · Parcels 66-A-46 &amp; 66-A-45</text>
+  <text x="28" y="114" font-size="15" fill="#cfe8d8">SE corner, US-29 × Matthew Mill Rd (SR-607) · Aug 2026</text>
+
+  <g transform="translate(0,46)">
+  <!-- map background -->
+  <rect x="0" y="104" width="1400" height="896" fill="#f4f5f2"/>
 
   <!-- ===== ROADS ===== -->
   <!-- Matthew Mill Rd (SR-607) : TOP -->
-  <polygon points="0,60 1040,60 1040,112 0,120" fill="#cfd2d6"/>
-  <line x1="0" y1="88" x2="1040" y2="84" stroke="#fff" stroke-width="2.5" stroke-dasharray="18 14"/>
-  <text x="420" y="46" font-size="14" font-weight="700" fill="#3a3a38" letter-spacing="1">MATTHEW MILL RD · STATE ROUTE 607</text>
+  <polygon points="0,150 1400,150 1400,214 0,206" fill="#6d7883"/>
+  <line x1="0" y1="182" x2="1400" y2="178" stroke="#f4c430" stroke-width="4" stroke-dasharray="24 18"/>
+  <text x="700" y="188" font-size="16" font-weight="800" fill="#fff" text-anchor="middle" letter-spacing="1">MATTHEW MILL ROAD (SR-607)</text>
   <!-- Seminole Trail (US-29) : LEFT -->
-  <polygon points="0,120 66,120 74,720 0,720" fill="#cfd2d6"/>
-  <line x1="34" y1="130" x2="40" y2="720" stroke="#fff" stroke-width="2.5" stroke-dasharray="18 14"/>
-  <text x="30" y="430" transform="rotate(-90 30 430)" font-size="13.5" font-weight="700" fill="#3a3a38" letter-spacing="1">US ROUTE 29 · SEMINOLE TRAIL — ≈28,000 AADT</text>
+  <polygon points="0,206 92,206 100,1000 0,1000" fill="#6d7883"/>
+  <line x1="46" y1="216" x2="50" y2="1000" stroke="#f4c430" stroke-width="4" stroke-dasharray="24 18"/>
+  <text x="46" y="600" transform="rotate(-90 46 600)" font-size="15" font-weight="800" fill="#fff" text-anchor="middle" letter-spacing="1">US-29 · SEMINOLE TRAIL · ≈28,000 AADT</text>
   <!-- Preddy Creek Rd (Rt 670) : RIGHT -->
-  <polygon points="946,150 1000,140 1010,720 946,720" fill="#cfd2d6"/>
-  <text x="984" y="430" transform="rotate(90 984 430)" font-size="12.5" font-weight="700" fill="#3a3a38" letter-spacing="1">PREDDY CREEK RD · RT 670</text>
+  <polygon points="1300,220 1360,210 1372,1000 1300,1000" fill="#6d7883"/>
+  <text x="1336" y="600" transform="rotate(90 1336 600)" font-size="14" font-weight="800" fill="#fff" text-anchor="middle" letter-spacing="1">PREDDY CREEK RD · RT 670</text>
 
-  <!-- Signalized intersection (TOP-LEFT) -->
-  <circle cx="66" cy="96" r="12" fill="#fab219" stroke="#7a5a00" stroke-width="2"/><circle cx="66" cy="96" r="3.5" fill="#7a5a00"/>
-  <text x="84" y="140" font-size="10.5" font-weight="700" fill="#7a5a00">◆ SIGNALIZED CORNER</text>
-
-  <!-- Sheetz (across Matthew Mill, top) -->
-  <rect x="250" y="6" width="150" height="44" rx="6" fill="#e7f0e9" stroke="#9db8a4" stroke-width="1.5"/>
-  <text x="325" y="26" font-size="12" font-weight="700" fill="#3a3a38" text-anchor="middle">SHEETZ · 7020</text>
-  <text x="325" y="41" font-size="9.5" fill="#6f6e6a" text-anchor="middle">across SR-607 · zoned B-3</text>
+  <!-- Signal at the corner -->
+  <rect x="78" y="158" width="20" height="44" rx="4" fill="#2b2b28"/>
+  <circle cx="88" cy="168" r="5" fill="#e0483e"/><circle cx="88" cy="180" r="5" fill="#f4c430"/><circle cx="88" cy="192" r="5" fill="#3fae5a"/>
+  <text x="108" y="184" font-size="12" font-weight="700" fill="#2b2b28">SIGNAL</text>
 
   <!-- ===== PARCEL BOUNDARY (~5.04 ac) ===== -->
-  <polygon points="86,126 300,120 620,128 850,150 890,440 700,606 360,612 86,470"
-           fill="#ffffff" stroke="#33a94d" stroke-width="3"/>
-  <text x="112" y="150" font-size="11.5" font-weight="700" fill="#2b6b39">SUBJECT SITE · ±5.04 AC · PARCELS 66-A-46 &amp; 66-A-45</text>
+  <polygon points="130,222 520,214 900,224 1180,252 1230,650 950,860 480,868 130,700" fill="#ffffff" stroke="#1f6b3a" stroke-width="4"/>
+  <text x="150" y="252" font-size="15" font-weight="800" fill="#1f6b3a">SUBJECT SITE · ±5.04 AC · PARCELS 66-A-46 &amp; 66-A-45</text>
 
-  <!-- Monument sign at the corner -->
-  <rect x="92" y="158" width="24" height="15" rx="2" fill="#33a94d"/><text x="120" y="170" font-size="9" fill="#2b6b39">▲ monument sign (corner)</text>
+  <!-- Monument sign -->
+  <rect x="140" y="272" width="30" height="20" rx="3" fill="#1f6b3a"/>
+  <text x="178" y="288" font-size="12" fill="#1f6b3a">▲ monument sign</text>
 
-  <!-- ===== GOODWILL held to the top-left corner (single-use, retail-only deal) ===== -->
-  <text x="118" y="196" font-size="11" font-weight="700" fill="#0a5c30">GOODWILL — HELD TO CORNER</text>
-  <!-- building -->
-  <rect x="118" y="204" width="210" height="96" rx="3" fill="#0f7a3f" stroke="#0a5c30" stroke-width="2"/>
-  <text x="223" y="245" font-size="15" font-weight="800" fill="#fff" text-anchor="middle">GOODWILL RETAIL</text>
-  <text x="223" y="265" font-size="11" fill="#d6f0df" text-anchor="middle">±6,000 SF build-to-suit</text>
-  <!-- storefront faces the lot (south) -->
-  <rect x="126" y="296" width="150" height="6" rx="3" fill="#57b0ff"/><text x="132" y="316" font-size="9" fill="#2b6b39">storefront ↓ faces lot</text>
-  <!-- loading / processing on east end -->
-  <rect x="330" y="204" width="60" height="58" rx="3" fill="#e7ece9" stroke="#9db8a4"/><text x="360" y="230" font-size="8.5" fill="#3a3a38" text-anchor="middle">loading /</text><text x="360" y="242" font-size="8.5" fill="#3a3a38" text-anchor="middle">processing</text>
-  <!-- attended donation canopy -->
-  <rect x="332" y="270" width="80" height="48" rx="4" fill="#f6d9b0" stroke="#c98a3a" stroke-width="2"/>
-  <text x="372" y="290" font-size="10" font-weight="800" fill="#8a5a17" text-anchor="middle">DONATION</text>
-  <text x="372" y="303" font-size="9" fill="#8a5a17" text-anchor="middle">CANOPY</text>
-  <text x="372" y="314" font-size="8" fill="#8a5a17" text-anchor="middle">(attended)</text>
-  <!-- one-way donor lane -->
-  <path d="M372,320 C372,360 320,372 240,372" fill="none" stroke="#f0b46a" stroke-width="9" stroke-linecap="round"/>
-  <text x="300" y="360" font-size="8.5" font-style="italic" fill="#a9741f">one-way donor lane ▸</text>
+  <!-- Main entrance off SR-607 -->
+  <path d="M660,214 L660,270" stroke="#2b2b28" stroke-width="3" marker-end="url(#arr)"/>
+  <text x="672" y="238" font-size="12" fill="#2b2b28">MAIN ENTRANCE</text>
+  <text x="672" y="253" font-size="10.5" fill="#5c5c58">off SR-607 · ≈200 ft from signal</text>
 
-  <!-- customer parking (front / south of store) -->
-  <rect x="118" y="330" width="300" height="150" rx="4" fill="url(#asphalt)" stroke="#c7c9cc"/>
+  <!-- GOODWILL building — sized to the real ±6,000 SF build-to-suit, not the
+       (much larger) ±18,000 SF format Goodwill sometimes uses elsewhere;
+       every figure on this card's Deal Economics ($168K NOI, etc.) derives
+       from this 6,000 SF pad, so the picture has to match it. -->
+  <rect x="170" y="304" width="230" height="140" rx="4" fill="#0f7a3f" stroke="#0a5c30" stroke-width="3"/>
+  <text x="285" y="368" font-size="24" font-weight="800" fill="#fff" text-anchor="middle">GOODWILL</text>
+  <text x="285" y="394" font-size="14" fill="#d6f0df" text-anchor="middle">±6,000 SF retail (build-to-suit)</text>
+  <text x="285" y="414" font-size="11" font-style="italic" fill="#bfe6c9" text-anchor="middle">storefront + donation · faces corner</text>
+
+  <!-- Donation drive-thru -->
+  <rect x="412" y="304" width="110" height="90" rx="4" fill="#f0b84a" stroke="#a9741f" stroke-width="2"/>
+  <text x="467" y="342" font-size="13" font-weight="800" fill="#5a3c10" text-anchor="middle">DONATION</text>
+  <text x="467" y="360" font-size="11" fill="#5a3c10" text-anchor="middle">drive-thru</text>
+
+  <!-- Goodwill pad callout -->
+  <rect x="165" y="452" width="200" height="26" fill="#fff" opacity="0.92"/>
+  <text x="170" y="470" font-size="13" font-weight="700" fill="#1f6b3a">Goodwill pad ≈ 1.2 ac</text>
+
+  <!-- Customer parking -->
+  <rect x="170" y="486" width="430" height="270" fill="url(#asphalt)" stroke="#b7bcc2"/>
   <g stroke="#c2c4c7" stroke-width="1">
-    <line x1="138" y1="440" x2="138" y2="474"/><line x1="156" y1="440" x2="156" y2="474"/><line x1="174" y1="440" x2="174" y2="474"/>
-    <line x1="192" y1="440" x2="192" y2="474"/><line x1="210" y1="440" x2="210" y2="474"/><line x1="228" y1="440" x2="228" y2="474"/>
-    <line x1="246" y1="440" x2="246" y2="474"/><line x1="264" y1="440" x2="264" y2="474"/><line x1="282" y1="440" x2="282" y2="474"/>
-    <line x1="300" y1="440" x2="300" y2="474"/><line x1="318" y1="440" x2="318" y2="474"/><line x1="336" y1="440" x2="336" y2="474"/>
-    <line x1="354" y1="440" x2="354" y2="474"/><line x1="372" y1="440" x2="372" y2="474"/><line x1="390" y1="440" x2="390" y2="474"/>
+    <line x1="200" y1="510" x2="200" y2="560"/><line x1="230" y1="510" x2="230" y2="560"/><line x1="260" y1="510" x2="260" y2="560"/>
+    <line x1="290" y1="510" x2="290" y2="560"/><line x1="320" y1="510" x2="320" y2="560"/><line x1="350" y1="510" x2="350" y2="560"/>
+    <line x1="380" y1="510" x2="380" y2="560"/><line x1="410" y1="510" x2="410" y2="560"/><line x1="440" y1="510" x2="440" y2="560"/>
+    <line x1="470" y1="510" x2="470" y2="560"/><line x1="500" y1="510" x2="500" y2="560"/><line x1="530" y1="510" x2="530" y2="560"/>
+    <line x1="560" y1="510" x2="560" y2="560"/><line x1="590" y1="510" x2="590" y2="560"/>
+    <line x1="200" y1="620" x2="200" y2="670"/><line x1="230" y1="620" x2="230" y2="670"/><line x1="260" y1="620" x2="260" y2="670"/>
+    <line x1="290" y1="620" x2="290" y2="670"/><line x1="320" y1="620" x2="320" y2="670"/><line x1="350" y1="620" x2="350" y2="670"/>
+    <line x1="380" y1="620" x2="380" y2="670"/><line x1="410" y1="620" x2="410" y2="670"/><line x1="440" y1="620" x2="440" y2="670"/>
+    <line x1="470" y1="620" x2="470" y2="670"/><line x1="500" y1="620" x2="500" y2="670"/><line x1="530" y1="620" x2="530" y2="670"/>
+    <line x1="560" y1="620" x2="560" y2="670"/><line x1="590" y1="620" x2="590" y2="670"/>
   </g>
-  <text x="128" y="498" font-size="10" font-weight="600" fill="#52514e">Customer parking · ±49 spaces (right-size to store)</text>
+  <rect x="190" y="716" width="260" height="26" fill="#fff" opacity="0.92"/>
+  <text x="200" y="734" font-size="13" font-weight="700" fill="#3a3a38">CUSTOMER PARKING · ≈49 SPACES</text>
 
-  <!-- Entrance off SR-607 (top), spaced from signal -->
-  <path d="M470,120 L470,168" stroke="#52514e" stroke-width="3" marker-end="url(#arr)"/>
-  <text x="478" y="140" font-size="9" fill="#52514e">Entrance (SR-607) · spaced from signal</text>
-  <!-- Potential RIRO on Seminole (left, into parking) -->
-  <path d="M74,410 L112,410" stroke="#d03b3b" stroke-width="2.5" stroke-dasharray="5 4" marker-end="url(#arr)"/>
-  <text x="80" y="402" font-size="8.5" fill="#b03636">potential RIRO — VDOT approval</text>
+  <!-- Potential RIRO off Seminole Trail -->
+  <path d="M100,610 L162,610" stroke="#c23b34" stroke-width="2.5" stroke-dasharray="6 5" marker-end="url(#arrRed)"/>
+  <text x="106" y="600" font-size="11" fill="#b03636">potential RIRO — pending VDOT</text>
 
-  <!-- ===== REMAINDER OF SITE (rear / east) — reserved, undeveloped ===== -->
-  <text x="560" y="196" font-size="11" font-weight="700" fill="#5b6472">REMAINDER OF SITE — RESERVED / UNDEVELOPED</text>
-  <rect x="560" y="204" width="300" height="250" rx="4" fill="url(#field)" stroke="#c7c9cc" stroke-dasharray="6 5"/>
-  <text x="710" y="330" font-size="10.5" fill="#7a8272" text-anchor="middle">No use committed</text>
-  <text x="560" y="472" font-size="8.5" font-style="italic" fill="#7a8272">Reserved land — not part of current deal economics</text>
+  <!-- ===== OPEN LAND / LAND BANK (rear / east) ===== -->
+  <rect x="650" y="304" width="460" height="480" rx="4" fill="#eaf1e7" stroke="#8fae90" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="880" y="530" font-size="18" font-weight="800" fill="#5b6f5c" text-anchor="middle">OPEN LAND / LAND BANK</text>
+  <text x="880" y="556" font-size="13" font-style="italic" fill="#5b6f5c" text-anchor="middle">≈3.8 ac held for future development</text>
+  <text x="880" y="576" font-size="11" font-style="italic" fill="#7a8a7a" text-anchor="middle">No use committed — not part of current deal economics</text>
 
-  <!-- Stormwater (bottom / low corner near storm-drain easement) -->
-  <ellipse cx="470" cy="560" rx="86" ry="42" fill="#dbeafe" stroke="#7fa8d9" stroke-width="1.5" stroke-dasharray="5 4"/>
-  <text x="470" y="558" font-size="10.5" font-weight="600" fill="#2b5f9e" text-anchor="middle">STORMWATER</text>
-  <text x="470" y="572" font-size="9.5" fill="#3a6ba5" text-anchor="middle">bioretention / BMP</text>
+  <!-- 3 existing dwellings -->
+  <text x="150" y="825" font-size="12" font-style="italic" fill="#9a6a1a">• 3 existing dwellings to be razed</text>
 
-  <!-- existing homes to raze -->
-  <text x="118" y="530" font-size="9" fill="#9a6a1a">◦ 3 existing dwellings to be razed</text>
+  <!-- Stormwater -->
+  <ellipse cx="560" cy="830" rx="110" ry="52" fill="#dbeafe" stroke="#7fa8d9" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="560" y="826" font-size="14" font-weight="700" fill="#2b5f9e" text-anchor="middle">STORMWATER</text>
+  <text x="560" y="845" font-size="11.5" fill="#3a6ba5" text-anchor="middle">bioretention / BMP</text>
 
-  <!-- North arrow (up) -->
-  <g transform="translate(986,60)"><path d="M0,-20 L7,10 L0,3 L-7,10 Z" fill="#3a3a38"/><text x="0" y="26" font-size="11" font-weight="700" fill="#3a3a38" text-anchor="middle">N</text></g>
+  <!-- North arrow -->
+  <g transform="translate(1340,150)">
+    <path d="M0,-22 L8,12 L0,4 L-8,12 Z" fill="#2b2b28"/>
+    <text x="0" y="30" font-size="13" font-weight="800" fill="#2b2b28" text-anchor="middle">N</text>
+  </g>
+
+  <!-- Scale bar -->
+  <g transform="translate(150,945)">
+    <line x1="0" y1="0" x2="200" y2="0" stroke="#3a3a38" stroke-width="2"/>
+    <line x1="0" y1="-5" x2="0" y2="5" stroke="#3a3a38" stroke-width="2"/>
+    <line x1="100" y1="-5" x2="100" y2="5" stroke="#3a3a38" stroke-width="2"/>
+    <line x1="200" y1="-5" x2="200" y2="5" stroke="#3a3a38" stroke-width="2"/>
+    <text x="0" y="22" font-size="11" fill="#3a3a38" text-anchor="middle">0</text>
+    <text x="100" y="22" font-size="11" fill="#3a3a38" text-anchor="middle">100</text>
+    <text x="200" y="22" font-size="11" fill="#3a3a38" text-anchor="middle">200 ft (approx.)</text>
+  </g>
 
   <!-- Legend / disclaimer -->
-  <g transform="translate(24,676)">
-    <rect x="-8" y="-16" width="812" height="42" rx="6" fill="#fff" stroke="#e1e0d9"/>
-    <rect x="4" y="-6" width="14" height="14" rx="2" fill="#0f7a3f"/><text x="24" y="5" font-size="10.5" fill="#3a3a38">Goodwill retail (build-to-suit)</text>
-    <rect x="216" y="-6" width="14" height="14" rx="2" fill="#f6d9b0" stroke="#c98a3a"/><text x="236" y="5" font-size="10.5" fill="#3a3a38">Donation canopy</text>
-    <rect x="348" y="-6" width="14" height="14" rx="2" fill="#eef1ea" stroke="#c7c9cc" stroke-dasharray="3 2"/><text x="368" y="5" font-size="10.5" fill="#3a3a38">Reserved / undeveloped</text>
-    <rect x="530" y="-6" width="14" height="14" rx="2" fill="#dbeafe" stroke="#7fa8d9"/><text x="550" y="5" font-size="10.5" fill="#3a3a38">Stormwater</text>
-    <text x="640" y="5" font-size="9.5" font-style="italic" fill="#8a5a17">Conceptual test-fit — not for construction</text>
+  <g transform="translate(430,945)">
+    <rect x="-10" y="-24" width="960" height="46" rx="6" fill="#fff" stroke="#e1e0d9"/>
+    <rect x="4" y="-9" width="14" height="14" rx="2" fill="#0f7a3f"/><text x="24" y="3" font-size="11" fill="#3a3a38">Goodwill retail (±6,000 SF)</text>
+    <rect x="230" y="-9" width="14" height="14" rx="2" fill="#e4e6e8" stroke="#b7bcc2"/><text x="250" y="3" font-size="11" fill="#3a3a38">Parking / pavement</text>
+    <rect x="418" y="-9" width="14" height="14" rx="2" fill="#f0b84a" stroke="#a9741f"/><text x="438" y="3" font-size="11" fill="#3a3a38">Donation drive-thru</text>
+    <rect x="606" y="-9" width="14" height="14" rx="2" fill="#dbeafe" stroke="#7fa8d9"/><text x="626" y="3" font-size="11" fill="#3a3a38">Stormwater BMP</text>
+    <rect x="736" y="-9" width="14" height="14" rx="2" fill="#eaf1e7" stroke="#8fae90" stroke-dasharray="3 2"/><text x="756" y="3" font-size="11" fill="#3a3a38">Open land / land bank</text>
+    <text x="470" y="18" font-size="10" font-style="italic" fill="#8a5a17" text-anchor="middle">Conceptual test-fit — not an engineered site plan. For discussion only.</text>
+  </g>
   </g>
 </svg>
