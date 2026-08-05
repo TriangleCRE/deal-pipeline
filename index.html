@@ -1375,7 +1375,30 @@ async function initProperty(){
         <div class="ts-tile"><div class="l">Exit value</div><div class="v">${T.fmtUSDk(fin.exitValue)}</div></div>
         <div class="ts-tile"><div class="l">Levered IRR</div><div class="v">${fin.leveredIRR != null ? T.fmtPct(fin.leveredIRR) : "TBD"}</div></div>
       </div>` : "";
-    const tsKeyFacts = [].concat(P.propertyInfo || [], P.market || [], P.zoning || []).slice(0, 6);
+    // A labeled two-column section for the tearsheet — same {k, d:{v}} row
+    // shape propertyInfo/gis/market/zoning/hbu all already use, so any of
+    // those arrays (or an adapted one, see tsTenantRows below) plugs in
+    // directly. Renders nothing when the section has no rows, so an empty
+    // section never leaves a dangling heading on the printed page.
+    function tsSection(title, rows, cap) {
+      const r = (rows || []).filter(row => row.d && row.d.v).slice(0, cap || 8);
+      if (!r.length) return "";
+      return `<div class="ts-h">${T.esc(title)}</div>${r.map(row => `<div class="tsr"><span class="tsk">${T.esc(row.k)}</span><span class="tsv">${T.esc(row.d.v)}</span></div>`).join("")}`;
+    }
+    // Property & GIS: the property-info basics plus the couple of GIS rows
+    // (frontage, easements) that round out the physical picture — same mix
+    // the old one-pager showed as a single section.
+    const tsPropGis = [].concat(
+      P.propertyInfo || [],
+      (P.gis || []).filter(r => /frontage|easement/i.test(r.k || ""))
+    );
+    // Tenants & Use: named tenants (status as the "value") plus the HBU /
+    // phasing rows — adapted to the same {k, d:{v}} shape as everything
+    // else so tsSection renders it with no special-casing.
+    const tsTenantRows = [].concat(
+      (P.tenants || []).map(t => ({ k: t.name, d: { v: t.status } })),
+      P.hbu || []
+    );
     const tsEconRows = fin ? `
         <div class="tsr"><span class="tsk">Loan / Equity</span><span class="tsv">${T.fmtUSD(fin.loan)} / ${T.fmtUSD(fin.equity)}</span></div>
         <div class="tsr"><span class="tsk">Interest · amort · hold</span><span class="tsv">${T.fmtPct(fin.interestRate, 2)} · ${(P.financing && P.financing.amortYears) || "—"}yr · ${(P.financing && P.financing.holdYears) || "—"}yr</span></div>
@@ -1384,7 +1407,7 @@ async function initProperty(){
       : `<div class="tsr"><span class="tsk">Not yet modeled</span><span class="tsv">—</span></div>`;
     const tsFlags = (P.flags && P.flags.length) ? `<div class="ts-flags">
         <div class="ts-h">Flags</div>
-        <div class="tsflags-grid">${P.flags.slice(0, 6).map(f => `<div class="tsflag ${f.type || "watch"}"><span>${f.type === "opp" ? "▲" : f.type === "risk" ? "■" : "◆"}</span><span>${T.esc(f.text)}</span></div>`).join("")}</div>
+        <div class="tsflags-grid">${P.flags.slice(0, 8).map(f => `<div class="tsflag ${f.type || "watch"}"><span>${f.type === "opp" ? "▲" : f.type === "risk" ? "■" : "◆"}</span><span>${T.esc(f.text)}</span></div>`).join("")}</div>
       </div>` : "";
     const tearsheet = `<div class="tearsheet">
       <div class="ts-head">
@@ -1407,12 +1430,14 @@ async function initProperty(){
       ${P.thesis && P.thesis.v ? `<div class="ts-thesis">${T.esc(P.thesis.v)}</div>` : ""}
       <div class="ts-cols">
         <div>
-          <div class="ts-h">Key Facts</div>
-          ${tsKeyFacts.length ? tsKeyFacts.map(r => `<div class="tsr"><span class="tsk">${T.esc(r.k)}</span><span class="tsv">${T.esc(r.d && r.d.v)}</span></div>`).join("") : `<div class="tsr"><span class="tsk">No details captured yet</span><span class="tsv">—</span></div>`}
+          ${tsSection("Property & GIS", tsPropGis, 8) || `<div class="ts-h">Property &amp; GIS</div><div class="tsr"><span class="tsk">No details captured yet</span><span class="tsv">—</span></div>`}
+          ${tsSection("Market & Location", P.market, 6)}
         </div>
         <div>
+          ${tsSection("Zoning & Entitlement", P.zoning, 6)}
           <div class="ts-h">Deal Economics</div>
           ${tsEconRows}
+          ${tsSection("Tenants & Use", tsTenantRows, 6)}
         </div>
       </div>
       ${tsFlags}
