@@ -323,6 +323,6 @@ export const FIELD_GUIDE = [
     "materials: { financingModel: [{ name, file, meta, s }], gis: [...], siteMap: [...], survey: [...], scoring: [...], other: [...] } — file is a link or filename to where the material already lives, NEVER embedded base64",
     "extras: [{ label, text, s }] — anything that doesn't fit a field above",
     "sources: [{ label, url }] — citations for web research",
-    "images: { sitePlan: \"link/filename\" }",
+    "images: { sitePlan: \"link/filename\" } — optional here; if there's no site plan yet, leave it out entirely and add it later from the card's Edit mode (an upload control appears once the property exists)",
   ]},
 ];

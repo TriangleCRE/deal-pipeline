@@ -57,12 +57,26 @@ per-field CRUD, no extra tables.
   financial model, photos, notes, whatever exists (partial is fine; the
   page has a collapsed "see examples" list for anyone unsure what to
   gather), (2) paste or upload the JSON Claude gives back — it's validated
-  against the schema, previewed, then saved (upsert by `id`). Materials
-  themselves aren't part of that JSON upload — once the card exists, use
-  the "Deal Materials" section (or the financing-model button) to upload
-  the actual files (max 3MB each); for anything bigger, paste a link to
-  where it already lives (Drive, Dropbox, SharePoint, etc.) via View/edit
-  JSON instead.
+  against the schema, previewed, then saved (upsert by `id`), and lands you
+  straight on the new card. Materials themselves aren't part of that JSON
+  upload — once the card exists (right there after step 2, or any time
+  later), use the "Deal Materials" section (or the financing-model button)
+  to upload the actual files (max 3MB each); for anything bigger, paste a
+  link to where it already lives (Drive, Dropbox, SharePoint, etc.) via
+  View/edit JSON instead.
+- **Concept Site Plan image**: the big rendered site-plan image (as opposed
+  to a downloadable site-plan file in Deal Materials) lives at
+  `images.sitePlan` and is uploaded the same "real control if there's
+  something to show, upload prompt otherwise" way as the financing model —
+  from the card's Edit mode, no separate flow to remember: with nothing
+  uploaded yet it's an "＋ Upload site plan image" prompt, and once one
+  exists it's "＋ Replace site plan image". Works identically for a
+  brand-new property (Edit mode is available immediately after Add Property
+  lands you on the new card) and for a property that's had one for years.
+  Uses the same upload endpoint/size cap as Deal Materials
+  (`POST /api/materials/:propertyId` with `imageKey` instead of `category` —
+  see routes/materials.js), just writing to `images.sitePlan` instead of
+  appending to a `materials[category]` list.
 - **Editing**: every card has an "✎ Edit card" button for editing existing
   text/values in place (name, thesis, scores, flags, tenants, contacts,
   checklist responses, etc.) — Save writes the whole document back through

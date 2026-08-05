@@ -1,5 +1,10 @@
 // POST /api/materials/:propertyId       -> upload one file onto a property's
 //        materials[category] list. body: { category, filename, contentType, dataBase64 }
+//        -- or, to set one of the property's single "hero" images instead
+//        (e.g. the concept site plan rendered on the card) --
+//        body: { imageKey, filename, contentType, dataBase64 } — writes the
+//        uploaded file's URL to images[imageKey] instead of appending to a
+//        materials category.
 // GET  /api/materials/file/:fileId/:name -> serve back an uploaded file's bytes
 //        (:name is cosmetic — only used for the download filename — the
 //        lookup is by :fileId)
@@ -25,8 +30,12 @@ const router = express.Router();
 const MAX_FILE_BYTES = 3 * 1024 * 1024;
 
 router.post("/:propertyId", async (req, res) => {
-  const { category, filename, contentType, dataBase64 } = req.body || {};
-  if (!category || typeof category !== "string") {
+  const { category, filename, contentType, dataBase64, imageKey } = req.body || {};
+  if (imageKey && typeof imageKey !== "string") {
+    res.status(400).json({ ok: false, error: "imageKey must be a string" });
+    return;
+  }
+  if (!imageKey && (!category || typeof category !== "string")) {
     res.status(400).json({ ok: false, error: "category is required" });
     return;
   }
@@ -65,15 +74,21 @@ router.post("/:propertyId", async (req, res) => {
     const fileId = crypto.randomUUID();
     await saveMaterialFile({ id: fileId, propertyId: property.id, filename, contentType, data: buffer });
     const url = `/api/materials/file/${fileId}/${encodeURIComponent(filename)}`;
-    const material = {
-      name: filename,
-      file: url,
-      meta: `Uploaded ${new Date().toISOString().slice(0, 10)} · ${(buffer.length / 1024).toFixed(0)} KB`,
-      s: "source",
-    };
 
-    const updated = { ...property, materials: { ...(property.materials || {}) } };
-    updated.materials[category] = [...(updated.materials[category] || []), material];
+    let updated;
+    let material = null;
+    if (imageKey) {
+      updated = { ...property, images: { ...(property.images || {}), [imageKey]: url } };
+    } else {
+      material = {
+        name: filename,
+        file: url,
+        meta: `Uploaded ${new Date().toISOString().slice(0, 10)} · ${(buffer.length / 1024).toFixed(0)} KB`,
+        s: "source",
+      };
+      updated = { ...property, materials: { ...(property.materials || {}) } };
+      updated.materials[category] = [...(updated.materials[category] || []), material];
+    }
 
     const check = validateProperty(updated);
     if (!check.ok) {
@@ -81,7 +96,7 @@ router.post("/:propertyId", async (req, res) => {
       return;
     }
     await upsertProperty(check.data.id, check.data);
-    res.status(200).json({ ok: true, property: check.data, material });
+    res.status(200).json({ ok: true, property: check.data, material, url });
   } catch (err) {
     res.status(500).json({ ok: false, error: err.message });
   }
