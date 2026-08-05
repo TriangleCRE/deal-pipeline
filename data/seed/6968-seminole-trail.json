@@ -127,7 +127,7 @@
   "financingNote": {
     "pencil": {
       "ok": true,
-      "v": "Per the v8 model (retail-only, Goodwill build-to-suit): yield-on-cost is 8.08% against a 7.5% exit cap (+0.58% spread), levered IRR 12.7%, 1.71x equity multiple, net development profit ≈$117K. Full $1.25M whole-site land basis retained (owner will not subdivide) — land cost is the key swing factor; spread turns negative above ≈$1.4M (see land-basis sensitivity in Extras).",
+      "v": "Per the v8 model (retail-only, Goodwill build-to-suit): a single $168K NNN NOI pad on $2,078,000 total cost (full $1.25M whole-site land + $720K shell + $108K soft costs) yields 8.08% against a 7.5% exit cap — a +0.58% spread, 12.7% levered IRR, 1.71x equity multiple, ≈$117K net development profit. The full whole-site land basis is carried against just this one small pad, so land is the key swing factor — the deal is materially stronger at a lower allocated basis (see land-basis sensitivity in Extras). Still contingent on the B-3 rezoning.",
       "s": "source"
     },
     "listAsk": {
