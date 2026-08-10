@@ -90,6 +90,7 @@ img{max-width:100%}
 .badge-warn{background:var(--warn-bg);color:var(--warn-ink)}
 .badge-bad{background:var(--bad-bg);color:var(--bad-ink)}
 .badge-neutral{background:#eee;color:#555}
+.badge-pin{background:var(--warn-bg);color:var(--warn-ink)}
 .type-chip{display:inline-flex;align-items:center;font-weight:750;font-size:11px;
   padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--ink-2);background:var(--surface)}
 
@@ -112,8 +113,14 @@ img{max-width:100%}
 .chipfilter button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 
 .pf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
-.pcard{display:flex;flex-direction:column;overflow:hidden;cursor:pointer;transition:.15s;text-decoration:none;color:inherit}
+.pcard{position:relative;display:flex;flex-direction:column;overflow:hidden;cursor:pointer;transition:.15s;text-decoration:none;color:inherit}
 .pcard:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(20,20,15,.12);border-color:#d6d5cd;text-decoration:none}
+.pcard.is-pinned{border-color:var(--warn);box-shadow:0 0 0 1px var(--warn) inset}
+.pinbtn{position:absolute;top:10px;right:10px;z-index:2;width:28px;height:28px;display:grid;place-items:center;
+  border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);
+  font-size:14px;line-height:1;cursor:pointer;transition:.15s}
+.pinbtn:hover{border-color:var(--warn);color:var(--warn-ink);background:var(--warn-bg)}
+.pinbtn.on{border-color:var(--warn);color:var(--warn-ink);background:var(--warn-bg)}
 .pcard .top{padding:16px 18px 0}
 .pcard .mid{padding:12px 18px;flex:1}
 .pcard .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
@@ -739,6 +746,12 @@ async function apiSetArchived(id, archived) {
   const body = await res.json().catch(() => ({}));
   return { httpOk: res.ok, status: res.status, ...body };
 }
+async function apiSetPinned(id, pinned) {
+  const res = await fetch(`/api/properties/${encodeURIComponent(id)}/${pinned ? "pin" : "unpin"}`, { method: "POST" });
+  if (res.status === 401) { redirectToLogin(); throw new Error("Session expired"); }
+  const body = await res.json().catch(() => ({}));
+  return { httpOk: res.ok, status: res.status, ...body };
+}
 async function apiDeleteProperty(id) {
   const res = await fetch("/api/properties/" + encodeURIComponent(id), { method: "DELETE" });
   if (res.status === 401) { redirectToLogin(); throw new Error("Session expired"); }
@@ -933,7 +946,8 @@ async function initPortfolio(){
     const purchase = fin ? T.fmtUSDk(fin.purchasePrice) : "—";
     const cost = fin ? T.fmtUSDk(fin.totalCost) : "—";
     const rent = fin && fin.primaryUseRentPSF ? "$" + fin.primaryUseRentPSF + "/SF" : "—";
-    return `<a class="card pcard" href="#/p/${encodeURIComponent(p.id)}"${p.archived ? ' style="opacity:.7;filter:grayscale(.4)"' : ""}>
+    return `<a class="card pcard${p.pinned ? " is-pinned" : ""}" href="#/p/${encodeURIComponent(p.id)}"${p.archived ? ' style="opacity:.7;filter:grayscale(.4)"' : ""}>
+      <button type="button" class="pinbtn${p.pinned ? " on" : ""}" data-pin-id="${T.esc(p.id)}" aria-pressed="${p.pinned ? "true" : "false"}" title="${p.pinned ? "Unpin — remove from top of the dashboard" : "Pin — always keep first on the dashboard"}">📌</button>
       <div class="top">
         <div class="row">
           <div><h3>${T.esc(p.name)}</h3><div class="addr">${T.esc(p.county)} · ${T.esc(p.parcels || "")}</div></div>
@@ -941,7 +955,7 @@ async function initPortfolio(){
         </div>
       </div>
       <div class="mid">
-        <div class="row" style="margin-bottom:4px">${badge}<span class="wnote">${T.esc(p.status || "")}</span><span class="type-chip">${T.esc(p.dealType || "Property-Driven")}</span></div>
+        <div class="row" style="margin-bottom:4px">${p.pinned ? `<span class="badge badge-pin">📌 Pinned</span>` : ""}${badge}<span class="wnote">${T.esc(p.status || "")}</span><span class="type-chip">${T.esc(p.dealType || "Property-Driven")}</span></div>
         <div class="tags">${tags}</div>
       </div>
       <div class="foot">
@@ -954,6 +968,27 @@ async function initPortfolio(){
       </div>
     </a>`;
   }
+
+  // Toggling pin is available right from the grid (no need to open the
+  // card) — delegated once on the grid container since cards re-render on
+  // every filter/search change. Stops the click from also following the
+  // card's own <a href>.
+  gridEl.addEventListener("click", async e => {
+    const btn = e.target.closest(".pinbtn");
+    if (!btn) return;
+    e.preventDefault(); e.stopPropagation();
+    const p = props.find(x => x.id === btn.dataset.pinId);
+    if (!p || btn.disabled) return;
+    const pinning = !p.pinned;
+    btn.disabled = true;
+    const result = await apiSetPinned(p.id, pinning).catch(err => ({ ok: false, error: err.message }));
+    if (result.ok) {
+      p.pinned = result.property.pinned;
+      render();
+    } else {
+      btn.disabled = false;
+    }
+  });
 
   function render() {
     const list = props.filter(p => {
@@ -969,7 +1004,15 @@ async function initPortfolio(){
       if (!query) return true;
       const hay = [p.name, p.county, p.address, (p.tags || []).join(" "), p.headlineTenant && p.headlineTenant.name].join(" ").toLowerCase();
       return hay.includes(query);
-    }).sort((a, b) => (a.archived ? 1 : 0) - (b.archived ? 1 : 0));
+    }).sort((a, b) => {
+      // Pinned properties always come first, no matter which status/type
+      // filter or search is active — that's the whole point of pinning.
+      // Archived still sinks to the bottom regardless of pin state, so an
+      // archived-but-pinned property doesn't reappear above the active
+      // pipeline.
+      if (!!a.archived !== !!b.archived) return a.archived ? 1 : -1;
+      return (a.pinned ? 0 : 1) - (b.pinned ? 0 : 1);
+    });
     gridEl.innerHTML = list.map(card).join("") +
       `<a class="addtile" href="#/add"><span class="plus">＋</span><b>Add a property</b>
        <span class="wnote">Copy the data-entry prompt, or upload a JSON card</span></a>`;
@@ -1047,6 +1090,7 @@ async function initProperty(){
           : `<button class="btn btn-sm" id="btnEdit">✎ Edit card</button>
              <button class="btn btn-sm" id="btnJson">{ } View/edit JSON</button>
              <button class="btn btn-sm" onclick="window.print()" title="Choose “Save as PDF”">⬇ Save as PDF (1-pager)</button>
+             <button class="btn btn-sm" id="btnPin" title="Pinned properties always sort first on the portfolio dashboard">${P.pinned ? "📌 Unpin" : "📌 Pin"}</button>
              <button class="btn btn-sm" id="btnArchive">${P.archived ? "↩ Restore" : "🗄 Archive"}</button>
              <button class="btn btn-sm btn-danger" id="btnDelete">🗑 Delete</button>`}
         </span>
@@ -1474,6 +1518,25 @@ async function initProperty(){
     }
   }
 
+  async function doPinToggle() {
+    const pinning = !P.pinned;
+    const btn = document.getElementById("btnPin");
+    if (btn) { btn.disabled = true; btn.textContent = pinning ? "Pinning…" : "Unpinning…"; }
+    const result = await apiSetPinned(P.id, pinning).catch(err => ({ ok: false, error: err.message }));
+    if (result.ok) {
+      P = result.property; baseSnapshot = clone(P);
+      saveMsg = { ok: true, text: pinning
+        ? "Pinned ✓ — always shown first on the dashboard."
+        : "Unpinned ✓ — back to normal sort order." };
+      render();
+      setTimeout(() => { saveMsg = null; render(); }, 4000);
+    } else {
+      if (btn) { btn.disabled = false; btn.textContent = pinning ? "📌 Pin" : "📌 Unpin"; }
+      saveMsg = { ok: false, text: result.error || "Couldn't update — try again." };
+      render();
+    }
+  }
+
   async function doArchiveToggle() {
     const archiving = !P.archived;
     const btn = document.getElementById("btnArchive");
@@ -1553,6 +1616,7 @@ async function initProperty(){
       P = clone(baseSnapshot); EDIT = false; dirty = false; saveMsg = null; render();
     };
     if (g("btnSave")) g("btnSave").onclick = doSave;
+    if (g("btnPin")) g("btnPin").onclick = doPinToggle;
     if (g("btnArchive")) g("btnArchive").onclick = doArchiveToggle;
     if (g("btnDelete")) g("btnDelete").onclick = doDelete;
     document.querySelectorAll("input[data-mat-cat]").forEach(input => {

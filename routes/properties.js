@@ -5,6 +5,8 @@
 //          body: { data: {...}, validateOnly: true }  -> validate only, no save
 // POST   /api/properties/:id/archive   -> mark archived (kept, just hidden from the active pipeline)
 // POST   /api/properties/:id/unarchive -> clear archived, back into the active pipeline
+// POST   /api/properties/:id/pin       -> mark pinned (always sorts first on the portfolio dashboard)
+// POST   /api/properties/:id/unpin     -> clear pinned
 // DELETE /api/properties/:id           -> permanently remove the property (no undo — the
 //          frontend is the one place that confirms this before calling it)
 //
@@ -75,6 +77,8 @@ router.delete("/:id", async (req, res) => {
 
 router.post("/:id/archive", (req, res) => setArchived(req, res, true));
 router.post("/:id/unarchive", (req, res) => setArchived(req, res, false));
+router.post("/:id/pin", (req, res) => setPinned(req, res, true));
+router.post("/:id/unpin", (req, res) => setPinned(req, res, false));
 
 // Shared by the archive/unarchive routes above — load the existing
 // document, flip the flag, validate, save. A separate action from the
@@ -88,6 +92,30 @@ async function setArchived(req, res, archived) {
       return;
     }
     const updated = { ...existing, archived, archivedAt: archived ? new Date().toISOString() : null };
+    const check = validateProperty(updated);
+    if (!check.ok) {
+      res.status(400).json({ ok: false, errors: check.errors });
+      return;
+    }
+    await upsertProperty(check.data.id, check.data);
+    res.status(200).json({ ok: true, property: check.data });
+  } catch (err) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+}
+
+// Same shape as setArchived above, for the "pinned" flag — pinned
+// properties always sort first on the portfolio dashboard (see
+// index.html's portfolio render()), regardless of which status/type
+// filter or search term is active.
+async function setPinned(req, res, pinned) {
+  try {
+    const existing = await getProperty(req.params.id);
+    if (!existing) {
+      res.status(404).json({ ok: false, error: "Not found" });
+      return;
+    }
+    const updated = { ...existing, pinned };
     const check = validateProperty(updated);
     if (!check.ok) {
       res.status(400).json({ ok: false, errors: check.errors });

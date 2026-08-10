@@ -150,6 +150,11 @@ export const PropertySchema = z.object({
   // out of the default portfolio view and its KPIs.
   archived: z.boolean().optional(),
   archivedAt: z.string().nullable().optional(),
+  // App-managed, not part of the data-entry prompt — set via the "Pin" /
+  // "Unpin" control on the portfolio card / property page. Pinned
+  // properties always sort first on the portfolio dashboard, regardless
+  // of which status/type filter or search is active.
+  pinned: z.boolean().optional(),
   // App-managed, ISO timestamps tracked by the properties row itself (see
   // lib/db.mjs's withTimestamps/upsertProperty) — never hand-edited, and
   // stripped back out before the document is stored so these two fields
