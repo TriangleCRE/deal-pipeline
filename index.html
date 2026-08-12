@@ -111,6 +111,7 @@ img{max-width:100%}
 .chipfilter button{border:1px solid var(--line);background:var(--surface);border-radius:999px;
   padding:6px 13px;font-size:13px;font-weight:600;color:var(--ink-2);cursor:pointer}
 .chipfilter button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.fdiv{width:1px;height:22px;background:var(--line);flex-shrink:0}
 
 .pf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
 .pcard{display:flex;flex-direction:column;overflow:hidden;cursor:pointer;transition:.15s;text-decoration:none;color:inherit}
@@ -913,7 +914,7 @@ async function initPortfolio(){
   let activeStatus = "All", activeType = "All", query = "";
   const sf = document.getElementById("statusFilter");
   sf.innerHTML = statuses.map((s, i) =>
-    `<button data-s="${T.esc(s)}" class="${i === 0 ? "on" : ""}">${T.esc(s)}</button>`).join("");
+    `<button data-s="${T.esc(s)}" class="${i === 0 ? "on" : ""}">${T.esc(i === 0 ? "All statuses" : s)}</button>`).join("");
   sf.addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
     activeStatus = b.dataset.s;
@@ -925,7 +926,7 @@ async function initPortfolio(){
   const types = ["All"].concat(T.DEAL_TYPES);
   const tf = document.getElementById("typeFilter");
   tf.innerHTML = types.map((s, i) =>
-    `<button data-s="${T.esc(s)}" class="${i === 0 ? "on" : ""}">${T.esc(s)}</button>`).join("");
+    `<button data-s="${T.esc(s)}" class="${i === 0 ? "on" : ""}">${T.esc(i === 0 ? "All types" : s)}</button>`).join("");
   tf.addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
     activeType = b.dataset.s;
@@ -1759,6 +1760,7 @@ const PF_SKELETON=`<div class="hero">
     <div class="toolbar">
       <input type="search" id="q" placeholder="Search properties, county, tenant…" aria-label="Search properties">
       <div class="chipfilter" id="statusFilter"></div>
+      <span class="fdiv" aria-hidden="true"></span>
       <div class="chipfilter" id="typeFilter"></div>
     </div>
 
