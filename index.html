@@ -113,16 +113,18 @@ img{max-width:100%}
 .chipfilter button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 
 .pf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:18px}
-.pcard{position:relative;display:flex;flex-direction:column;overflow:hidden;cursor:pointer;transition:.15s;text-decoration:none;color:inherit}
+.pcard{display:flex;flex-direction:column;overflow:hidden;cursor:pointer;transition:.15s;text-decoration:none;color:inherit}
 .pcard:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(20,20,15,.12);border-color:#d6d5cd;text-decoration:none}
 .pcard.is-pinned{border-color:var(--warn);box-shadow:0 0 0 1px var(--warn) inset}
-.pinbtn{position:absolute;top:10px;right:10px;z-index:2;width:28px;height:28px;display:grid;place-items:center;
-  border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);
-  font-size:14px;line-height:1;cursor:pointer;transition:.15s}
-.pinbtn:hover{border-color:var(--warn);color:var(--warn-ink);background:var(--warn-bg)}
-.pinbtn.on{border-color:var(--warn);color:var(--warn-ink);background:var(--warn-bg)}
+.pin-row{margin-top:auto;display:flex;justify-content:flex-end;padding-top:8px}
+.pinbtn{width:26px;height:26px;display:grid;place-items:center;border-radius:8px;
+  border:none;background:transparent;color:var(--ink);cursor:pointer;transition:.15s}
+.pinbtn:hover{background:var(--line-2)}
+.pinbtn.on{color:var(--warn-ink)}
+.pinbtn svg{width:16px;height:16px}
+.pinbtn.on svg{fill:currentColor}
 .pcard .top{padding:16px 18px 0}
-.pcard .mid{padding:12px 18px;flex:1}
+.pcard .mid{padding:12px 18px;flex:1;display:flex;flex-direction:column}
 .pcard .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .pcard h3{font-size:18px}
 .pcard .addr{color:var(--muted);font-size:13px;margin-top:2px}
@@ -947,7 +949,6 @@ async function initPortfolio(){
     const cost = fin ? T.fmtUSDk(fin.totalCost) : "—";
     const rent = fin && fin.primaryUseRentPSF ? "$" + fin.primaryUseRentPSF + "/SF" : "—";
     return `<a class="card pcard${p.pinned ? " is-pinned" : ""}" href="#/p/${encodeURIComponent(p.id)}"${p.archived ? ' style="opacity:.7;filter:grayscale(.4)"' : ""}>
-      <button type="button" class="pinbtn${p.pinned ? " on" : ""}" data-pin-id="${T.esc(p.id)}" aria-pressed="${p.pinned ? "true" : "false"}" title="${p.pinned ? "Unpin — remove from top of the dashboard" : "Pin — always keep first on the dashboard"}">📌</button>
       <div class="top">
         <div class="row">
           <div><h3>${T.esc(p.name)}</h3><div class="addr">${T.esc(p.county)} · ${T.esc(p.parcels || "")}</div></div>
@@ -957,6 +958,11 @@ async function initPortfolio(){
       <div class="mid">
         <div class="row" style="margin-bottom:4px">${p.pinned ? `<span class="badge badge-pin">📌 Pinned</span>` : ""}${badge}<span class="wnote">${T.esc(p.status || "")}</span><span class="type-chip">${T.esc(p.dealType || "Property-Driven")}</span></div>
         <div class="tags">${tags}</div>
+        <div class="pin-row">
+          <button type="button" class="pinbtn${p.pinned ? " on" : ""}" data-pin-id="${T.esc(p.id)}" aria-pressed="${p.pinned ? "true" : "false"}" title="${p.pinned ? "Unpin — remove from top of the dashboard" : "Pin — always keep first on the dashboard"}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 17v5"/><path d="M9 3v1.061c0 .32-.198.604-.478.752A6.5 6.5 0 0 0 5 10.522v.956a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.956a6.5 6.5 0 0 0-3.522-5.71A.845.845 0 0 1 15 4.06V3"/><line x1="8" y1="3" x2="16" y2="3"/></svg>
+          </button>
+        </div>
       </div>
       <div class="foot">
         <div class="mini">
