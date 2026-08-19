@@ -1355,7 +1355,7 @@ async function initProperty(){
         <span><a href="#/">Portfolio</a> › ${T.esc(P.name)}</span>
         <span class="editbar noprint">
           ${EDIT ? `<span class="edit-badge">Editing${dirty ? ' <span class="dirty-dot"></span>' : ""}</span>
-            <button class="btn btn-sm btn-primary" id="btnSave">Save</button>
+            <button class="btn btn-sm btn-primary btn-save-action" id="btnSave">Save</button>
             <button class="btn btn-sm" id="btnCancel">Cancel</button>`
           : `<button class="btn btn-sm" id="btnEdit">✎ Edit card</button>
              <button class="btn btn-sm" id="btnJson">{ } View/edit JSON</button>
@@ -1724,17 +1724,23 @@ async function initProperty(){
     }
 
     const scenariosSection = `<section class="card block" id="scenarios">
-      <h2><span class="block-icon">🧪</span>Development Scenarios</h2>
+      <h2 style="justify-content:space-between">
+        <span><span class="block-icon">🧪</span>Development Scenarios</span>
+        ${!EDIT ? `<button type="button" class="btn btn-sm noprint" id="btnEditScenarios">✎ Edit scenarios</button>` : ""}
+      </h2>
       <div class="hint">Separate from the site score above — each scenario is a specific building/use idea for this parcel (strip center, standalone retail, self-storage, ...) with its own financing assumptions and its own score. Combined with the site score, this is how you find the highest-and-best use.</div>
       ${site
         ? `<div class="wnote" style="margin-bottom:14px">Site score (from the sidebar meters — same for every scenario): <b>${site.weighted}/100</b></div>`
         : `<div class="wnote" style="margin-bottom:14px">Site score not set yet — score Location, Traffic, Demographics, Zoning, and Site Layout Efficiency in the sidebar first.</div>`}
       <div id="scenRanking">${scenRankingHTML()}</div>
       ${scenarios.length ? scenarios.map((sc, idx) => scenCardHTML(sc, idx)).join("")
-        : `<div class="scen-empty">No scenarios yet. ${EDIT ? "Add one below." : `Click "Edit card" to add one.`}</div>`}
-      ${EDIT ? `<div style="display:flex;gap:10px;flex-wrap:wrap">
+        : `<div class="scen-empty">No scenarios yet. ${EDIT ? "Add one below." : `Click "✎ Edit scenarios" above to add one.`}</div>`}
+      ${EDIT ? `<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
           <button type="button" class="btn btn-sm btn-primary" id="btnAddScenario">＋ Add Scenario</button>
           ${fin ? `<button type="button" class="btn btn-sm" id="btnImportFinancing">⇩ Copy from current Financing model</button>` : ""}
+          <span style="flex:1"></span>
+          <button type="button" class="btn btn-sm btn-primary btn-save-action" id="btnSaveScenarios">💾 Save</button>
+          <button type="button" class="btn btn-sm" id="btnCancelScenarios">✕ Cancel</button>
         </div>` : ""}
     </section>`;
 
@@ -2059,14 +2065,33 @@ async function initProperty(){
       markDirty();
       render();
     };
+
+    // Quick-edit shortcut: entering/leaving/saving edit mode from right here
+    // in the Scenarios section, instead of needing to scroll all the way to
+    // the top toolbar and back down to this section every time.
+    // html{scroll-behavior:smooth} (see CSS) makes this an animated scroll,
+    // not an instant jump — that's fine, it lands at the section either way.
+    const scrollToScenarios = () => document.getElementById("scenarios")?.scrollIntoView({ block: "start" });
+    const btnEditScenarios = document.getElementById("btnEditScenarios");
+    if (btnEditScenarios) btnEditScenarios.onclick = () => { doEnterEdit(); scrollToScenarios(); };
+    const btnSaveScenarios = document.getElementById("btnSaveScenarios");
+    if (btnSaveScenarios) btnSaveScenarios.onclick = async () => { await doSave(); scrollToScenarios(); };
+    const btnCancelScenarios = document.getElementById("btnCancelScenarios");
+    if (btnCancelScenarios) btnCancelScenarios.onclick = () => { doCancel(); scrollToScenarios(); };
   }
 
   /* ---------- events ---------- */
   function markDirty() { dirty = true; const b = document.querySelector(".edit-badge"); if (b && !b.querySelector(".dirty-dot")) b.innerHTML = 'Editing <span class="dirty-dot"></span>'; }
 
   async function doSave() {
-    const btn = document.getElementById("btnSave");
-    if (btn) { btn.disabled = true; btn.textContent = "Saving…"; }
+    // Two copies of this button can exist at once (the one at the top of the
+    // card, and the one in the Scenarios toolbar) so an edit made without
+    // scrolling to the top can also be saved without scrolling back up —
+    // both get the same disabled/"Saving…" treatment, each restoring its
+    // own original label (with or without an icon) if the save fails.
+    const btns = [...document.querySelectorAll(".btn-save-action")];
+    const labels = new Map(btns.map(b => [b, b.textContent]));
+    btns.forEach(b => { b.disabled = true; b.textContent = "Saving…"; });
     const result = await apiSaveProperty(P).catch(err => ({ ok: false, error: err.message }));
     if (result.ok) {
       baseSnapshot = clone(P);
@@ -2075,12 +2100,21 @@ async function initProperty(){
       render();
       setTimeout(() => { saveMsg = null; render(); }, 4000);
     } else {
-      if (btn) { btn.disabled = false; btn.textContent = "Save"; }
+      btns.forEach(b => { b.disabled = false; b.textContent = labels.get(b) || "Save"; });
       saveMsg = result.errors
         ? { ok: false, text: "Doesn't match the schema: " + result.errors.map(e => e.path + ": " + e.message).join("; ") }
         : { ok: false, text: result.error || "Save failed — try again." };
       render();
     }
+  }
+
+  // Shared by the top toolbar's Edit/Cancel buttons and the Scenarios
+  // section's own shortcut buttons below — one definition, so entering/
+  // leaving edit mode behaves identically no matter which button triggered it.
+  function doEnterEdit() { baseSnapshot = clone(P); EDIT = true; dirty = false; saveMsg = null; render(); }
+  function doCancel() {
+    if (dirty && !confirm("Discard your unsaved changes?")) return;
+    P = clone(baseSnapshot); EDIT = false; dirty = false; saveMsg = null; render();
   }
 
   async function doPinToggle() {
@@ -2175,11 +2209,8 @@ async function initProperty(){
       title: P.name + " — raw JSON",
       onSaved: updated => { P = updated; baseSnapshot = clone(P); EDIT = false; dirty = false; render(); }
     }); };
-    if (g("btnEdit")) g("btnEdit").onclick = () => { baseSnapshot = clone(P); EDIT = true; dirty = false; saveMsg = null; render(); };
-    if (g("btnCancel")) g("btnCancel").onclick = () => {
-      if (dirty && !confirm("Discard your unsaved changes?")) return;
-      P = clone(baseSnapshot); EDIT = false; dirty = false; saveMsg = null; render();
-    };
+    if (g("btnEdit")) g("btnEdit").onclick = doEnterEdit;
+    if (g("btnCancel")) g("btnCancel").onclick = doCancel;
     if (g("btnSave")) g("btnSave").onclick = doSave;
     if (g("btnPin")) g("btnPin").onclick = doPinToggle;
     if (g("btnArchive")) g("btnArchive").onclick = doArchiveToggle;
