@@ -24,18 +24,23 @@
     "sourceModel": "Basic property pull only — per B. Blackburn 8/19/26, economics and scenarios intentionally left off pending further direction."
   },
   "thesis": {
-    "v": "Goodwill already operates an attended donation center (ADC) at 1311 Stony Point Road in the Pantops retail node, near the US-250/Route 20 intersection — this evaluates expanding that presence into a full store, which is what \"Pantops Expansion Potential\" refers to in the underlying email thread. Pantops is Goodwill's stated top Charlottesville-area target (per Jackson Green's 8/17 email): strong brand recognition locally, a long-standing presence, and the dominant intersection in the area. Their open concern is customer stop-ability at a site visible from a busy highway (US-250) — they cite two underperforming Goodwill locations elsewhere with that same profile — though they believe Pantops' brand strength and traffic volume outweigh that risk. The vacant 47,550 SF former Roses box at Pantops Shopping Center (400 Pantops Center, dark since March 2025) is a notable nearby alternative in the same node worth tracking, though it's larger than Goodwill's typical 15,000–25,000 SF format. No financing model or development scenario has been built for either site yet — this card is basic property information only, per Ben's 8/19 request.",
+    "v": "Goodwill already operates an attended donation center (ADC) at 1311 Stony Point Road in the Pantops retail node, at the signalized US-250/Route 20 corner — this evaluates expanding that presence into a full store, which is what \"Pantops Expansion Potential\" refers to in the underlying email thread. Traffic is by far the strongest of the three Goodwill sites under review: 44,000 ADT / 48,000 weekday on US-250 immediately west of the signal (roughly 53,000 combined across both approach legs), versus 19,000 on 5th Street SW and 11,000–12,000 on Avon St Ext at Mill Creek. It also has the largest 5-mile population (99,375) and highest 3-mile median income ($94,447) of the three. Goodwill's own stated concern is customer stop-ability at a site visible from a busy highway — they cite two underperforming Goodwill locations elsewhere with that profile — though they believe Pantops' brand strength and traffic volume outweigh that risk. The vacant 47,550 SF former Roses box at Pantops Shopping Center (400 Pantops Center, dark since March 2025) is a notable nearby alternative in the same node worth tracking, though it's larger than Goodwill's typical 15,000–25,000 SF format. No financing model or development scenario has been built for either site yet — this card is basic property information only, per Ben's 8/19 request.",
     "s": "ai"
   },
   "flags": [
     {
       "type": "opp",
-      "text": "Goodwill's brand in Charlottesville/Albemarle \"ranks extremely high\" per Jackson Green (Goodwill CFO), and they've had a presence in the Pantops area for years — strong customer-acceptance case despite US-250 visibility concerns raised for other markets.",
-      "s": "source"
+      "text": "Strongest traffic of the three Goodwill sites by a wide margin: 44,000 ADT / 48,000 weekday on US-250 immediately west of the Stony Point Rd signal, plus 9,100 ADT on the Route 20 frontage — roughly 53,000 combined across both approach legs.",
+      "s": "web"
     },
     {
       "type": "opp",
-      "text": "Pantops sits at \"THE primary intersection in this entire Pantops area\" (Jackson Green, 8/17 email) — US-250 at Route 20 (Stony Point Rd), which VDOT is actively studying for intersection/corridor reconstruction, a sign of sustained growth pressure.",
+      "text": "Largest 5-mile population (99,375) and highest 3-mile median household income ($94,447) of the three sites; most owner-occupied households at 3 miles (11,585) — the more relevant metric for donation supply.",
+      "s": "web"
+    },
+    {
+      "type": "opp",
+      "text": "Goodwill's brand in Charlottesville/Albemarle \"ranks extremely high\" per Jackson Green (Goodwill CFO), and they've had a presence in the Pantops area for years — strong customer-acceptance case despite US-250 visibility concerns raised for other markets.",
       "s": "source"
     },
     {
@@ -45,43 +50,48 @@
     },
     {
       "type": "watch",
-      "text": "Goodwill's own stated risk (Jackson Green): stores visible from busy/congested roads have underperformed elsewhere in their portfolio (cites Orange Ave East in Roanoke, Rt. 220 in Bassett) — they believe Pantops' brand strength offsets this, but it's their explicit diligence question, not ours.",
+      "text": "Goodwill's own stated risk (Jackson Green): stores visible from busy/congested roads have underperformed elsewhere in their portfolio (cites Orange Ave East in Roanoke, Rt. 220 in Bassett) — they believe Pantops' brand strength offsets this, but it's their explicit diligence question, not ours. US-250 east of the signal (toward I-64/Glenmore/Keswick) carries 35,000 ADT, supporting Peter Wray's point that the corner draws from communities further east.",
       "s": "source"
     },
     {
       "type": "watch",
-      "text": "Goodwill is also weighing cross-cannibalization against its existing Mill Creek and Rt. 29 North stores — they believe Charlottesville's neighborhood \"clusters\" (Pantops pulls from Glenmore/Keswick; Mill Creek pulls from Downtown/5th Street) limit overlap, but this is their internal read, not independently verified here.",
+      "text": "Goodwill is also weighing cross-cannibalization against its existing Mill Creek and Rt. 29 North stores — they believe Charlottesville's neighborhood \"clusters\" limit overlap; Pantops is 3.6 miles from the Mill Creek store versus the 5th Street site's 1.6 miles, so overlap risk here reads lower than at 5th Street.",
       "s": "source"
     }
   ],
   "propertyInfo": [
     { "k": "Address (existing Goodwill ADC)", "d": { "v": "1311 Stony Point Rd, Charlottesville, VA 22911", "s": "web", "n": "Attended donation center only today — opened May 2023; no retail sales at this location currently." } },
+    { "k": "Coordinates", "d": { "v": "38.0348, -78.4539", "s": "web" } },
+    { "k": "Site history", "d": { "v": "Part of the 1289 / 1311–1321 Stony Point Rd assemblage (~2.6 ac, three buildings), sold Sept 2022 for $4.8M to TAP Investments LLC; marketed for redevelopment", "s": "web" } },
     { "k": "Nearby alternative", "d": { "v": "Former Roses box, 400 Pantops Center — 47,550 SF, vacant since March 2025", "s": "web", "n": "Same shopping node (Pantops Shopping Center); owned by Great Eastern Management Co., actively seeking a tenant rather than redeveloping." } },
-    { "k": "Shopping center anchors", "d": { "v": "Food Lion and Dollar Tree (Roses closed March 2025)", "s": "web" } },
-    { "k": "Ownership", "d": { "v": "Pantops Shopping Center: Great Eastern Management Company. Ownership of the 1311 Stony Point Rd ADC parcel not yet confirmed.", "s": "web" } }
+    { "k": "Shopping center anchors", "d": { "v": "Pantops Shopping Center (Food Lion, Dollar Tree — Roses closed March 2025); Rivanna Ridge (Giant), Lidl nearby", "s": "web" } },
+    { "k": "Ownership", "d": { "v": "Pantops Shopping Center: Great Eastern Management Company. 1311/1321 (and 1289) Stony Point Rd assemblage: TAP Investments LLC (acquired Sept 2022).", "s": "web" } },
+    { "k": "Existing ADC building SF / proposed expansion SF", "d": { "v": "Not yet confirmed", "s": "need", "n": "Pull from the drawings previously provided to Goodwill." } },
+    { "k": "Parcel IDs / total site acreage", "d": { "v": "Not yet confirmed", "s": "need", "n": "For the 1311/1321 (and 1289) assemblage as currently configured." } },
+    { "k": "Parking count (post-expansion)", "d": { "v": "Not yet confirmed", "s": "need", "n": "The prior Route 250 Goodwill store was parking-constrained — this is the same concern Jackson Green raised for Pantops." } }
   ],
   "gis": [
-    { "k": "Access", "d": { "v": "Directly accessible from US-250 and Route 20 (Stony Point Rd); the Rt 20/US-250 intersection is the subject of an active VDOT reconstruction study", "s": "web" } }
+    { "k": "Access", "d": { "v": "Directly accessible from US-250 and Route 20 (Stony Point Rd); the Rt 20/US-250 intersection is the subject of an active VDOT reconstruction study", "s": "web" } },
+    { "k": "Frontage", "d": { "v": "Stony Point Road (VA Rte 20 North), at the signalized US-250 intersection", "s": "web" } },
+    { "k": "Interstate access", "d": { "v": "I-64 Exit 124, ~1.1 mi east on US-250", "s": "web" } },
+    { "k": "VDOT entrance permit implications", "d": { "v": "Not yet confirmed", "s": "need", "n": "Flag against the Rte 20 / US-250 Pantops corridor improvement project — could affect access post-expansion." } }
   ],
   "market": [
-    {
-      "k": "Traffic (AADT)",
-      "d": {
-        "v": "Not yet pulled at current precision — VDOT's traffic-count portal (P4P) and GIS traffic viewer were unreachable during this pass. One dated secondary-source estimate: ≈31,000 vehicles/day on US-250 through Pantops, per a 2013 VDOT figure cited in local reporting — almost certainly stale given growth since (and the corridor's since-approved intersection reconstruction)",
-        "s": "need",
-        "n": "Pull current US-250 and Route 20 (Stony Point Rd) AADT from vdotp4p.com or the VDOT GIS traffic count layer before quoting a number to Goodwill or Peter Wray."
-      }
-    },
-    { "k": "Visibility / access", "d": { "v": "Directly on US-250, Charlottesville/Albemarle's dominant east-side commercial corridor; also fronts Route 20 (Stony Point Rd)", "s": "web" } },
-    { "k": "Nearby anchors", "d": { "v": "Pantops Shopping Center (Food Lion, Dollar Tree), Sentara Martha Jefferson Hospital nearby", "s": "web" } },
-    { "k": "Growth trends", "d": { "v": "VDOT is actively studying reconstruction of the Route 20/US-250 signalized intersection in Pantops; Albemarle's Pantops Master Plan (last updated 2019) designates the area for continued mixed-use growth", "s": "web" } },
-    { "k": "Population", "d": { "v": "Albemarle County ≈ 119,400 (2026 estimate), up ~20% since 2010", "s": "web" } },
-    { "k": "Median household income", "d": { "v": "≈ $104,392 (2024, Albemarle County)", "s": "web" } }
+    { "k": "Traffic — US-250 (Bus US-250 High St to Rte 20 Stony Point Rd)", "d": { "v": "44,000 ADT / 48,000 weekday (AAWDT), 2024", "s": "web", "n": "VDOT Bidirectional Traffic Volume 2024 (Traffic Volume ADT layer), retrieved 19 Aug 2026. Strongest of the three sites by a wide margin." } },
+    { "k": "Traffic — US-250 (Rte 20 Stony Point Rd to I-64)", "d": { "v": "35,000 ADT / 38,000 weekday, 2024", "s": "web", "n": "East of the signal, toward I-64/Glenmore/Keswick." } },
+    { "k": "Traffic — Route 20 North / Stony Point Rd (site frontage)", "d": { "v": "9,100 ADT / 10,000 weekday, 2024", "s": "web" } },
+    { "k": "Combined intersection approach volume", "d": { "v": "≈53,000 vehicles/day across both US-250 legs", "s": "web" } },
+    { "k": "Population — 1 / 3 / 5 mile rings", "d": { "v": "8,876 / 53,151 / 99,375", "s": "web", "n": "ACS 2019–2023 5-year estimates, block-group level. Largest 5-mile population of the three sites." } },
+    { "k": "Households — 1 / 3 / 5 mile rings", "d": { "v": "4,632 / 23,545 / 41,647", "s": "web" } },
+    { "k": "Owner- / renter-occupied HH — 3 mile", "d": { "v": "11,585 owner / 11,960 renter", "s": "web", "n": "Most owner-occupied households of the three sites at 3 miles — the more relevant metric for donation supply." } },
+    { "k": "Median household income — 1 / 3 / 5 mile rings", "d": { "v": "$93,236 / $94,447 / $90,757", "s": "web", "n": "Highest 3-mile median income of the three sites." } },
+    { "k": "Nearby anchors", "d": { "v": "Pantops Shopping Center, Rivanna Ridge (Giant), Lidl, State Farm Blvd corridor", "s": "web" } },
+    { "k": "Growth trends", "d": { "v": "VDOT is actively studying reconstruction of the Route 20/US-250 signalized intersection in Pantops; Albemarle's Pantops Master Plan (last updated 2019) designates the area for continued mixed-use growth", "s": "web" } }
   ],
   "zoning": [
     { "k": "Current zoning", "d": { "v": "HC — Highway Commercial (Albemarle County), within an Entrance Corridor overlay district", "s": "web" } },
     { "k": "Comp Plan / FLU", "d": { "v": "Pantops Master Plan designates this area \"Community Mixed-Use,\" supporting a wide variety of commercial uses", "s": "web" } },
-    { "k": "Approval risk", "d": { "v": "HC-zoned parcels with Entrance Corridor overlay in Pantops have required special-use-permit review in some past cases — confirm whether Goodwill's specific use (retail + donation) needs one here", "s": "web" } }
+    { "k": "Approval risk", "d": { "v": "HC-zoned parcels with Entrance Corridor overlay in Pantops have required special-use-permit review in some past cases — confirm whether Goodwill's specific expansion needs one, and whether Pantops ARB / Entrance Corridor review applies", "s": "web" } }
   ],
   "hbu": [
     { "k": "Primary use", "d": { "v": "Expand the existing 1311 Stony Point Rd ADC into a full Goodwill retail store, or relocate/expand into the vacant former Roses box at Pantops Shopping Center", "s": "ai" } }
@@ -91,6 +101,11 @@
       "label": "Why this card is basic-info-only",
       "text": "Per Ben Blackburn's 8/19/26 email, this pull intentionally excludes financing/economics and development scenarios — just property basics (traffic, population, zoning, access). Add a Financing model and Scenarios (e.g. expand-in-place vs. the former Roses box) once Goodwill narrows down a preferred approach.",
       "s": "source"
+    },
+    {
+      "label": "Demographic methodology note",
+      "text": "Ring demographics (ACS 2019–2023 5-year estimates) are aggregated by block-group centroid falling inside each radius — block groups aren't split at the ring boundary, so small rings are approximate. Median household income is a household-weighted average of block-group medians, not a true ring median.",
+      "s": "web"
     }
   ],
   "sources": [
@@ -98,6 +113,9 @@
     { "label": "Goodwill Opening New Pantops Donation Center (Goodwill Industries of the Valleys press release)", "url": "https://www.goodwillvalleys.com/press_releases/goodwill-opening-new-pantops-donation-center/" },
     { "label": "Roses Discount Store closing in Pantops Shopping Center (Daily Progress)", "url": "https://dailyprogress.com/news/local/business/roses-closing-after-60-year-run-in-charlottesville/article_e8bce420-d840-11ef-8143-5b280979298f.html" },
     { "label": "VDOT — Route 20 at U.S. 250 intersection and corridor improvements, Pantops", "url": "https://www.vdot.virginia.gov/projects/culpeper-district/pantops-corridor-improvements/" },
-    { "label": "Pantops Master Plan — Cvillepedia", "url": "https://www.cvillepedia.org/Pantops_Master_Plan" }
+    { "label": "Pantops Master Plan — Cvillepedia", "url": "https://www.cvillepedia.org/Pantops_Master_Plan" },
+    { "label": "1289 & 1311-1321 Stony Point Road sale — Colliers", "url": "https://www.colliers.com/" },
+    { "label": "VDOT Bidirectional Traffic Volume 2024 (traffic count layer)", "url": "https://www.virginiaroads.org/datasets/VDOT::vdot-bidirectional-traffic-volume-2024" },
+    { "label": "U.S. Census Bureau ACS 2019–2023 5-year estimates (via Census Reporter)", "url": "https://censusreporter.org/" }
   ]
 }
