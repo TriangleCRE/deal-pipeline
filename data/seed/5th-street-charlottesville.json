@@ -4,7 +4,7 @@
   "name": "1113 5th Street SW (Former Carter Bank)",
   "address": "1113 5th St SW, Charlottesville, VA 22902",
   "county": "City of Charlottesville, VA",
-  "parcels": "City of Charlottesville Parcel 51540-21B004400",
+  "parcels": "Parcel 21B004400 (GPIN 13465) — Lot A & Parcel X",
   "status": "Under Review",
   "dealType": "Tenant-Driven",
   "tags": [
@@ -24,7 +24,7 @@
     "sourceModel": "Basic property pull only — per B. Blackburn 8/19/26, economics and scenarios intentionally left off pending further direction."
   },
   "thesis": {
-    "v": "Former Carter Bank & Trust branch on a signalized corner of 5th Street SW — 0.90 ac with a 3,024 SF building and an intact drive-thru, close to I-64 and the 5th Street Station retail node (Wegmans). This is the highest-density one-mile residential ring of the three Goodwill sites under review (13,959 residents, roughly 3.3x Mill Creek's), and its 19,000 ADT site frontage sits inside a corridor that thickens to 28,000 ADT just south toward 5th Street Station. Its trade area overlaps materially with the existing Mill Creek/Avon store (1.6 miles apart) — cannibalization is the open question, not site fundamentals. No financing model or development scenario has been built for this site yet — this card is basic property information only, per Ben's 8/19 request.",
+    "v": "Former Carter Bank & Trust branch on a signalized corner of 5th Street SW — a 0.90-acre (39,248 SF) lot with a GIS building footprint of roughly 3,240 SF, close to I-64 and the 5th Street Station retail node (Wegmans). This is the highest-density one-mile residential ring of the three Goodwill sites under review (13,959 residents, roughly 3.3x Mill Creek's), and its 19,000 ADT site frontage sits inside a corridor that thickens to 28,000 ADT just south toward 5th Street Station. Two real open questions: the building is likely well under the 10,260 SF Goodwill occupies at its Mill Creek store, so total usable area (including any upstairs space) needs confirming before this is compared to a full-format store; and the parcel's CX-8 zoning permits far more density than the ~8% lot coverage currently built, which matters if redevelopment rather than reuse ends up on the table. Trade area overlaps materially with the existing Mill Creek/Avon store (1.6 miles apart) — cannibalization is a real open question. No financing model or development scenario has been built for this site yet — this card is basic property information only, per Ben's 8/19 request.",
     "s": "ai"
   },
   "flags": [
@@ -44,8 +44,18 @@
       "s": "web"
     },
     {
+      "type": "opp",
+      "text": "CX-8 zoning (Commercial Mixed Use, up to 8 stories) permits substantially more density than what's built — the 0.90-acre lot sits at roughly 8% building coverage today. Relevant if redevelopment rather than reuse ends up on the table.",
+      "s": "web"
+    },
+    {
       "type": "watch",
       "text": "Answers Jackson Green's (Goodwill CFO) 8/19 diligence question directly: 5th St SW carries 19,000 ADT / 21,000 weekday at the site frontage, roughly 70% heavier than the 11,000–12,000 ADT on Avon St Ext at Mill Creek.",
+      "s": "web"
+    },
+    {
+      "type": "risk",
+      "text": "SIZE CONSTRAINT: the City GIS building footprint is roughly 3,240 SF. Even with the upstairs space Jackson referenced, total area is likely well under the 10,260 SF Goodwill occupies at its Mill Creek store — confirm total SF before this site is compared to a full-format store.",
       "s": "web"
     },
     {
@@ -55,36 +65,38 @@
     },
     {
       "type": "risk",
-      "text": "Listing price ($2,595,000 asking per the active LoopNet/Triangle Realtors listing) is well above a $1,375,000 figure that appears in some property records for a prior transaction — reconcile which applies before quoting a basis.",
+      "text": "Listing price ($2,595,000 asking per the active LoopNet/Triangle Realtors listing) is well above a $1,375,000 figure that appears in some property records for a prior transaction, and above the 2026 assessed value of $1,270,200 — reconcile which basis applies before underwriting.",
       "s": "web"
     }
   ],
   "propertyInfo": [
     { "k": "Address", "d": { "v": "1113 5th St SW, Charlottesville, VA 22902", "s": "web", "n": "Corrected from 22903 — confirmed against two geocoders (Aug 2026)." } },
     { "k": "Coordinates", "d": { "v": "38.0143, -78.5008", "s": "web" } },
-    { "k": "Site size", "d": { "v": "±0.90 acres", "s": "web", "n": "Per active LoopNet listing." } },
-    { "k": "Building size", "d": { "v": "3,024 SF — former bank branch with drive-thru, built ~2004", "s": "web" } },
-    { "k": "Asking price", "d": { "v": "$2,595,000 (active listing)", "s": "web", "n": "A separate record shows a $1,375,000 figure for what may be a prior sale — confirm which applies before underwriting a basis." } },
+    { "k": "Parcel number", "d": { "v": "21B004400 (GPIN 13465)", "s": "web", "n": "Per Albemarle/Charlottesville GIS. Legal description: Lot A & Parcel X." } },
+    { "k": "Site size", "d": { "v": "39,248 SF / ±0.90 acres", "s": "web", "n": "GIS parcel polygon area." } },
+    { "k": "2026 assessment", "d": { "v": "$1,270,200", "s": "web" } },
+    { "k": "Building footprint", "d": { "v": "~3,240 SF, 15 ft height (GIS footprint)", "s": "web", "n": "The LoopNet listing states 3,024 SF — close but not identical to the GIS figure; treat GIS as the more current source, but confirm total interior SF (including any upstairs) directly." } },
+    { "k": "Asking price", "d": { "v": "$2,595,000 (active listing)", "s": "web", "n": "A separate record shows a $1,375,000 figure for what may be a prior sale, and the 2026 assessment is $1,270,200 — confirm which basis applies before underwriting." } },
     { "k": "Current use", "d": { "v": "Vacant — former Carter Bank & Trust branch (closed)", "s": "web" } },
     { "k": "Listing broker", "d": { "v": "Triangle Realtors (Peter Wray)", "s": "source" } },
     { "k": "Ownership", "d": { "v": "Not yet confirmed", "s": "need", "n": "Pull current owner from the City Assessor's parcel record (opendata.charlottesville.org)." } },
-    { "k": "Parking count / ratio", "d": { "v": "Not yet confirmed", "s": "need", "n": "Goodwill flagged parking as the constraint at their prior Route 250 store — confirm count and ratio before this goes to Peter." } },
+    { "k": "Total building SF (incl. upstairs) / year built", "d": { "v": "Not yet confirmed", "s": "need", "n": "City GIS carries footprint and height only, not total interior SF or year built." } },
+    { "k": "Parking count / ratio", "d": { "v": "Not yet confirmed", "s": "need", "n": "Goodwill flagged parking as the constraint at their prior Pantops store — confirm count and ratio before this goes to Peter." } },
     { "k": "Drive-thru / teller lane", "d": { "v": "Not yet confirmed", "s": "need", "n": "Confirm former teller lane configuration and whether it can serve donation drop-off." } },
     { "k": "Loading / rear access", "d": { "v": "Not yet confirmed", "s": "need", "n": "Confirm dimensions for donation-trailer access." } }
   ],
   "gis": [
-    { "k": "Parcel / APN", "d": { "v": "51540-21B004400", "s": "web", "n": "Confirm against the City of Charlottesville Assessor's parcel viewer." } },
+    { "k": "Parcel / APN", "d": { "v": "21B004400 (GPIN 13465)", "s": "web", "n": "Albemarle County GIS (services2.arcgis.com/khVz7mitcPJHUnlM) and City of Charlottesville Open Data GIS (gisweb.charlottesville.org), retrieved 19 Aug 2026." } },
     { "k": "Access", "d": { "v": "Signalized corner on 5th Street SW; existing curb cuts and a drive-thru lane from the prior bank use", "s": "web" } },
-    { "k": "Frontage", "d": { "v": "5th Street SW (VDOT Rte 631 corridor / city-maintained section)", "s": "web" } },
+    { "k": "Frontage", "d": { "v": "5th Street SW (Rte 631 corridor, city-maintained section)", "s": "web" } },
     { "k": "Nearest signal", "d": { "v": "5th St SW at Cherry Ave / Elliott Ave corridor, ~0.4 mi to W Main St (Bus US-250)", "s": "web" } },
-    { "k": "Interstate access", "d": { "v": "I-64 Exit 120 at 5th St Ext, ~1.5 mi south", "s": "web" } },
-    { "k": "Year built", "d": { "v": "Not yet confirmed", "s": "need" } },
-    { "k": "Zoning district (parcel-level)", "d": { "v": "Not yet confirmed", "s": "need", "n": "General district (HW, see Zoning section) confirmed; confirm this specific parcel's zoning + any overlay against City GIS." } }
+    { "k": "Interstate access", "d": { "v": "I-64 Exit 120 at 5th St Ext, ~1.5 mi south", "s": "web" } }
   ],
   "market": [
     { "k": "Traffic — site frontage (5th St SW, Bus US-250 to county line)", "d": { "v": "19,000 ADT / 21,000 weekday (AAWDT), 2024", "s": "web", "n": "VDOT Bidirectional Traffic Volume 2024 (Traffic Volume ADT layer), retrieved 19 Aug 2026." } },
     { "k": "Traffic — 5th St Ext, I-64 to city limits", "d": { "v": "28,000 ADT / 30,000 weekday, 2024", "s": "web", "n": "The stretch fed by 5th Street Station — corridor thickens sharply south of the site." } },
     { "k": "Traffic — 5th St Ext, Stagecoach Rd to Windfield Cir/I-64", "d": { "v": "19,000 ADT / 21,000 weekday, 2024", "s": "web" } },
+    { "k": "Traffic — Elliott Ave (Ridge St to 1st St) / Cherry Ave (Ridge St to Spring St)", "d": { "v": "9,600 ADT (10,000 weekday) / 5,800 ADT (6,300 weekday), 2024", "s": "web" } },
     { "k": "Traffic — comparison (Avon St Ext at Mill Creek)", "d": { "v": "11,000–12,000 ADT — 5th Street is roughly 70% heavier", "s": "web", "n": "This is the direct answer to Jackson Green's (Goodwill CFO) 8/19 diligence question." } },
     { "k": "Population — 1 / 3 / 5 mile rings", "d": { "v": "13,959 / 62,331 / 94,624", "s": "web", "n": "ACS 2019–2023 5-year estimates, block-group level. Highest one-mile density of the three sites under review." } },
     { "k": "Households — 1 / 3 / 5 mile rings", "d": { "v": "5,635 / 24,551 / 40,000", "s": "web" } },
@@ -95,12 +107,13 @@
     { "k": "Corridor context", "d": { "v": "5th Street / Route 631 corridor study (VDOT, ongoing) has flagged congestion and traffic-flow concerns along this corridor between Harris Road and Ambrose Commons Drive", "s": "web" } }
   ],
   "zoning": [
-    { "k": "Current zoning", "d": { "v": "HW — Highway Corridor (City of Charlottesville), with Entrance Corridor overlay", "s": "web" } },
+    { "k": "Current zoning", "d": { "v": "CX-8 — Commercial Mixed Use, up to 8 stories", "s": "web", "n": "Corrected via direct GIS parcel lookup (Aug 2026) — an earlier general web search had this as \"HW — Highway Corridor,\" which appears to reflect Charlottesville's prior zoning ordinance rather than its current (post-rewrite) form-based code. Treat CX-8 as authoritative." } },
     { "k": "Comp Plan / FLU", "d": { "v": "Comprehensive Plan calls for \"Urban Mixed Use Corridor\" along this stretch of 5th Street SW", "s": "web" } },
-    { "k": "Fit for retail/donation use", "d": { "v": "Highway Corridor zoning generally supports retail by-right; confirm Goodwill's specific use (retail + donation drive-thru) against the City's Entrance Corridor design guidelines before assuming no ARB review is needed", "s": "ai" } }
+    { "k": "Fit for retail/donation use", "d": { "v": "CX-8 (Commercial Mixed Use) generally supports retail by-right; confirm Goodwill's specific use (retail + donation drive-thru) against the City's design/entrance-corridor guidelines before assuming no review is needed. Separately, CX-8's density allowance (up to 8 stories) is far beyond the single-story bank building on-site today — worth noting if redevelopment ever becomes the conversation instead of reuse.", "s": "ai" } }
   ],
   "hbu": [
-    { "k": "Primary use", "d": { "v": "Reuse of the existing building as a Goodwill retail store, likely retaining the drive-thru lane for donations", "s": "ai" } }
+    { "k": "Primary use", "d": { "v": "Reuse of the existing building as a Goodwill retail store, likely retaining the drive-thru lane for donations", "s": "ai" } },
+    { "k": "Redevelopment potential", "d": { "v": "CX-8 zoning permits far more density (up to 8 stories) than the current ~8% lot coverage — a longer-horizon alternative to simple reuse, not something Goodwill's near-term store search needs to weigh", "s": "ai" } }
   ],
   "extras": [
     {
@@ -117,6 +130,8 @@
   "sources": [
     { "label": "1113 5th St SW — LoopNet listing (former bank property)", "url": "https://www.loopnet.com/Listing/1113-5th-St-SW-Charlottesville-VA/27827278/" },
     { "label": "1113 5th St SW — Triangle Realtors listing", "url": "https://www.trianglerealtors.net/1113-5th-st-sw-charlottesville-va-22903.html" },
+    { "label": "Albemarle County GIS (parcel, zoning, assessment)", "url": "https://services2.arcgis.com/khVz7mitcPJHUnlM" },
+    { "label": "City of Charlottesville Open Data GIS", "url": "https://gisweb.charlottesville.org" },
     { "label": "VDOT Route 631 (5th Street/Old Lynchburg Road) corridor study", "url": "https://www.vdot.virginia.gov/projects/culpeper-district/route-631-5th-streetold-lynchburg-road-corridor-charlottesville--albemarle/" },
     { "label": "VDOT Bidirectional Traffic Volume 2024 (traffic count layer)", "url": "https://www.virginiaroads.org/datasets/VDOT::vdot-bidirectional-traffic-volume-2024" },
     { "label": "U.S. Census Bureau ACS 2019–2023 5-year estimates (via Census Reporter)", "url": "https://censusreporter.org/" }

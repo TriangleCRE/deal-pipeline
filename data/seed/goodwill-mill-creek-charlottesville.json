@@ -4,7 +4,7 @@
   "name": "Mill Creek / Avon — Existing Goodwill Store",
   "address": "34 Mill Creek Dr, Charlottesville, VA 22902",
   "county": "Albemarle County, VA",
-  "parcels": "Not yet confirmed",
+  "parcels": "Parcel 07700-00-00-047A0 (GPIN 483778887965)",
   "status": "Under Review",
   "dealType": "Tenant-Driven",
   "tags": [
@@ -24,28 +24,28 @@
     "sourceModel": "Basic property pull only, benchmark/reference card — per B. Blackburn 8/19/26, economics and scenarios intentionally left off pending further direction."
   },
   "thesis": {
-    "v": "Goodwill's existing store and donation center at 34 Mill Creek Dr, south of the Charlottesville city line — this card exists purely as the comparison Jackson Green (Goodwill CFO) asked for in the 8/19 email thread, and as the reference point for cannibalization risk against the 5th Street and Pantops expansion candidates. Avon St Ext at Mill Creek carries 11,000–12,000 ADT, about 70% lighter than 5th Street SW's 19,000 ADT — the direct answer to Jackson's question. This store sits inside the 5th Street site's trade area (1.6 miles apart) but well outside Pantops' (3.6 miles), so cannibalization risk reads meaningfully higher for a 5th Street expansion than for Pantops. Not itself a deal under evaluation — no financing model or development scenario applies here.",
+    "v": "Goodwill's existing 10,260 SF store and donation center at 34 Mill Creek Dr (built 2015, on a 0.90-acre pad at the Avon Street Extended corner) — this card exists purely as the comparison Jackson Green (Goodwill CFO) asked for in the 8/19 email thread, and as the reference point for cannibalization risk and store-format sizing against the 5th Street and Pantops expansion candidates. Avon St Ext at Mill Creek carries 11,000–12,000 ADT, about 70% lighter than 5th Street SW's 19,000 ADT — the direct answer to Jackson's question. GIS confirms the store fronts Mill Creek Drive at its Avon Street Extended corner, resolving an earlier geocoder ambiguity about which end of Mill Creek Drive the address sits on. This store sits inside the 5th Street site's trade area (1.6 miles apart) but well outside Pantops' (3.6 miles), so cannibalization risk reads meaningfully higher for a 5th Street expansion than for Pantops. Not itself a deal under evaluation — no financing model or development scenario applies here.",
     "s": "ai"
   },
   "flags": [
     {
       "type": "watch",
-      "text": "This is the comparison Jackson Green asked for: Avon St Ext at Mill Creek carries 11,000–12,000 ADT versus 19,000 ADT on 5th St SW at the Carter Bank site — 5th Street is roughly 70% heavier.",
-      "s": "web"
-    },
-    {
-      "type": "watch",
-      "text": "Address ambiguity worth resolving before this goes to Peter: geocoders place 34 Mill Creek Dr toward the Route 20 (Scottsville Rd) end of Mill Creek Drive, not the Avon St end — if that's wrong, the relevant arterial count changes. Mill Creek Drive's own frontage is low-volume either way (1,500–2,600 ADT); the store's real traffic exposure comes from whichever arterial (Avon St Ext or Route 20) it's actually closest to.",
+      "text": "This is the comparison Jackson Green asked for: Avon St Ext at Mill Creek carries 11,000 ADT (12,000 weekday) versus 19,000 ADT (21,000 weekday) on 5th St SW at the Carter Bank site — 5th Street is roughly 70% heavier.",
       "s": "web"
     },
     {
       "type": "opp",
-      "text": "Highest one-mile median household income of the three sites ($112,758) and the only one that is majority owner-occupied inside a mile (59%) — a favorable donation-supply profile for this existing store.",
+      "text": "BENCHMARK SIZE: 10,260 SF, built 2015, single story on a 0.90-acre pad — this is the store format the two candidate sites (5th Street, Pantops) should be measured against.",
+      "s": "web"
+    },
+    {
+      "type": "opp",
+      "text": "Highest one-mile median household income of the three sites ($112,758) and the only one that is majority owner-occupied inside a mile (59%) — a favorable donation-supply profile for this existing store, despite the smallest one-mile population (4,222).",
       "s": "web"
     },
     {
       "type": "watch",
-      "text": "Smallest one-mile population of the three sites (4,222) — note the one-mile ring here captures only two block groups, so this is the least precise of the nine ring estimates across all three cards.",
+      "text": "Address discrepancy worth a quick note, not a real risk: Albemarle County GIS lists the property's street number as 36 Mill Creek Dr, not 34 — same parcel, same corner, almost certainly a minor addressing variance rather than a different property.",
       "s": "web"
     },
     {
@@ -55,34 +55,40 @@
     }
   ],
   "propertyInfo": [
-    { "k": "Address", "d": { "v": "34 Mill Creek Dr, Charlottesville, VA 22902", "s": "web" } },
+    { "k": "Address", "d": { "v": "34 Mill Creek Dr, Charlottesville, VA 22902", "s": "web", "n": "Albemarle County GIS lists the parcel's street number as 36 Mill Creek Dr — likely a minor addressing variance on the same parcel/corner, not a different property." } },
     { "k": "Coordinates", "d": { "v": "38.0008, -78.4970", "s": "web" } },
+    { "k": "Parcel number", "d": { "v": "07700-00-00-047A0 (GPIN 483778887965)", "s": "web" } },
+    { "k": "Parcel size", "d": { "v": "~0.90 acres", "s": "web" } },
+    { "k": "Improvements", "d": { "v": "10,260 SF retail store, built 2015, single story", "s": "web" } },
+    { "k": "2026 assessment", "d": { "v": "$2,070,800 — land $701,500 / improvements $1,369,300", "s": "web" } },
     { "k": "Current use", "d": { "v": "Existing Goodwill store and donation center (active)", "s": "web" } },
-    { "k": "Store SF / lease expiration / occupancy cost", "d": { "v": "Not yet confirmed", "s": "need", "n": "Pull from Goodwill / Triangle records." } },
-    { "k": "Which end of Mill Creek Dr", "d": { "v": "Not yet confirmed", "s": "need", "n": "Geocoders place the address toward the Rte 20 (Scottsville Rd) end, not the Avon St Ext end — Triangle or LeighAnn should know the store's actual corner. This changes which arterial's traffic count is the relevant one." } },
+    { "k": "Lease expiration / occupancy cost", "d": { "v": "Not yet confirmed", "s": "need", "n": "Pull from Goodwill / Triangle records." } },
     { "k": "Current sales / donation volumes", "d": { "v": "Not requested", "s": "need", "n": "Excluded from this card per instruction — needed for a real cannibalization analysis if this goes further." } }
   ],
   "gis": [
-    { "k": "Frontage", "d": { "v": "Mill Creek Drive (Rte 1150), which connects Avon St Ext (Rte 742) to Scottsville Rd (VA Rte 20)", "s": "web" } },
-    { "k": "Nearest arterial", "d": { "v": "Avon Street Extended, ~0.5 mi east; Scottsville Rd (Rte 20), ~0.3 mi west", "s": "web" } },
+    { "k": "Zoning", "d": { "v": "PD-SC — Planned Development Shopping Center", "s": "web" } },
+    { "k": "Overlays", "d": { "v": "Entrance Corridor: Yes · Development Area: Yes", "s": "web" } },
+    { "k": "Comp plan land use", "d": { "v": "Community Mixed Use", "s": "web" } },
+    { "k": "Frontage", "d": { "v": "Mill Creek Drive (Rte 1150) at the Avon Street Extended corner", "s": "web", "n": "Resolves an earlier geocoder ambiguity — the store fronts the Avon St Ext corner, not the Route 20/Scottsville Rd end of Mill Creek Drive." } },
+    { "k": "Nearest arterial", "d": { "v": "Avon Street Extended (Rte 742), ~0.2 mi east", "s": "web" } },
     { "k": "Interstate access", "d": { "v": "I-64 Exit 121 (Rte 20), ~1.8 mi north", "s": "web" } }
   ],
   "market": [
-    { "k": "Traffic — Avon St Ext (Rte 20 Scottsville Rd to Avon Court)", "d": { "v": "11,000 ADT / 12,000 weekday (AAWDT), 2024", "s": "web", "n": "VDOT Bidirectional Traffic Volume 2024 (Traffic Volume ADT layer), retrieved 19 Aug 2026." } },
+    { "k": "Traffic — Avon St Ext (Rte 20 Scottsville Rd to Avon Court)", "d": { "v": "11,000 ADT / 12,000 weekday (AAWDT), 2024", "s": "web", "n": "VDOT Bidirectional Traffic Volume 2024 (Traffic Volume ADT layer), retrieved 19 Aug 2026. This is the arterial the store actually fronts." } },
     { "k": "Traffic — Avon St (city), south city limits to Rockland Ave", "d": { "v": "11,000 ADT / 12,000 weekday, 2024", "s": "web" } },
     { "k": "Traffic — Avon St (city), Rockland Ave to Monticello Ave", "d": { "v": "12,000 ADT / 13,000 weekday, 2024", "s": "web" } },
-    { "k": "Traffic — Mill Creek Dr itself (both segments)", "d": { "v": "1,500–2,600 ADT — a low-volume connector; the store's real exposure comes from the Avon St Ext / Rte 20 arterials, not its own frontage", "s": "web" } },
+    { "k": "Traffic — Mill Creek Dr itself (Avon St to Rte 20 Scottsville Rd)", "d": { "v": "2,600 ADT — a low-volume connector; the store's real exposure comes from the Avon St Ext arterial it fronts, not Mill Creek Dr itself", "s": "web" } },
     { "k": "Population — 1 / 3 / 5 mile rings", "d": { "v": "4,222 / 53,992 / 86,966", "s": "web", "n": "ACS 2019–2023 5-year estimates, block-group level. Smallest 1-mile population of the three sites; that ring captures only two block groups, so treat it as approximate." } },
     { "k": "Households — 1 / 3 / 5 mile rings", "d": { "v": "1,883 / 21,200 / 36,149", "s": "web" } },
     { "k": "Owner- / renter-occupied HH — 1 mile", "d": { "v": "1,115 owner / 768 renter (59% owner)", "s": "web", "n": "Only site of the three that is majority owner-occupied inside 1 mile." } },
     { "k": "Median household income — 1 / 3 / 5 mile rings", "d": { "v": "$112,758 / $82,239 / $88,599", "s": "web", "n": "Highest 1-mile median income of the three sites." } },
-    { "k": "Nearby anchors", "d": { "v": "Southwood / Mill Creek neighborhood retail; Avon St Ext commercial strip", "s": "web" } },
+    { "k": "Nearby anchors", "d": { "v": "Market at Mill Creek, Carter Bank, Avon St Ext commercial strip", "s": "web" } },
     { "k": "Position in trade area", "d": { "v": "Serves the Mill Creek, Southwood, Lake Reynovia and Avon corridor rooftops south of the city", "s": "web" } }
   ],
   "extras": [
     {
       "label": "Why this card exists",
-      "text": "Not a deal under evaluation — this is a benchmark/reference card for the 5th Street and Pantops expansion analysis, built to directly answer Jackson Green's (Goodwill CFO) 8/19 request to compare 5th Street traffic against \"counts on Avon at Mill Creek.\" Economics, rent, and scenario analysis are intentionally excluded, as with the other two cards.",
+      "text": "Not a deal under evaluation — this is a benchmark/reference card for the 5th Street and Pantops expansion analysis, built to directly answer Jackson Green's (Goodwill CFO) 8/19 request to compare 5th Street traffic against \"counts on Avon at Mill Creek,\" and to give the other two candidate sites a real store-format size to be measured against. Economics, rent, and scenario analysis are intentionally excluded, as with the other two cards.",
       "s": "source"
     },
     {
@@ -92,6 +98,8 @@
     }
   ],
   "sources": [
+    { "label": "Albemarle County GIS (parcel, zoning, assessment)", "url": "https://services2.arcgis.com/khVz7mitcPJHUnlM" },
+    { "label": "City of Charlottesville Open Data GIS", "url": "https://gisweb.charlottesville.org" },
     { "label": "VDOT Bidirectional Traffic Volume 2024 (traffic count layer)", "url": "https://www.virginiaroads.org/datasets/VDOT::vdot-bidirectional-traffic-volume-2024" },
     { "label": "U.S. Census Bureau ACS 2019–2023 5-year estimates (via Census Reporter)", "url": "https://censusreporter.org/" }
   ]
