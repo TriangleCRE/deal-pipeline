@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "id": "5th-street-charlottesville",
+  "name": "1113 5th Street SW (Former Carter Bank)",
+  "address": "1113 5th St SW, Charlottesville, VA 22903",
+  "county": "City of Charlottesville, VA",
+  "parcels": "City of Charlottesville Parcel 51540-21B004400",
+  "status": "Under Review",
+  "dealType": "Tenant-Driven",
+  "tags": [
+    "Goodwill expansion search",
+    "Former bank branch",
+    "5th Street corridor"
+  ],
+  "updated": "2026-08-19",
+  "headlineTenant": {
+    "name": "Goodwill",
+    "logo": null
+  },
+  "meta": {
+    "dealId": "TRI-2026-003",
+    "entity": "Triangle Investment Group",
+    "prepared": "S. Dahl · Aug 2026",
+    "sourceModel": "Basic property pull only — per B. Blackburn 8/19/26, economics and scenarios intentionally left off pending further direction."
+  },
+  "thesis": {
+    "v": "Former Carter Bank & Trust branch on a signalized corner of 5th Street SW — 0.90 ac with a 3,024 SF building and an intact drive-thru, close to I-64 and the 5th Street Station retail node (Wegmans). Goodwill is assessing this alongside its Pantops expansion search and specifically wants 5th Street traffic counts compared against its existing Avon Street/Mill Creek store before going further. No financing model or development scenario has been built for this site yet — this card is basic property information only, per Ben's 8/19 request.",
+    "s": "ai"
+  },
+  "flags": [
+    {
+      "type": "opp",
+      "text": "Signalized corner with an intact drive-thru — a Goodwill donation drive-through could reuse the existing lane rather than requiring new site work.",
+      "s": "web"
+    },
+    {
+      "type": "opp",
+      "text": "Close to I-64 and the 5th Street Station shopping center (Wegmans-anchored) — an established retail node with regional draw.",
+      "s": "web"
+    },
+    {
+      "type": "watch",
+      "text": "Goodwill's own diligence question (Jackson Green, 8/19 email): wants 5th Street traffic counts benchmarked against Avon Street at Mill Creek before deciding — this is the swing factor for them, not site fundamentals.",
+      "s": "source"
+    },
+    {
+      "type": "risk",
+      "text": "Listing price ($2,595,000 asking per the active LoopNet/Triangle Realtors listing) is well above a $1,375,000 figure that appears in some property records for a prior transaction — reconcile which applies before quoting a basis.",
+      "s": "web"
+    }
+  ],
+  "propertyInfo": [
+    { "k": "Address", "d": { "v": "1113 5th St SW, Charlottesville, VA 22903", "s": "web" } },
+    { "k": "Site size", "d": { "v": "±0.90 acres", "s": "web", "n": "Per active LoopNet listing." } },
+    { "k": "Building size", "d": { "v": "3,024 SF — former bank branch with drive-thru, built ~2004", "s": "web" } },
+    { "k": "Asking price", "d": { "v": "$2,595,000 (active listing)", "s": "web", "n": "A separate record shows a $1,375,000 figure for what may be a prior sale — confirm which applies before underwriting a basis." } },
+    { "k": "Current use", "d": { "v": "Vacant — former Carter Bank & Trust branch (closed)", "s": "web" } },
+    { "k": "Listing broker", "d": { "v": "Triangle Realtors (Peter Wray)", "s": "source" } },
+    { "k": "Ownership", "d": { "v": "Not yet confirmed", "s": "need", "n": "Pull current owner from the City Assessor's parcel record (opendata.charlottesville.org)." } }
+  ],
+  "gis": [
+    { "k": "Parcel / APN", "d": { "v": "51540-21B004400", "s": "web", "n": "Confirm against the City of Charlottesville Assessor's parcel viewer." } },
+    { "k": "Access", "d": { "v": "Signalized corner on 5th Street SW; existing curb cuts and a drive-thru lane from the prior bank use", "s": "web" } }
+  ],
+  "market": [
+    {
+      "k": "Traffic (AADT)",
+      "d": {
+        "v": "Not yet pulled — VDOT's traffic-count portal (P4P) and GIS traffic viewer were unreachable during this pass",
+        "s": "need",
+        "n": "This is literally what Peter Wray and Jackson Green (Goodwill) are both waiting on — pull current 5th St SW (Rt 631) AADT from vdotp4p.com or the VDOT GIS traffic count layer, and the matching count for Avon Street Extended (Rt 742) at Mill Creek Dr for their requested side-by-side comparison."
+      }
+    },
+    { "k": "Visibility / access", "d": { "v": "Signalized intersection frontage on 5th Street SW, a primary north-south corridor into downtown Charlottesville from I-64", "s": "web" } },
+    { "k": "Nearby anchors", "d": { "v": "5th Street Station (Wegmans-anchored) retail node nearby; nearby to UVA and Downtown Charlottesville per the listing", "s": "web" } },
+    { "k": "Corridor context", "d": { "v": "5th Street / Route 631 corridor study (VDOT, ongoing) has flagged congestion and traffic-flow concerns along this corridor between Harris Road and Ambrose Commons Drive", "s": "web" } },
+    { "k": "Population", "d": { "v": "City of Charlottesville ≈ 45,437 (most recent Census estimate)", "s": "web" } },
+    { "k": "Median household income", "d": { "v": "≈ $74,824 (2024, Charlottesville city)", "s": "web" } }
+  ],
+  "zoning": [
+    { "k": "Current zoning", "d": { "v": "HW — Highway Corridor (City of Charlottesville), with Entrance Corridor overlay", "s": "web" } },
+    { "k": "Comp Plan / FLU", "d": { "v": "Comprehensive Plan calls for \"Urban Mixed Use Corridor\" along this stretch of 5th Street SW", "s": "web" } },
+    { "k": "Fit for retail/donation use", "d": { "v": "Highway Corridor zoning generally supports retail by-right; confirm Goodwill's specific use (retail + donation drive-thru) against the City's Entrance Corridor design guidelines before assuming no ARB review is needed", "s": "ai" } }
+  ],
+  "hbu": [
+    { "k": "Primary use", "d": { "v": "Reuse of the existing building as a Goodwill retail store, likely retaining the drive-thru lane for donations", "s": "ai" } }
+  ],
+  "extras": [
+    {
+      "label": "Why this card is basic-info-only",
+      "text": "Per Ben Blackburn's 8/19/26 email, this pull intentionally excludes financing/economics and development scenarios — just property basics (traffic, population, zoning, access). Add a Financing model and Scenarios once Goodwill decides this is worth underwriting.",
+      "s": "source"
+    }
+  ],
+  "sources": [
+    { "label": "1113 5th St SW — LoopNet listing (former bank property)", "url": "https://www.loopnet.com/Listing/1113-5th-St-SW-Charlottesville-VA/27827278/" },
+    { "label": "1113 5th St SW — Triangle Realtors listing", "url": "https://www.trianglerealtors.net/1113-5th-st-sw-charlottesville-va-22903.html" },
+    { "label": "VDOT Route 631 (5th Street/Old Lynchburg Road) corridor study", "url": "https://www.vdot.virginia.gov/projects/culpeper-district/route-631-5th-streetold-lynchburg-road-corridor-charlottesville--albemarle/" },
+    { "label": "U.S. Census QuickFacts — Charlottesville city, Virginia", "url": "https://www.census.gov/quickfacts/fact/table/charlottesvillecityvirginia" }
+  ]
+}
