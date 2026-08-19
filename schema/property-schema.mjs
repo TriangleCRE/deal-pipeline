@@ -73,6 +73,23 @@ const source = z.object({
   url: z.string().optional(),
 }).passthrough();
 
+// A development scenario — a specific building/use idea for this site
+// (strip center, standalone retail, self-storage, ...) with its own
+// financing assumptions and its own 4-criteria scenario score. `assumptions`
+// is intentionally as loose as `financing` above (the app's calcScenario()
+// derives NOI/IRR/etc. live from whatever's in here) so new fields don't
+// need a schema change to use. `criteria` mirrors `scores`' shape (1-5 per
+// factor) but only for the 4 scenario-dependent factors (tenantDemand,
+// rentPotential, devCost, exitLiquidity) — the other 5 live on the
+// property's own `scores`, since they don't change per scenario.
+const scenario = z.object({
+  id: z.string().optional(),
+  name: z.string().optional(),
+  notes: z.string().optional(),
+  assumptions: z.record(z.string(), z.any()).optional(),
+  criteria: z.record(z.string(), z.number()).optional(),
+}).passthrough();
+
 // ---------------------------------------------------------------------------
 // Scoring + checklist reference data — mirrors index.html's TRI engine
 // (SCORE_CRITERIA_BY_TYPE / CHECKLIST_TEMPLATE_BY_TYPE) exactly. Duplicated
@@ -191,6 +208,11 @@ export const PropertySchema = z.object({
     pencil: z.object({ ok: z.boolean().optional(), v: z.string().optional(), s: prov(), n: z.string().optional() }).passthrough().optional(),
     listAsk: fact(z.string()).optional(),
   }).passthrough().optional(),
+
+  /* ---- development scenarios (site score stays on `scores` above; each
+     scenario carries its own financing assumptions + 4-criteria scenario
+     score — see the `scenario` helper above) ---- */
+  scenarios: z.array(scenario).optional(),
 
   /* ---- flat section fields ---- */
   propertyInfo: z.array(fieldRow).optional(),

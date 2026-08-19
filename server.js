@@ -97,9 +97,6 @@ app.use("/api/properties", propertiesRouter);
 app.use("/api/materials", materialsRouter);
 app.use("/uploads", express.static(path.join(ROOT, "uploads")));
 app.use("/prompt", express.static(path.join(ROOT, "prompt")));
-// Internal prototypes/reports for discussion — same passcode wall as everything
-// else above, not linked from search, never touches the properties table.
-app.use("/mockups", express.static(path.join(ROOT, "mockups")));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(ROOT, "index.html"));
