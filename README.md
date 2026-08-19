@@ -3,9 +3,9 @@
 An internal, **private** tool for tracking commercial real-estate deals.
 Each property is one JSON document — basics, tags, scores, and every card
 section (snapshot, site plan, property info, GIS, market, zoning, brokers &
-owners, history, surroundings, tenants, phasing, financing, checklist,
-materials) — stored as a single `JSONB` blob in Postgres (Neon). No ORM, no
-per-field CRUD, no extra tables.
+owners, history, surroundings, tenants, phasing, financing, development
+scenarios, checklist, materials) — stored as a single `JSONB` blob in
+Postgres (Neon). No ORM, no per-field CRUD, no extra tables.
 
 ## Architecture
 
