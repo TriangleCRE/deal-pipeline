@@ -227,6 +227,18 @@ img{max-width:100%}
 .scen-field input[type=text]{text-align:left}
 .scen-field input.scen-score{width:52px;text-align:center;border:1px solid var(--brand);font-weight:800}
 .scen-field.scen-checkbox{grid-template-columns:auto 1fr}
+/* deal-specific fields (land, building, rent, SF, market-rate terms) get an
+   accent color so they read as "this varies every deal" against the plain-
+   black boilerplate assumptions around them — both are equally editable. */
+.scen-field.scen-deal-specific label{color:var(--p-source);font-weight:700}
+.scen-field.scen-deal-specific input{border-color:var(--p-source);color:var(--p-source)}
+.scen-field.scen-deal-specific input[type=checkbox]{accent-color:var(--p-source)}
+.scen-field[data-dep-key].dep-highlight label{background:var(--warn-bg);border-radius:5px;padding:1px 4px;margin:-1px -4px}
+.scen-field[data-dep-key].dep-highlight input{outline:2px solid var(--warn);outline-offset:1px}
+.scen-out-grid .t[data-dep-key]{cursor:help}
+.scen-out-grid .t[data-dep-key].dep-highlight{outline:2px solid var(--warn);outline-offset:1px;background:var(--warn-bg)}
+.scen-out-grid .t[data-dep-key].dep-active{outline:2px solid var(--brand);outline-offset:1px}
+.scen-field[data-dep-key].dep-active label{background:var(--brand-wash);border-radius:5px;padding:1px 4px;margin:-1px -4px;color:var(--brand-dark)}
 .scen-out-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
 .scen-out-grid .t{border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--surface)}
 .scen-out-grid .t .l{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
@@ -238,6 +250,41 @@ img{max-width:100%}
 .scen-score-row .sc{font-size:13px}
 .scen-score-row .sc b{font-size:20px;display:block}
 .scen-empty{color:var(--muted);font-size:13.5px;padding:14px 0}
+
+/* scenario comparison bar chart */
+.scen-chart-block{margin-bottom:16px}
+.chart-row{display:grid;grid-template-columns:160px 1fr 70px;gap:10px;align-items:center;margin-bottom:6px;font-size:12.5px}
+.chart-label{font-weight:650;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chart-track{height:16px;background:var(--line-2);border-radius:5px;overflow:hidden}
+.chart-fill{height:100%;border-radius:5px 0 0 5px;transition:width .2s}
+.chart-val{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+
+/* per-scenario sensitivity heatmap */
+.scen-heat{margin-top:14px}
+.scen-heat-table{width:100%;border-collapse:collapse;font-size:12px;text-align:center}
+.scen-heat-table th,.scen-heat-table td{padding:6px 4px;border:1px solid var(--line-2)}
+.scen-heat-table thead th{font-weight:700;color:var(--muted);font-size:11px}
+.scen-heat-table tbody th{text-align:right;font-weight:700;color:var(--muted);font-size:11px;white-space:nowrap;padding-right:8px}
+.scen-heat-table td{font-weight:750;font-variant-numeric:tabular-nums}
+.scen-heat-table td.ok{background:var(--ok-bg);color:var(--ok-ink)}
+.scen-heat-table td.warn{background:var(--warn-bg);color:var(--warn-ink)}
+.scen-heat-table td.bad{background:var(--bad-bg);color:var(--bad-ink)}
+
+/* suggested-scenarios panel */
+.scen-suggest{border:1px dashed var(--p-ai);background:var(--p-ai-bg);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.scen-suggest .scen-group-title{color:var(--p-ai)}
+.scen-suggest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.scen-suggest-card{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+.scen-suggest-card b{font-size:13px;display:block;margin-bottom:4px}
+.scen-suggest-card p{font-size:12px;color:var(--ink-2);margin:0 0 8px;line-height:1.35}
+
+/* deal-economics highlights strip (Overview tab) */
+.deal-hl{background:var(--brand-wash);border-color:var(--brand)}
+.deal-hl-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.deal-hl-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:10px}
+.deal-hl-grid .t{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+.deal-hl-grid .l{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.deal-hl-grid .v{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:2px}
 
 /* checklist */
 .check{display:grid;gap:1px;background:var(--line-2);border:1px solid var(--line-2);border-radius:10px;overflow:hidden}
@@ -318,6 +365,15 @@ img{max-width:100%}
 .toc a{font-size:12.5px;font-weight:650;color:var(--ink-2);padding:4px 10px;border-radius:7px;white-space:nowrap}
 .toc a:hover{background:var(--brand-wash);color:var(--brand-dark);text-decoration:none}
 .block[id]{scroll-margin-top:120px}
+
+/* ---------- top-level tabs ---------- */
+.tabbar{display:flex;gap:6px;margin:0 0 16px;border-bottom:2px solid var(--line)}
+.tabbtn{border:none;background:none;padding:10px 16px;font-size:14px;font-weight:700;color:var(--muted);
+  cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;display:flex;align-items:center;gap:6px}
+.tabbtn:hover{color:var(--ink)}
+.tabbtn.on{color:var(--brand-dark);border-bottom-color:var(--brand)}
+.tabcount{background:var(--brand);color:#fff;font-size:11px;font-weight:800;border-radius:999px;
+  padding:1px 7px;min-width:18px;text-align:center;display:inline-block}
 
 /* ---------- inline edit mode ---------- */
 .editbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -586,7 +642,15 @@ textarea.edit-input{min-height:52px;resize:vertical;line-height:1.4}
     projectManagement: 20000, otherSoftCosts: 0,
     hardCostContingencyPct: 0.06, softCostContingencyPct: 0.05,
     loanLTC: 0.7, interestRate: 0.0725, amortYears: 30, holdYears: 5,
-    exitCapRate: 0.075, costOfSalePct: 0.02
+    loanOriginationFeePct: 0.01, loanClosingCostsPct: 0.0075,
+    exitCapRate: 0.075, costOfSalePct: 0.02,
+    // partnership / equity-split terms — Triangle's standard structure
+    // (LP contribution is 1 - gpContributionPct). These drive the simple
+    // straight-line contribution/fee splits computed in calcScenario();
+    // they do NOT solve a full tiered-hurdle promote waterfall (LP/GP net
+    // IRR after multiple hurdles) — the base model itself flags that as
+    // needing a separate rebuild, not something this reproduces.
+    gpContributionPct: 0.1, preferredReturnPct: 0.08, promotePct: 0.2, gpAssetMgmtFeePct: 0.02
   };
 
   // Assumption fields are stored in "spreadsheet units" (a rate is 0.07,
@@ -607,51 +671,65 @@ textarea.edit-input{min-height:52px;resize:vertical;line-height:1.4}
 
   // Drives the Scenarios editor form — grouped the same way the base
   // financing model groups its "blue text" inputs (Site & Building / Soft
-  // Costs / Financing / Exit), so a Triangle underwriter finds the same
-  // fields in the same order they'd expect from the spreadsheet.
+  // Costs / Financing / Exit / Partnership), so a Triangle underwriter
+  // finds the same fields in the same order they'd expect from the
+  // spreadsheet. `dealSpecific: true` marks the handful of numbers that
+  // are different on literally every deal (land, building, rent, SF,
+  // market-rate financing terms) — everything else is the kind of
+  // boilerplate assumption ("$10,000 attorney fees") that's usually the
+  // same from deal to deal. Both render editable either way; the flag only
+  // drives the black-vs-accent-color styling in the form.
   const SCENARIO_FIELD_GROUPS = [
     { title: "Primary Use", fields: [
-      ["primaryUseLabel", "Use / building type", "text"],
-      ["primaryUseSF", "Building SF", "num"],
-      ["primaryUseCostPSF", "Shell cost, $/SF", "usd"],
-      ["primaryUseRentPSF", "Rent, $/SF NNN", "usd"],
+      { key: "primaryUseLabel", label: "Use / building type", type: "text", dealSpecific: true },
+      { key: "primaryUseSF", label: "Building SF", type: "num", dealSpecific: true },
+      { key: "primaryUseCostPSF", label: "Shell cost, $/SF", type: "usd", dealSpecific: true },
+      { key: "primaryUseRentPSF", label: "Rent, $/SF NNN", type: "usd", dealSpecific: true },
     ]},
     { title: "Land", fields: [
-      ["landPrice", "Land price / basis", "usd0"],
+      { key: "landPrice", label: "Land price / basis", type: "usd0", dealSpecific: true },
     ]},
     { title: "Secondary Use (optional)", fields: [
-      ["includeSecondaryUse", "Include a second use", "bool"],
-      ["secondaryUseLabel", "Use / building type", "text"],
-      ["secondaryUseSF", "Building SF", "num"],
-      ["secondaryUseCostPSF", "Shell cost, $/SF", "usd"],
-      ["secondaryUseRentPSF", "Rent, $/SF", "usd"],
-      ["secondaryUseEfficiency", "Rentable efficiency", "pct"],
-      ["secondaryUseOccupancy", "Stabilized occupancy", "pct"],
-      ["secondaryUseOpexPct", "Opex, % of revenue", "pct"],
+      { key: "includeSecondaryUse", label: "Include a second use", type: "bool", dealSpecific: true },
+      { key: "secondaryUseLabel", label: "Use / building type", type: "text", dealSpecific: true },
+      { key: "secondaryUseSF", label: "Building SF", type: "num", dealSpecific: true },
+      { key: "secondaryUseCostPSF", label: "Shell cost, $/SF", type: "usd", dealSpecific: true },
+      { key: "secondaryUseRentPSF", label: "Rent, $/SF", type: "usd", dealSpecific: true },
+      { key: "secondaryUseEfficiency", label: "Rentable efficiency", type: "pct" },
+      { key: "secondaryUseOccupancy", label: "Stabilized occupancy", type: "pct" },
+      { key: "secondaryUseOpexPct", label: "Opex, % of revenue", type: "pct" },
     ]},
     { title: "Soft Costs", fields: [
-      ["architectural", "Architectural", "usd0"],
-      ["engineering", "Engineering", "usd0"],
-      ["attorneyFees", "Attorney fees", "usd0"],
-      ["appraisal", "Appraisal", "usd0"],
-      ["environmental", "Environmental", "usd0"],
-      ["insurance", "Insurance", "usd0"],
-      ["utilityConnectFees", "Utility connect fees", "usd0"],
-      ["permitsAndFees", "Permits & fees", "usd0"],
-      ["projectManagement", "Project mgmt (construction)", "usd0"],
-      ["otherSoftCosts", "Other soft costs", "usd0"],
-      ["hardCostContingencyPct", "Hard cost contingency", "pct"],
-      ["softCostContingencyPct", "Soft cost contingency", "pct"],
+      { key: "architectural", label: "Architectural", type: "usd0" },
+      { key: "engineering", label: "Engineering", type: "usd0" },
+      { key: "attorneyFees", label: "Attorney fees", type: "usd0" },
+      { key: "appraisal", label: "Appraisal", type: "usd0" },
+      { key: "environmental", label: "Environmental", type: "usd0" },
+      { key: "insurance", label: "Insurance", type: "usd0" },
+      { key: "utilityConnectFees", label: "Utility connect fees", type: "usd0" },
+      { key: "permitsAndFees", label: "Permits & fees", type: "usd0" },
+      { key: "projectManagement", label: "Project mgmt (construction)", type: "usd0" },
+      { key: "otherSoftCosts", label: "Other soft costs", type: "usd0" },
+      { key: "hardCostContingencyPct", label: "Hard cost contingency", type: "pct" },
+      { key: "softCostContingencyPct", label: "Soft cost contingency", type: "pct" },
     ]},
     { title: "Financing", fields: [
-      ["loanLTC", "Loan-to-cost", "pct"],
-      ["interestRate", "Interest rate", "pct"],
-      ["amortYears", "Amortization, yrs", "int"],
-      ["holdYears", "Hold period, yrs", "int"],
+      { key: "loanLTC", label: "Loan-to-cost", type: "pct" },
+      { key: "interestRate", label: "Interest rate", type: "pct", dealSpecific: true },
+      { key: "amortYears", label: "Amortization, yrs", type: "int" },
+      { key: "holdYears", label: "Hold period, yrs", type: "int" },
+      { key: "loanOriginationFeePct", label: "Loan origination fee", type: "pct" },
+      { key: "loanClosingCostsPct", label: "Loan closing costs", type: "pct" },
     ]},
     { title: "Exit", fields: [
-      ["exitCapRate", "Exit cap rate", "pct"],
-      ["costOfSalePct", "Cost of sale", "pct"],
+      { key: "exitCapRate", label: "Exit cap rate", type: "pct", dealSpecific: true },
+      { key: "costOfSalePct", label: "Cost of sale", type: "pct" },
+    ]},
+    { title: "Partnership / Equity Split", fields: [
+      { key: "gpContributionPct", label: "GP contribution %", type: "pct" },
+      { key: "preferredReturnPct", label: "LP preferred return", type: "pct" },
+      { key: "promotePct", label: "GP promote (after pref.)", type: "pct" },
+      { key: "gpAssetMgmtFeePct", label: "GP asset mgmt fee, % of equity", type: "pct" },
     ]},
   ];
 
@@ -722,14 +800,87 @@ textarea.edit-input{min-height:52px;resize:vertical;line-height:1.4}
     const equityMultiple = equity > 0 ? cashflows.slice(1).reduce((s, v) => s + v, 0) / equity : null;
     const leveredIRR = equity > 0 ? irr(cashflows) : null;
 
+    // Loan fees — informational only (due at closing, funded from equity),
+    // NOT folded into totalProjectCost above: a fee sized as % of the loan
+    // depends on the loan amount, which depends on totalProjectCost, which
+    // would depend on the fee — a circular reference the base spreadsheet
+    // avoids the same way, by keeping these as a separate closing-cost line.
+    const loanOriginationFee = loan * num("loanOriginationFeePct");
+    const loanClosingCosts = loan * num("loanClosingCostsPct");
+
+    // Partnership / equity split — the simple straight-line pieces only:
+    // who puts in how much, and the GP's asset management fee. This is
+    // deliberately NOT a full tiered-hurdle promote waterfall (LP/GP net
+    // IRR after a preferred return and promote split) — the base model
+    // itself flags that as needing a separate rebuild ("Rebuild to match
+    // JV-Waterfall-Model..."), so faking a precise-looking number here
+    // would be less honest than just not computing it.
+    const gpContribution = equity * num("gpContributionPct");
+    const lpContribution = equity - gpContribution;
+    const gpAssetMgmtFee = equity * num("gpAssetMgmtFeePct");
+
     return {
       hardCost, hardCostContingency, softCostItems, softCostContingency, totalSoftCosts, totalProjectCost,
       primaryNOI, secondaryNOI, stabilizedNOI,
       loan, equity, yieldOnCost, devSpread, exitValue, netSaleValue, devProfit, profitMarginOnCost,
       annualDebtService, dscr, cashOnCash, loanBalanceExit, equityMultiple, leveredIRR,
+      loanOriginationFee, loanClosingCosts,
+      gpContribution, lpContribution, gpAssetMgmtFee,
       pencils: devSpread != null ? devSpread >= 0 : null
     };
   }
+
+  // "What feeds this number" dependency map — which assumption fields
+  // actually appear in the formula behind each computed output above.
+  // Hand-written against calcScenario() itself (not auto-derived) so it
+  // stays a plain, readable list; whoever touches calcScenario should
+  // update this alongside it. Built from a few reusable input groups so
+  // the same "which fields make up cost/NOI" list isn't repeated by hand
+  // for every output that depends on them.
+  const DEP_COST_INPUTS = ["landPrice", "primaryUseSF", "primaryUseCostPSF", "includeSecondaryUse",
+    "secondaryUseSF", "secondaryUseCostPSF", "hardCostContingencyPct", "architectural", "engineering",
+    "attorneyFees", "appraisal", "environmental", "insurance", "utilityConnectFees", "permitsAndFees",
+    "projectManagement", "otherSoftCosts", "softCostContingencyPct"];
+  const DEP_NOI_INPUTS = ["primaryUseSF", "primaryUseRentPSF", "includeSecondaryUse", "secondaryUseSF",
+    "secondaryUseEfficiency", "secondaryUseRentPSF", "secondaryUseOccupancy", "secondaryUseOpexPct"];
+  const DEP_LOAN_INPUTS = [...DEP_COST_INPUTS, "loanLTC"];
+  const DEP_DEBT_SERVICE_INPUTS = [...DEP_LOAN_INPUTS, "interestRate", "amortYears"];
+  const DEP_RETURNS_INPUTS = [...DEP_DEBT_SERVICE_INPUTS, ...DEP_NOI_INPUTS, "holdYears", "exitCapRate", "costOfSalePct"];
+  const SCENARIO_DEPENDENCY_MAP = {
+    totalProjectCost: DEP_COST_INPUTS,
+    hardCost: ["primaryUseSF", "primaryUseCostPSF", "includeSecondaryUse", "secondaryUseSF", "secondaryUseCostPSF"],
+    totalSoftCosts: ["architectural", "engineering", "attorneyFees", "appraisal", "environmental", "insurance",
+      "utilityConnectFees", "permitsAndFees", "projectManagement", "otherSoftCosts", "softCostContingencyPct"],
+    loan: DEP_LOAN_INPUTS,
+    equity: DEP_LOAN_INPUTS,
+    stabilizedNOI: DEP_NOI_INPUTS,
+    yieldOnCost: [...DEP_COST_INPUTS, ...DEP_NOI_INPUTS],
+    devSpread: [...DEP_COST_INPUTS, ...DEP_NOI_INPUTS, "exitCapRate"],
+    exitValue: [...DEP_NOI_INPUTS, "exitCapRate"],
+    netSaleValue: [...DEP_NOI_INPUTS, "exitCapRate", "costOfSalePct"],
+    devProfit: [...DEP_COST_INPUTS, ...DEP_NOI_INPUTS, "exitCapRate", "costOfSalePct"],
+    annualDebtService: DEP_DEBT_SERVICE_INPUTS,
+    dscr: [...DEP_DEBT_SERVICE_INPUTS, ...DEP_NOI_INPUTS],
+    cashOnCash: [...DEP_DEBT_SERVICE_INPUTS, ...DEP_NOI_INPUTS],
+    loanBalanceExit: [...DEP_DEBT_SERVICE_INPUTS, "holdYears"],
+    equityMultiple: DEP_RETURNS_INPUTS,
+    leveredIRR: DEP_RETURNS_INPUTS,
+    loanOriginationFee: [...DEP_LOAN_INPUTS, "loanOriginationFeePct"],
+    loanClosingCosts: [...DEP_LOAN_INPUTS, "loanClosingCostsPct"],
+    gpContribution: [...DEP_LOAN_INPUTS, "gpContributionPct"],
+    lpContribution: [...DEP_LOAN_INPUTS, "gpContributionPct"],
+    gpAssetMgmtFee: [...DEP_LOAN_INPUTS, "gpAssetMgmtFeePct"],
+  };
+  // Reverse index — given an input key, which outputs does it feed? Built
+  // once from the map above so clicking an INPUT field highlights the
+  // outputs it affects, the same way clicking an output highlights inputs.
+  const SCENARIO_DEPENDENTS_MAP = {};
+  Object.entries(SCENARIO_DEPENDENCY_MAP).forEach(([out, inputs]) => {
+    inputs.forEach(inp => {
+      if (!SCENARIO_DEPENDENTS_MAP[inp]) SCENARIO_DEPENDENTS_MAP[inp] = [];
+      SCENARIO_DEPENDENTS_MAP[inp].push(out);
+    });
+  });
 
   /* ---------- Financing summary ----------
      Derives headline deal economics from model inputs.
@@ -952,6 +1103,7 @@ textarea.edit-input{min-height:52px;resize:vertical;line-height:1.4}
     SCORE_CRITERIA_BY_TYPE, scoreCriteriaFor,
     SITE_SCORE_CRITERIA, SCENARIO_SCORE_CRITERIA, siteScoreOf, scenarioScoreOf, combineScores, scoreStatusFor,
     SCENARIO_ASSUMPTION_DEFAULTS, SCENARIO_FIELD_TYPES, SCENARIO_FIELD_GROUPS, calcScenario,
+    SCENARIO_DEPENDENCY_MAP, SCENARIO_DEPENDENTS_MAP,
     computeFinancing, CHECKLIST_TEMPLATE, MATERIAL_CATEGORIES,
     CHECKLIST_TEMPLATE_BY_TYPE, checklistTemplateFor,
     fmtUSD, fmtUSDk, fmtPct, esc, resolveFileUrl, fmtDate,
@@ -1317,6 +1469,10 @@ async function initProperty(){
      edit here is visible to every Triangle employee, not just this
      browser. ------------------------------------------------------- */
   let EDIT = false, dirty = false, saveMsg = null, baseSnapshot = clone(P);
+  // Which top-level view is showing — "overview" (the card as it's always
+  // been) or "financing" (the in-depth, editable deal-economics/scenarios
+  // workbench). Local to this page load, same lifetime as EDIT/dirty above.
+  let activeTab = "overview";
 
   /* editable value cell, shared by the flat field-blocks (propertyInfo/gis/market/zoning/hbu) */
   function valCell(pathBase, d) {
@@ -1342,6 +1498,11 @@ async function initProperty(){
     const score = T.computeScore(P.scores, dealType);
     const fin = T.computeFinancing(P.financing);
     const finProv = fin && fin.modelSourced ? "source" : "ai";
+    // Needed early for the tab bar (scenario count badge) and the Overview
+    // tab's highlights strip — the fuller scenario math lives further down,
+    // right before the Financing & Scenarios tab content is built.
+    const site = T.siteScoreOf(P.scores);
+    const scenarios = P.scenarios || [];
 
     /* ---------- header + toolbar ---------- */
     const m = P.meta || {};
@@ -1409,10 +1570,21 @@ async function initProperty(){
     const tocItems = [
       ["snapshot", "Snapshot"], ["siteplan", "Site Plan"], ["propinfo", "Property Info"], ["gis", "GIS"],
       ["market", "Market"], ["zoning", "Zoning"], ["contacts", "Brokers & Owners"], ["history", "History"],
-      ["surroundings", "Surroundings"], ["tenants", "Tenants"], ["hbu", "Phasing"], ["financing", "Financing"],
-      ["scenarios", "Scenarios"], ["checklist", "Checklist"], ["materials", "Materials"]
+      ["surroundings", "Surroundings"], ["tenants", "Tenants"], ["hbu", "Phasing"],
+      ["checklist", "Checklist"], ["materials", "Materials"]
     ];
     const toc = `<nav class="toc noprint"><span class="lbl">Jump to</span>${tocItems.map(t => `<a href="#${t[0]}">${t[1]}</a>`).join("")}</nav>`;
+
+    /* ---------- top-level tabs: Overview vs. Financing & Scenarios ----------
+       The deal-economics workbench (base financing model + every scenario +
+       charts) gets its own tab rather than living in the long Overview
+       scroll — there's enough going on in there (a full assumption set,
+       comparison charts, a heatmap per scenario) that it wants the room,
+       and switching tabs beats scrolling a much longer page to reach it. */
+    const tabBar = `<div class="tabbar noprint">
+      <button type="button" class="tabbtn ${activeTab === "overview" ? "on" : ""}" id="tabOverview">Overview</button>
+      <button type="button" class="tabbtn ${activeTab === "financing" ? "on" : ""}" id="tabFinancing">💰 Financing &amp; Scenarios${scenarios.length ? `<span class="tabcount">${scenarios.length}</span>` : ""}</button>
+    </div>`;
 
     /* ---------- rail: score + meters (editable) ---------- */
     const gc = score ? (score.weighted >= 80 ? "var(--ok)" : score.weighted >= 65 ? "var(--warn)" : "var(--bad)") : "var(--muted)";
@@ -1451,7 +1623,11 @@ async function initProperty(){
       </div>
       ${finModelLink}
     </section>` : "";
-    const rail = `<aside class="prail">${railScore}${railFin}</aside>`;
+    // railFin (the compact sidebar financing card) is redundant once the
+    // full workbench is on-screen in the Financing & Scenarios tab, so it
+    // only shows in Overview; the site-score meters stay visible in both,
+    // since they feed directly into every scenario's combined score.
+    const rail = `<aside class="prail">${railScore}${activeTab === "overview" ? railFin : ""}</aside>`;
 
     /* ---------- main sections ---------- */
     const flagTypeOpts = t => ["opp", "risk", "watch"].map(k =>
@@ -1611,8 +1787,6 @@ async function initProperty(){
        base financing model — and its own 4-criteria scenario score. The two
        combine (same weight split the single 9-criteria score already used)
        to rank scenarios and surface the highest-and-best use. ------------ */
-    const site = T.siteScoreOf(P.scores);
-    const scenarios = P.scenarios || [];
 
     function scenarioResult(sc) {
       const calc = T.calcScenario(sc.assumptions || {});
@@ -1621,11 +1795,67 @@ async function initProperty(){
       return { calc, scScore, combined };
     }
 
-    function scenComputedHTML(sc) {
+    // The starting point for a scenario built from this property's existing
+    // Financing model — shared by "Copy from current Financing model" (new
+    // scenario) and a scenario's own "↺ Reset to base" button (overwrite in
+    // place). Falls back to the generic template defaults when there's no
+    // Financing model on this property at all.
+    function financingSeedAssumptions() {
+      if (!fin) return Object.assign({}, T.SCENARIO_ASSUMPTION_DEFAULTS);
+      const f = P.financing || {};
+      const secondary = (fin.secondaryUseRows && fin.secondaryUseRows[0]) || null;
+      return Object.assign({}, T.SCENARIO_ASSUMPTION_DEFAULTS, {
+        primaryUseLabel: fin.primaryUseLabel || "Retail (NNN)",
+        primaryUseSF: fin.primaryUseSF || 0,
+        primaryUseCostPSF: f.primaryUseCostPSF != null ? Number(f.primaryUseCostPSF) : Number(f.retailCostPSF) || 0,
+        primaryUseRentPSF: fin.primaryUseRentPSF || 0,
+        landPrice: fin.purchasePrice || 0,
+        includeSecondaryUse: !!secondary,
+        secondaryUseLabel: secondary ? secondary.label : "Self-Storage",
+        secondaryUseSF: secondary ? (secondary.sf || 0) : 0,
+        secondaryUseCostPSF: secondary ? (secondary.costPSF || 0) : 0,
+        secondaryUseRentPSF: secondary ? (secondary.rentPSF || 0) : 0,
+        architectural: 0, engineering: 0, attorneyFees: 0, appraisal: 0, environmental: 0,
+        insurance: 0, utilityConnectFees: 0, permitsAndFees: 0, projectManagement: 0,
+        otherSoftCosts: fin.softCosts || 0,
+        hardCostContingencyPct: 0, softCostContingencyPct: 0,
+        loanLTC: fin.loanLTC != null ? fin.loanLTC : 0.7,
+        interestRate: fin.interestRate != null ? fin.interestRate : 0.0725,
+        amortYears: f.amortYears || 30,
+        holdYears: f.holdYears || 5,
+        exitCapRate: fin.exitCap != null ? fin.exitCap : 0.075,
+        costOfSalePct: fin.costOfSale != null ? fin.costOfSale : 0.02,
+      });
+    }
+    function defaultCriteriaFromScores() {
+      return {
+        tenantDemand: Number(P.scores && P.scores.tenantDemand) || 0,
+        rentPotential: Number(P.scores && P.scores.rentPotential) || 0,
+        devCost: Number(P.scores && P.scores.devCost) || 0,
+        exitLiquidity: Number(P.scores && P.scores.exitLiquidity) || 0,
+      };
+    }
+    // Every field zeroed/blanked — a genuine clean slate, vs. "↺ Reset to
+    // base" which goes back to a sensible starting point instead of blank.
+    function blankAssumptions() {
+      const blank = {};
+      Object.entries(T.SCENARIO_ASSUMPTION_DEFAULTS).forEach(([k, v]) => {
+        blank[k] = typeof v === "boolean" ? false : typeof v === "number" ? 0 : "";
+      });
+      return blank;
+    }
+
+    // Every output tile carries data-dep-key + data-scen-idx so the
+    // dependency-tracing click handler (wired further down) can find "what
+    // feeds this" within the SAME scenario card — clicking a tile highlights
+    // its contributing assumption fields, clicking a field highlights the
+    // outputs it affects, via SCENARIO_DEPENDENCY_MAP / _DEPENDENTS_MAP.
+    function scenComputedHTML(sc, idx) {
       const a = Object.assign({}, T.SCENARIO_ASSUMPTION_DEFAULTS, sc.assumptions || {});
       const { calc, scScore, combined } = scenarioResult(sc);
       const st = T.scoreStatusFor(combined);
       const irrColor = calc.leveredIRR != null && calc.leveredIRR < 0 ? "var(--bad-ink)" : "inherit";
+      const tile = (key, label, value, extra) => `<div class="t" data-dep-key="${key}" data-scen-idx="${idx}" title="Click to see what feeds this"><div class="l">${label}</div><div class="v"${extra || ""}>${value}</div></div>`;
       return `
         <div class="scen-pencil ${calc.pencils ? "ok" : "bad"}">
           <b>${calc.pencils ? "✓ Pencils" : "⚑ Does not currently pencil"}</b> —
@@ -1633,16 +1863,24 @@ async function initProperty(){
           (${calc.devSpread != null ? (calc.devSpread >= 0 ? "+" : "") + T.fmtPct(calc.devSpread) : "—"} spread)
         </div>
         <div class="scen-out-grid">
-          <div class="t"><div class="l">Total project cost</div><div class="v">${T.fmtUSD(calc.totalProjectCost)}</div></div>
-          <div class="t"><div class="l">Loan / Equity</div><div class="v" style="font-size:13px">${T.fmtUSD(calc.loan)} / ${T.fmtUSD(calc.equity)}</div></div>
-          <div class="t"><div class="l">Stabilized NOI</div><div class="v">${T.fmtUSD(calc.stabilizedNOI)}</div></div>
-          <div class="t"><div class="l">Exit value</div><div class="v">${calc.exitValue != null ? T.fmtUSD(calc.exitValue) : "—"}</div></div>
-          <div class="t"><div class="l">Levered IRR</div><div class="v" style="color:${irrColor}">${calc.leveredIRR != null ? T.fmtPct(calc.leveredIRR) : "—"}</div></div>
-          <div class="t"><div class="l">Equity multiple</div><div class="v">${calc.equityMultiple != null ? calc.equityMultiple.toFixed(2) + "×" : "—"}</div></div>
-          <div class="t"><div class="l">Cash-on-cash</div><div class="v">${calc.cashOnCash != null ? T.fmtPct(calc.cashOnCash) : "—"}</div></div>
-          <div class="t"><div class="l">DSCR</div><div class="v">${calc.dscr != null ? calc.dscr.toFixed(2) : "—"}</div></div>
-          <div class="t"><div class="l">Dev profit</div><div class="v">${calc.devProfit != null ? T.fmtUSD(calc.devProfit) : "—"}</div></div>
+          ${tile("totalProjectCost", "Total project cost", T.fmtUSD(calc.totalProjectCost))}
+          ${tile("loan", "Loan / Equity", `${T.fmtUSD(calc.loan)} / ${T.fmtUSD(calc.equity)}`, ' style="font-size:13px"')}
+          ${tile("stabilizedNOI", "Stabilized NOI", T.fmtUSD(calc.stabilizedNOI))}
+          ${tile("exitValue", "Exit value", calc.exitValue != null ? T.fmtUSD(calc.exitValue) : "—")}
+          ${tile("leveredIRR", "Levered IRR", calc.leveredIRR != null ? T.fmtPct(calc.leveredIRR) : "—", ` style="color:${irrColor}"`)}
+          ${tile("equityMultiple", "Equity multiple", calc.equityMultiple != null ? calc.equityMultiple.toFixed(2) + "×" : "—")}
+          ${tile("cashOnCash", "Cash-on-cash", calc.cashOnCash != null ? T.fmtPct(calc.cashOnCash) : "—")}
+          ${tile("dscr", "DSCR", calc.dscr != null ? calc.dscr.toFixed(2) : "—")}
+          ${tile("devProfit", "Dev profit", calc.devProfit != null ? T.fmtUSD(calc.devProfit) : "—")}
         </div>
+        <div class="scen-group-title">Loan fees &amp; partnership (informational)</div>
+        <div class="scen-out-grid">
+          ${tile("loanOriginationFee", "Loan origination fee", T.fmtUSD(calc.loanOriginationFee))}
+          ${tile("loanClosingCosts", "Loan closing costs", T.fmtUSD(calc.loanClosingCosts))}
+          ${tile("gpContribution", "GP / LP contribution", `${T.fmtUSD(calc.gpContribution)} / ${T.fmtUSD(calc.lpContribution)}`, ' style="font-size:13px"')}
+          ${tile("gpAssetMgmtFee", "GP asset mgmt fee (ann.)", T.fmtUSD(calc.gpAssetMgmtFee))}
+        </div>
+        <div class="wnote" style="margin-top:2px">Loan fees are due at closing from equity, not added to project cost. Partnership figures are the simple contribution/fee split only — no tiered promote waterfall is modeled here (see hint on the Partnership fields).</div>
         <div class="scen-score-row">
           <div class="sc"><span class="wnote">Scenario score</span><b>${scScore ? scScore.weighted : "—"}</b></div>
           <div class="sc"><span class="wnote">Site score</span><b>${site ? site.weighted : "—"}</b></div>
@@ -1668,13 +1906,139 @@ async function initProperty(){
       </table>`;
     }
 
-    function scenFieldHTML(idx, key, label, type) {
+    // Scenario comparison chart — plain div/CSS bars, no charting library.
+    // Two small charts (combined score, levered IRR) rather than one dense
+    // multi-metric one, so each stays readable at a glance.
+    function scenChartHTML() {
+      if (!scenarios.length) return `<div class="wnote">Add at least one scenario to see the comparison chart.</div>`;
+      const results = scenarios.map((sc, i) => ({ name: sc.name || `Scenario ${i + 1}`, ...scenarioResult(sc) }));
+      const bar = (label, magnitude, max, displayText, color) => {
+        const pct = max > 0 && magnitude != null ? Math.max(2, Math.min(100, (magnitude / max) * 100)) : 0;
+        return `<div class="chart-row">
+          <div class="chart-label" title="${T.esc(label)}">${T.esc(label)}</div>
+          <div class="chart-track"><div class="chart-fill" style="width:${pct}%;background:${color}"></div></div>
+          <div class="chart-val">${displayText}</div>
+        </div>`;
+      };
+      const scoreRows = results.map(r => {
+        const st = T.scoreStatusFor(r.combined);
+        const color = st.cls === "badge-ok" ? "var(--ok)" : st.cls === "badge-warn" ? "var(--warn)" : st.cls === "badge-bad" ? "var(--bad)" : "var(--muted)";
+        return bar(r.name, r.combined, 100, r.combined != null ? r.combined : "—", color);
+      }).join("");
+      const irrVals = results.map(r => r.calc.leveredIRR).filter(v => v != null).map(Math.abs);
+      const maxIRR = Math.max(0.15, ...irrVals);
+      const irrRows = results.map(r => {
+        const v = r.calc.leveredIRR;
+        const color = v == null ? "var(--muted)" : v < 0 ? "var(--bad)" : "var(--ok)";
+        return bar(r.name, v != null ? Math.abs(v) : null, maxIRR, v != null ? T.fmtPct(v) : "—", color);
+      }).join("");
+      return `<div class="scen-chart-block">
+          <div class="scen-group-title">Combined score by scenario</div>
+          ${scoreRows}
+        </div>
+        <div class="scen-chart-block">
+          <div class="scen-group-title">Levered IRR by scenario</div>
+          ${irrRows}
+        </div>`;
+    }
+
+    // Per-scenario sensitivity heatmap — rent vs. exit cap, holding every
+    // other assumption fixed, showing development spread. A small, real
+    // preview of "yields for different costs/rents" rather than a full 2D
+    // grid across every possible pair of assumptions.
+    function scenHeatmapHTML(sc, idx) {
+      const a = Object.assign({}, T.SCENARIO_ASSUMPTION_DEFAULTS, sc.assumptions || {});
+      const baseRent = Number(a.primaryUseRentPSF) || 0;
+      const baseCap = Number(a.exitCapRate) || 0;
+      if (!baseRent || !baseCap) return `<div class="scen-heat" id="scenHeatmap-${idx}"></div>`;
+      const rentSteps = [-0.2, -0.1, 0, 0.1, 0.2];
+      const capSteps = [-0.01, -0.005, 0, 0.005, 0.01];
+      const spreadClass = v => v == null ? "" : v < 0 ? "bad" : v < 0.01 ? "warn" : "ok";
+      const rows = capSteps.map(capDelta => {
+        const cap = Math.max(0.01, baseCap + capDelta);
+        const cells = rentSteps.map(rentDelta => {
+          const rent = Math.max(0, baseRent * (1 + rentDelta));
+          return T.calcScenario(Object.assign({}, a, { primaryUseRentPSF: rent, exitCapRate: cap })).devSpread;
+        });
+        return { cap, cells };
+      });
+      return `<div class="scen-heat" id="scenHeatmap-${idx}">
+        <div class="scen-group-title">Sensitivity — rent vs. exit cap (development spread)</div>
+        <div class="wnote" style="margin-bottom:6px">Holds every other assumption fixed; varies rent ±20% and exit cap ±100bps around this scenario's own values.</div>
+        <div style="overflow-x:auto"><table class="scen-heat-table">
+          <thead><tr><th></th>${rentSteps.map(d => `<th>${T.fmtUSD(baseRent * (1 + d), 2)}/SF${d === 0 ? " (base)" : ""}</th>`).join("")}</tr></thead>
+          <tbody>${rows.map(r => `<tr><th>${T.fmtPct(r.cap, 2)}${r.cap === baseCap ? " (base)" : ""}</th>${r.cells.map(v => `<td class="${spreadClass(v)}">${v != null ? (v >= 0 ? "+" : "") + T.fmtPct(v, 1) : "—"}</td>`).join("")}</tr>`).join("")}</tbody>
+        </table></div>
+      </div>`;
+    }
+
+    // Rule-based scenario suggestions — generic heuristics that make sense
+    // for any property (not hand-tuned to any one deal), seeded from either
+    // the first existing scenario's assumptions or the base template if
+    // there isn't one yet. "Add a Secondary Use" drops off the list once
+    // some scenario already has one — no point suggesting it twice.
+    function scenarioSuggestions() {
+      const baseAssumptions = scenarios.length
+        ? Object.assign({}, T.SCENARIO_ASSUMPTION_DEFAULTS, scenarios[0].assumptions || {})
+        : Object.assign({}, T.SCENARIO_ASSUMPTION_DEFAULTS);
+      const hasSecondary = scenarios.some(sc => sc.assumptions && sc.assumptions.includeSecondaryUse);
+      const list = [];
+      if (!hasSecondary) {
+        list.push({
+          id: "secondary-use", title: "Add a Secondary Use",
+          rationale: "Test whether a second income stream (self-storage, an additional pad) improves returns without buying more land.",
+          overrides: { includeSecondaryUse: true, secondaryUseSF: Math.round((baseAssumptions.primaryUseSF || 6000) * 0.5) }
+        });
+      }
+      list.push({
+        id: "downsized", title: "Try a Downsized Footprint",
+        rationale: "Test a smaller building if the full format doesn't fit the site, the budget, or the tenant's needs.",
+        overrides: { primaryUseSF: Math.max(1000, Math.round((baseAssumptions.primaryUseSF || 6000) * 0.7)) }
+      });
+      list.push({
+        id: "aggressive-financing", title: "Aggressive Financing (higher leverage)",
+        rationale: "See how much a higher loan-to-cost changes the return profile.",
+        overrides: { loanLTC: Math.min(0.85, (Number(baseAssumptions.loanLTC) || 0.7) + 0.1) }
+      });
+      list.push({
+        id: "conservative-financing", title: "Conservative Financing (lower leverage)",
+        rationale: "Stress-test with less debt and a rate cushion — the scenario to check before assuming the deal only works highly levered.",
+        overrides: { loanLTC: Math.max(0.4, (Number(baseAssumptions.loanLTC) || 0.7) - 0.15), interestRate: (Number(baseAssumptions.interestRate) || 0.0725) + 0.01 }
+      });
+      return { baseAssumptions, list };
+    }
+
+    function scenSuggestionsHTML() {
+      if (!EDIT) return "";
+      const { list } = scenarioSuggestions();
+      if (!list.length) return "";
+      return `<div class="scen-suggest">
+        <div class="scen-group-title">💡 Suggested scenarios to consider</div>
+        <div class="scen-suggest-grid">
+          ${list.map(s => `<div class="scen-suggest-card">
+            <b>${T.esc(s.title)}</b>
+            <p>${T.esc(s.rationale)}</p>
+            <button type="button" class="btn btn-sm" data-suggest-add="${s.id}">+ Add this scenario</button>
+          </div>`).join("")}
+        </div>
+      </div>`;
+    }
+
+    // dealSpecific fields (land, building, rent, SF, market-rate financing
+    // terms) render in the accent color; everything else — the reusable
+    // "$10,000 attorney fees"-style boilerplate — renders in plain black.
+    // Both are equally editable; the color is purely a visual cue for which
+    // kind of number you're looking at. data-dep-key drives the "what feeds
+    // this" hover/click highlighting further down.
+    function scenFieldHTML(idx, fdef) {
+      const { key, label, type, dealSpecific } = fdef;
       const def = T.SCENARIO_FIELD_TYPES[type];
       const a = Object.assign({}, T.SCENARIO_ASSUMPTION_DEFAULTS, scenarios[idx].assumptions || {});
+      const cls = "scen-field" + (dealSpecific ? " scen-deal-specific" : "") + (type === "bool" ? " scen-checkbox" : "");
       if (type === "bool") {
-        return `<div class="scen-field scen-checkbox"><input type="checkbox" data-scen-idx="${idx}" data-scen-path="assumptions.${key}" data-scen-type="${type}" ${a[key] ? "checked" : ""}><label>${T.esc(label)}</label></div>`;
+        return `<div class="${cls}" data-dep-key="${key}" data-scen-idx="${idx}"><input type="checkbox" data-scen-idx="${idx}" data-scen-path="assumptions.${key}" data-scen-type="${type}" ${a[key] ? "checked" : ""}><label>${T.esc(label)}</label></div>`;
       }
-      return `<div class="scen-field"><label>${T.esc(label)}</label><input type="${def.input}" step="${def.step || "any"}" data-scen-idx="${idx}" data-scen-path="assumptions.${key}" data-scen-type="${type}" value="${T.esc(def.toInput(a[key]))}"></div>`;
+      return `<div class="${cls}" data-dep-key="${key}" data-scen-idx="${idx}"><label>${T.esc(label)}</label><input type="${def.input}" step="${def.step || "any"}" data-scen-idx="${idx}" data-scen-path="assumptions.${key}" data-scen-type="${type}" value="${T.esc(def.toInput(a[key]))}"></div>`;
     }
 
     function scenScoreFieldHTML(idx, crit) {
@@ -1687,13 +2051,13 @@ async function initProperty(){
       if (group.title === "Secondary Use (optional)") {
         const [checkboxField, ...restFields] = group.fields;
         return `<div><div class="scen-group-title">${T.esc(group.title)}</div>
-          ${scenFieldHTML(idx, checkboxField[0], checkboxField[1], checkboxField[2])}
+          ${scenFieldHTML(idx, checkboxField)}
           <div class="scen-secondary-fields" data-scen-idx="${idx}" style="display:${a.includeSecondaryUse ? "" : "none"}">
-            ${restFields.map(f => scenFieldHTML(idx, f[0], f[1], f[2])).join("")}
+            ${restFields.map(f => scenFieldHTML(idx, f)).join("")}
           </div>
         </div>`;
       }
-      return `<div><div class="scen-group-title">${T.esc(group.title)}</div>${group.fields.map(f => scenFieldHTML(idx, f[0], f[1], f[2])).join("")}</div>`;
+      return `<div><div class="scen-group-title">${T.esc(group.title)}</div>${group.fields.map(f => scenFieldHTML(idx, f)).join("")}</div>`;
     }
 
     function scenCardHTML(sc, idx) {
@@ -1705,13 +2069,18 @@ async function initProperty(){
           <div class="scen-card-head"><h3>${T.esc(sc.name || "Untitled scenario")}</h3></div>
           ${sc.notes ? `<div class="scen-notes">${T.esc(sc.notes)}</div>` : ""}
           <div class="wnote" style="margin-bottom:8px">${summary}</div>
-          <div id="scenComputed-${idx}">${scenComputedHTML(sc)}</div>
+          <div id="scenComputed-${idx}">${scenComputedHTML(sc, idx)}</div>
+          ${scenHeatmapHTML(sc, idx)}
         </div>`;
       }
       return `<div class="scen-card">
         <div class="scen-card-head">
           <input class="edit-input" data-path="scenarios.${idx}.name" value="${T.esc(sc.name || "")}" placeholder="Scenario name (e.g. Goodwill + Rear Self-Storage)">
-          <button type="button" class="btn btn-sm btn-danger" data-scen-remove="${idx}">🗑 Remove</button>
+          <span style="display:flex;gap:6px">
+            <button type="button" class="btn btn-sm" data-scen-reset="${idx}" title="Reset every field back to the base template defaults">↺ Reset to base</button>
+            <button type="button" class="btn btn-sm" data-scen-clear="${idx}" title="Zero out every field on this scenario">🗑 Clear all</button>
+            <button type="button" class="btn btn-sm btn-danger" data-scen-remove="${idx}">🗑 Remove</button>
+          </span>
         </div>
         <textarea class="edit-input" rows="2" data-path="scenarios.${idx}.notes" placeholder="Notes (optional)">${T.esc(sc.notes || "")}</textarea>
         <div class="scen-groups" style="margin-top:12px">
@@ -1719,7 +2088,8 @@ async function initProperty(){
         </div>
         <div class="scen-group-title">Scenario Score (this development idea)</div>
         <div class="scen-groups"><div>${T.SCENARIO_SCORE_CRITERIA.map(c => scenScoreFieldHTML(idx, c)).join("")}</div></div>
-        <div id="scenComputed-${idx}">${scenComputedHTML(sc)}</div>
+        <div id="scenComputed-${idx}">${scenComputedHTML(sc, idx)}</div>
+        ${scenHeatmapHTML(sc, idx)}
       </div>`;
     }
 
@@ -1729,12 +2099,15 @@ async function initProperty(){
         ${!EDIT ? `<button type="button" class="btn btn-sm noprint" id="btnEditScenarios">✎ Edit scenarios</button>` : ""}
       </h2>
       <div class="hint">Separate from the site score above — each scenario is a specific building/use idea for this parcel (strip center, standalone retail, self-storage, ...) with its own financing assumptions and its own score. Combined with the site score, this is how you find the highest-and-best use.</div>
+      ${EDIT ? `<div class="wnote" style="margin-bottom:12px"><span style="color:var(--p-source);font-weight:700">■ Blue fields</span> are different on every deal (land, rent, SF, market financing terms). <span style="font-weight:700">■ Black fields</span> are the reusable boilerplate assumptions ("$10,000 attorney fees," contingencies, loan/partnership terms) — both are fully editable, the color is just a hint at which kind of number you're looking at. Click any computed figure below to see exactly which fields feed it.</div>` : ""}
       ${site
         ? `<div class="wnote" style="margin-bottom:14px">Site score (from the sidebar meters — same for every scenario): <b>${site.weighted}/100</b></div>`
         : `<div class="wnote" style="margin-bottom:14px">Site score not set yet — score Location, Traffic, Demographics, Zoning, and Site Layout Efficiency in the sidebar first.</div>`}
       <div id="scenRanking">${scenRankingHTML()}</div>
+      ${scenarios.length ? `<div id="scenChart">${scenChartHTML()}</div>` : ""}
+      ${scenSuggestionsHTML()}
       ${scenarios.length ? scenarios.map((sc, idx) => scenCardHTML(sc, idx)).join("")
-        : `<div class="scen-empty">No scenarios yet. ${EDIT ? "Add one below." : `Click "✎ Edit scenarios" above to add one.`}</div>`}
+        : `<div class="scen-empty">No scenarios yet. ${EDIT ? "Add one below, or try a suggestion above." : `Click "✎ Edit scenarios" above to add one.`}</div>`}
       ${EDIT ? `<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
           <button type="button" class="btn btn-sm btn-primary" id="btnAddScenario">＋ Add Scenario</button>
           ${fin ? `<button type="button" class="btn btn-sm" id="btnImportFinancing">⇩ Copy from current Financing model</button>` : ""}
@@ -1799,16 +2172,59 @@ async function initProperty(){
         : `<li><a href="${T.esc(s.url || "#")}" target="_blank" rel="noopener">${T.esc(s.label || s.url)}</a></li>`).join("")}</ol>
     </section>` : "";
 
-    const mainCol = `<div class="pmain">
-      ${snapshot}${sitePlan}
+    // Deal Economics highlights strip — the Overview tab's window into the
+    // full Financing & Scenarios tab, per request: pull the numbers people
+    // actually glance at (best scenario's score/IRR, or the base model's
+    // if nothing's been scenario-modeled yet) up to where the rest of the
+    // card lives, instead of making everyone switch tabs just to check.
+    // Calls scenarioResult()/T.scoreStatusFor() from the Financing tab's own
+    // section below — safe forward reference, function declarations hoist
+    // to the top of this render() call either way.
+    const dealHighlights = (scenarios.length || fin) ? (() => {
+      let body;
+      if (scenarios.length) {
+        const best = scenarios.map(sc => ({ sc, ...scenarioResult(sc) }))
+          .sort((a, b) => (b.combined ?? -1) - (a.combined ?? -1))[0];
+        const st = T.scoreStatusFor(best.combined);
+        body = `<div class="hint">Top-scoring of ${scenarios.length} scenario${scenarios.length > 1 ? "s" : ""} modeled so far: <b>${T.esc(best.sc.name || "Untitled scenario")}</b></div>
+          <div class="deal-hl-grid">
+            <div class="t"><div class="l">Combined score</div><div class="v">${best.combined != null ? best.combined : "—"}</div>${best.combined != null ? `<span class="badge ${st.cls}" style="margin-top:4px">${st.status}</span>` : ""}</div>
+            <div class="t"><div class="l">Total project cost</div><div class="v">${T.fmtUSDk(best.calc.totalProjectCost)}</div></div>
+            <div class="t"><div class="l">Levered IRR</div><div class="v">${best.calc.leveredIRR != null ? T.fmtPct(best.calc.leveredIRR) : "—"}</div></div>
+            <div class="t"><div class="l">Equity multiple</div><div class="v">${best.calc.equityMultiple != null ? best.calc.equityMultiple.toFixed(2) + "×" : "—"}</div></div>
+          </div>`;
+      } else {
+        body = `<div class="hint">${fin.modelVersion ? T.esc(fin.modelVersion) : "Base financing model"} — no scenarios modeled yet.</div>
+          <div class="deal-hl-grid">
+            <div class="t"><div class="l">${fin.isDevelopment ? "Land basis" : "Purchase price"}</div><div class="v">${T.fmtUSDk(fin.purchasePrice)}</div></div>
+            <div class="t"><div class="l">Total cost</div><div class="v">${T.fmtUSDk(fin.totalCost)}</div></div>
+            <div class="t"><div class="l">Yield on cost</div><div class="v">${T.fmtPct(fin.yieldOnCost)}</div></div>
+            <div class="t"><div class="l">Levered IRR</div><div class="v">${fin.leveredIRR != null ? T.fmtPct(fin.leveredIRR) : "—"}</div></div>
+          </div>`;
+      }
+      return `<div class="card block deal-hl" id="dealHighlights">
+        <div class="deal-hl-head">
+          <h2 style="margin-bottom:0"><span class="block-icon">💰</span>Deal Economics — Highlights</h2>
+          <button type="button" class="btn btn-sm noprint" id="btnGoFinancing">Open Financing &amp; Scenarios →</button>
+        </div>
+        ${body}
+      </div>`;
+    })() : "";
+
+    const overviewCol = `<div class="pmain">
+      ${snapshot}${dealHighlights}${sitePlan}
       ${fieldBlock("propinfo", "A · Property Information", "◱", "The basics of the parcel and the deal.", "propertyInfo")}
       ${fieldBlock("gis", "GIS Information", "◈", "Parcel, buildings, easements and assessed value from county GIS + survey.", "gis")}
       ${fieldBlock("market", "B · Market & Location Analysis", "◎", "Traffic, corridor strength, demographics and growth.", "market")}
       ${fieldBlock("zoning", "E · Zoning & Entitlement", "⚖", "Current zoning, the rezoning path, and approval risk.", "zoning")}
       ${contacts}${history}${surr}${tenants}
       ${fieldBlock("hbu", "C · Highest & Best Use / Phasing", "▤", "The development concept and how it phases.", "hbu")}
-      ${finDetail}${scenariosSection}${checklist}${materials}${extras}${sources}
+      ${checklist}${materials}${extras}${sources}
     </div>`;
+    const financingCol = `<div class="pmain pmain-financing">
+      ${finDetail}${scenariosSection}
+    </div>`;
+    const mainCol = activeTab === "financing" ? financingCol : overviewCol;
 
     const legend = `<div class="card" style="padding:11px 16px;margin:6px 0 14px" id="legendbar"><div class="prov-legend"><span class="wnote" style="font-weight:700">Source markers:</span>${T.provLegend()}</div></div>`;
 
@@ -1965,9 +2381,17 @@ async function initProperty(){
       </div>
     </div>`;
 
-    app.innerHTML = `<div class="screen-only">${header}${toc}${legend}<div class="player">${mainCol}${rail}</div></div>${tearsheet}${tsPage2}`;
+    app.innerHTML = `<div class="screen-only">${header}${tabBar}${activeTab === "overview" ? toc : ""}${legend}<div class="player">${mainCol}${rail}</div></div>${tearsheet}${tsPage2}`;
     document.body.classList.toggle("editing", EDIT);
     wire();
+
+    /* ---------- tab switching ---------- */
+    const tabOverviewBtn = document.getElementById("tabOverview");
+    if (tabOverviewBtn) tabOverviewBtn.onclick = () => { activeTab = "overview"; render(); window.scrollTo(0, 0); };
+    const tabFinancingBtn = document.getElementById("tabFinancing");
+    if (tabFinancingBtn) tabFinancingBtn.onclick = () => { activeTab = "financing"; render(); window.scrollTo(0, 0); };
+    const btnGoFinancing = document.getElementById("btnGoFinancing");
+    if (btnGoFinancing) btnGoFinancing.onclick = () => { activeTab = "financing"; render(); window.scrollTo(0, 0); };
 
     /* ---------- development scenarios: add / remove / live recompute ----------
        Lives here (inside render(), not the sibling wire()) because it needs
@@ -1997,9 +2421,13 @@ async function initProperty(){
         }
         markDirty();
         const out = document.getElementById(`scenComputed-${idx}`);
-        if (out) out.innerHTML = scenComputedHTML(sc);
+        if (out) { out.innerHTML = scenComputedHTML(sc, idx); wireDepClicks(out); }
+        const heat = document.getElementById(`scenHeatmap-${idx}`);
+        if (heat) { heat.outerHTML = scenHeatmapHTML(sc, idx); wireDepClicks(document.getElementById(`scenHeatmap-${idx}`) || document); }
         const rankEl = document.getElementById("scenRanking");
         if (rankEl) rankEl.innerHTML = scenRankingHTML();
+        const chartEl = document.getElementById("scenChart");
+        if (chartEl) chartEl.innerHTML = scenChartHTML();
       });
     });
     document.querySelectorAll("[data-scen-remove]").forEach(btn => {
@@ -2026,45 +2454,73 @@ async function initProperty(){
     };
     const btnImportFinancing = document.getElementById("btnImportFinancing");
     if (btnImportFinancing) btnImportFinancing.onclick = () => {
-      const f = P.financing || {};
-      const secondary = (fin && fin.secondaryUseRows && fin.secondaryUseRows[0]) || null;
       if (!P.scenarios) P.scenarios = [];
+      const f = P.financing || {};
       P.scenarios.push({
         id: "scenario-" + Date.now(),
         name: f.modelVersion || "Current Financing Model",
         notes: "Copied from this property's existing Financing model — edit freely, the original Financing section is untouched.",
-        assumptions: Object.assign({}, T.SCENARIO_ASSUMPTION_DEFAULTS, {
-          primaryUseLabel: fin.primaryUseLabel || "Retail (NNN)",
-          primaryUseSF: fin.primaryUseSF || 0,
-          primaryUseCostPSF: f.primaryUseCostPSF != null ? Number(f.primaryUseCostPSF) : Number(f.retailCostPSF) || 0,
-          primaryUseRentPSF: fin.primaryUseRentPSF || 0,
-          landPrice: fin.purchasePrice || 0,
-          includeSecondaryUse: !!secondary,
-          secondaryUseLabel: secondary ? secondary.label : "Self-Storage",
-          secondaryUseSF: secondary ? (secondary.sf || 0) : 0,
-          secondaryUseCostPSF: secondary ? (secondary.costPSF || 0) : 0,
-          secondaryUseRentPSF: secondary ? (secondary.rentPSF || 0) : 0,
-          architectural: 0, engineering: 0, attorneyFees: 0, appraisal: 0, environmental: 0,
-          insurance: 0, utilityConnectFees: 0, permitsAndFees: 0, projectManagement: 0,
-          otherSoftCosts: fin.softCosts || 0,
-          hardCostContingencyPct: 0, softCostContingencyPct: 0,
-          loanLTC: fin.loanLTC != null ? fin.loanLTC : 0.7,
-          interestRate: fin.interestRate != null ? fin.interestRate : 0.0725,
-          amortYears: f.amortYears || 30,
-          holdYears: f.holdYears || 5,
-          exitCapRate: fin.exitCap != null ? fin.exitCap : 0.075,
-          costOfSalePct: fin.costOfSale != null ? fin.costOfSale : 0.02,
-        }),
-        criteria: {
-          tenantDemand: Number(P.scores && P.scores.tenantDemand) || 0,
-          rentPotential: Number(P.scores && P.scores.rentPotential) || 0,
-          devCost: Number(P.scores && P.scores.devCost) || 0,
-          exitLiquidity: Number(P.scores && P.scores.exitLiquidity) || 0,
-        }
+        assumptions: financingSeedAssumptions(),
+        criteria: defaultCriteriaFromScores()
       });
       markDirty();
       render();
     };
+    document.querySelectorAll("[data-suggest-add]").forEach(btn => {
+      btn.onclick = () => {
+        const { baseAssumptions, list } = scenarioSuggestions();
+        const s = list.find(x => x.id === btn.dataset.suggestAdd);
+        if (!s) return;
+        if (!P.scenarios) P.scenarios = [];
+        P.scenarios.push({
+          id: "scenario-" + Date.now(),
+          name: s.title,
+          notes: s.rationale,
+          assumptions: Object.assign({}, baseAssumptions, s.overrides),
+          criteria: scenarios.length ? Object.assign({}, scenarios[0].criteria || {}) : defaultCriteriaFromScores()
+        });
+        markDirty();
+        render();
+      };
+    });
+    document.querySelectorAll("[data-scen-reset]").forEach(btn => {
+      btn.onclick = () => {
+        const idx = Number(btn.dataset.scenReset);
+        if (!confirm("Reset every field on this scenario back to the base model? This can't be undone once you Save.")) return;
+        P.scenarios[idx].assumptions = financingSeedAssumptions();
+        markDirty();
+        render();
+      };
+    });
+    document.querySelectorAll("[data-scen-clear]").forEach(btn => {
+      btn.onclick = () => {
+        const idx = Number(btn.dataset.scenClear);
+        if (!confirm("Clear every value on this scenario to zero/blank? This can't be undone once you Save.")) return;
+        P.scenarios[idx].assumptions = blankAssumptions();
+        markDirty();
+        render();
+      };
+    });
+
+    /* ---------- dependency tracing: click a value to see what feeds it ----------
+       Click an output tile to highlight the assumption fields behind it
+       (SCENARIO_DEPENDENCY_MAP); click an assumption field's label to
+       highlight the outputs it feeds (the reverse index). Pure DOM-class
+       toggling, no render() — re-wired after every live-recompute swap
+       below since that replaces the tile nodes with fresh, unwired ones. */
+    function depClick(e) {
+      if (e.target.tagName === "INPUT") return; // let normal editing happen
+      const el = e.currentTarget;
+      const wasActive = el.classList.contains("dep-active");
+      document.querySelectorAll(".dep-highlight, .dep-active").forEach(n => n.classList.remove("dep-highlight", "dep-active"));
+      if (wasActive) return;
+      const idx = el.dataset.scenIdx, key = el.dataset.depKey;
+      const targets = T.SCENARIO_DEPENDENCY_MAP[key] || T.SCENARIO_DEPENDENTS_MAP[key] || [];
+      targets.forEach(k => document.querySelectorAll(`[data-dep-key="${k}"][data-scen-idx="${idx}"]`).forEach(n => n.classList.add("dep-highlight")));
+      el.classList.add("dep-active");
+    }
+    function wireDepClicks(root) { root.querySelectorAll("[data-dep-key]").forEach(el => el.addEventListener("click", depClick)); }
+    wireDepClicks(document);
 
     // Quick-edit shortcut: entering/leaving/saving edit mode from right here
     // in the Scenarios section, instead of needing to scroll all the way to
